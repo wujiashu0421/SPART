@@ -18,6 +18,6 @@ This software is released under the GPLv3 license.
 
 ## Contributors
 
-A list of contributors can be found here.
+A list of contributors can be found [here](contributors.md).
 
 
