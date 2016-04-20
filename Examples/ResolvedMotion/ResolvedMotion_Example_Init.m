@@ -45,7 +45,7 @@ data.base.T_L0_J1=[eye(3),[base_side/2;0;0];zeros(1,3),1];
 
 
 %--- Initial conditions ---%
-q00=zeros(6,1);
+q00=[0;0;0;1;zeros(3,1)];
 qm0=[pi/4;-pi/4;-pi/4;pi/4];
 q0dot0=zeros(6,1);
 qmdot0=zeros(4,1);
@@ -53,7 +53,7 @@ q0ddot0=zeros(6,1);
 qmddot0=zeros(3,1);
 
 %Compute Initial momentum (M0) and initial matrices.
-R0=angle2dcm(q00(4),q00(5),q00(6),'XYZ');
+R0=quat2dcm([q00(4);q00(1:3)]');
 
 %Kinematics
 [RJ,RL,r,l,e,t0,tm,Bij,Bi0,P0,pm,TEE]=Kinematics_Serial(R0,q00(4:6),qm0,q0dot0,qmdot0,data);
