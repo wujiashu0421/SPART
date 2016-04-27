@@ -71,7 +71,7 @@ The definitions of the Denavit-Hartenberg (DH) parameters are as follows:
 
    Denavit-Hartenberg parameters and their geometric definition.
 
- .. figure:: Figures/GenLinksJoints.png
+.. figure:: Figures/GenLinksJoints.png
    :scale: 50 %
    :align: center
    :alt: DH text parameters
