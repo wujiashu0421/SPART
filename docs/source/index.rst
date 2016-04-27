@@ -1,16 +1,19 @@
-.. SPART documentation master file, created by
-   sphinx-quickstart on Tue Apr 26 19:36:08 2016.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+SPART - SPAcecraft Robotics Toolkit
+===================================
 
-Welcome to SPART's documentation!
-=================================
+SPART is a MATLAB/SIMULINK open-source modeling, simulation and control toolkit for orbiting spacecraft with robotic arms (i.e floating-base robots).
+
+SPART is organized as a collection of MATLAB functions and Simulink blocks. These can be used to built plants, forward or inverse dynamic solvers and controllers.
+
 
 Contents:
+=========
 
 .. toctree::
    :maxdepth: 2
 
+   Installation
+   QuickStart
 
 
 Indices and tables
