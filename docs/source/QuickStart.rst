@@ -91,7 +91,7 @@ Once the manipulator system has been defined we can then specify the configurati
 	q0dot=[deg2rad(10);deg2rad(5);deg2rad(1);1;2;3];
 	qmdot=deg2rad([40;55]);
 
-Then we can start calling some functions. For example the kinematic function.
+Then we can start calling some functions. For example the kinematic function:
 
 .. code:: matlab
 
@@ -99,16 +99,16 @@ Then we can start calling some functions. For example the kinematic function.
 	[RJ,RL,r,l,e,t0,tm,Bij,Bi0,P0,pm,TEE]=Kinematics_Serial(R0,r0,qm,q0dot,qmdot,data);
 
 The output of the function is as follows:
-	* RJ -> Joint 3x3 rotation matrices.
-	* RL -> Links 3x3 rotation matrices.
-	* r -> Links positions.
-	* l -> Joints positions.
-	* e -> Joints rotations axis.
-	* t0 -> Base-spacecraft twist vector
-	* tm -> Manipulator twist vector.
-	* Bij -> Twist-propagation matrix (for manipulator i>0 and j>0).
-	* Bi0 -> Twist-propagation matrix (for i>0 and j=0).
-	* P0 -> Base-spacecraft twist-propagation vector.
-	* pm -> Manipulator twist-propagation vector.
-	* TEE -> End-Effector Homogeneous transformation matrix.
+	* RJ - Joint 3x3 rotation matrices.
+	* RL - Links 3x3 rotation matrices.
+	* r - Links positions.
+	* l - Joints positions.
+	* e - Joints rotations axis.
+	* t0 - Base-spacecraft twist vector
+	* tm - Manipulator twist vector.
+	* Bij - Twist-propagation matrix (for manipulator i>0 and j>0).
+	* Bi0 - Twist-propagation matrix (for i>0 and j=0).
+	* P0 - Base-spacecraft twist-propagation vector.
+	* pm - Manipulator twist-propagation vector.
+	* TEE - End-Effector Homogeneous transformation matrix.
 
