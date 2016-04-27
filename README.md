@@ -10,7 +10,8 @@ Just copy the toolkit and in Matlab run the `SPART2path`. This will add all the 
 
 ## Usage
 
-Some examples of their usage can be found in the `Examples` folder that illustrate the basic functionality of the toolkit.
+Check the documentation [here](http://spart.readthedocs.org).
+Additionally some examples of their usage can be found in the `Examples` folder that illustrate the basic functionality of the toolkit.
 
 ## License
 
