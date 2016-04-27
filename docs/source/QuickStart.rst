@@ -40,3 +40,49 @@ Most of these functions require a description of the spacecraft-manipulator syst
 	%Base-spacecraft inertia matrix
 	data.base.mass=10;
 	data.base.I=eye(3);
+
+The data structure has 3 fields:
+	* data.n is the number of links
+	* data.man(i) describes the ith link/joint.
+		* data.man(i).type type of joint. 0 for a revolute joint, 1 for a prismatic joint.
+		* data.man(i).DH Denavit-Hartenberg parameters. Definitions are included below.
+		* data.man(i).b Vector from the Center-of-Mass of the link to the next joint in the local frame.
+		* data.man(i).mass mass of the link.
+		* data.man(i).I inertia matrix of the link.
+	* data.base describes the base-spacecraft.
+		* data.base.T_L0_J1 Homogeneous transformation matrix from the first 
+		* data.base.mass mass of the base-spacecraft.
+		* data.base.I inertia matrix of the base-spacecraft
+
+
+The definitions of the Denavit-Hartenberg (DH) parameters are as follows:
+
+.. figure:: Figures/DH.png
+   :scale: 50 %
+   :alt: DH parameters
+
+   Denavit-Hertenberg parameters.
+
+.. figure:: Figures/DH_TextDef.png
+   :scale: 50 %
+   :alt: DH text parameters
+
+   Denavit-Hartenberg parameters and their geometric definition.
+
+
+Once the manipulator system has been defined we can then specify the configuration of the spacecraft manipulator system as follows.
+
+.. code:: matlab
+
+	%Base position
+	R0=eye(3);  %Rotation from Base-spacecraft to inertial
+	r0=[0;0;0]; %Position of the base-spacecraft
+
+	%Joint variables
+	qm=deg2rad([25;25]);
+
+	%Velocities
+	q0dot=[deg2rad(10);deg2rad(5);deg2rad(1);1;2;3];
+	qmdot=deg2rad([40;55]);
+
+Then we can start calling some functions!
