@@ -53,7 +53,7 @@ q0ddot0=zeros(6,1);
 qmddot0=zeros(3,1);
 
 %Compute Initial momentum (M0) and initial matrices.
-R0=quat_DCM([q00(1:4)]');
+R0=quat_DCM([q00(1:4)]')';
 
 %Kinematics
 [RJ,RL,r,l,e,t0,tm,Bij,Bi0,P0,pm,TEE]=Kinematics_Serial(R0,q00(4:6),qm0,q0dot0,qmdot0,data);
