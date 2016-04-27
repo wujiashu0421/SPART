@@ -44,15 +44,15 @@ Most of these functions require a description of the spacecraft-manipulator syst
 The data structure has 3 fields:
 	* data.n is the number of links
 	* data.man(i) describes the ith link/joint.
-		* data.man(i).type type of joint. 0 for a revolute joint, 1 for a prismatic joint.
-		* data.man(i).DH Denavit-Hartenberg parameters. Definitions are included below.
-		* data.man(i).b Vector from the Center-of-Mass of the link to the next joint in the local frame.
-		* data.man(i).mass mass of the link.
-		* data.man(i).I inertia matrix of the link.
+		* data.man(i).type -- Type of joint. 0 for a revolute joint, 1 for a prismatic joint.
+		* data.man(i).DH -- Denavit-Hartenberg parameters. Definitions are included below.
+		* data.man(i).b -- Vector from the Center-of-Mass of the link to the next joint in the local frame.
+		* data.man(i).mass -- Mass of the link.
+		* data.man(i).I -- Inertia matrix of the link.
 	* data.base describes the base-spacecraft.
-		* data.base.T_L0_J1 Homogeneous transformation matrix from the first 
-		* data.base.mass mass of the base-spacecraft.
-		* data.base.I inertia matrix of the base-spacecraft
+		* data.base.T_L0_J1 -- Homogeneous transformation matrix from the first 
+		* data.base.mass -- Mass of the base-spacecraft.
+		* data.base.I -- Inertia matrix of the base-spacecraft
 
 
 The definitions of the Denavit-Hartenberg (DH) parameters are as follows:
@@ -102,16 +102,16 @@ Then we can start calling some functions. For example the kinematic function:
 	[RJ,RL,r,l,e,t0,tm,Bij,Bi0,P0,pm,TEE]=Kinematics_Serial(R0,r0,qm,q0dot,qmdot,data);
 
 The output of the function is as follows:
-	* RJ - Joint 3x3 rotation matrices.
-	* RL - Links 3x3 rotation matrices.
-	* r - Links positions.
-	* l - Joints positions.
-	* e - Joints rotations axis.
-	* t0 - Base-spacecraft twist vector
-	* tm - Manipulator twist vector.
-	* Bij - Twist-propagation matrix (for manipulator i>0 and j>0).
-	* Bi0 - Twist-propagation matrix (for i>0 and j=0).
-	* P0 - Base-spacecraft twist-propagation vector.
-	* pm - Manipulator twist-propagation vector.
-	* TEE - End-Effector Homogeneous transformation matrix.
+	* RJ -- Joint 3x3 rotation matrices.
+	* RL -- Links 3x3 rotation matrices.
+	* r -- Links positions.
+	* l -- Joints positions.
+	* e -- Joints rotations axis.
+	* t0 -- Base-spacecraft twist vector
+	* tm -- Manipulator twist vector.
+	* Bij -- Twist-propagation matrix (for manipulator i>0 and j>0).
+	* Bi0 -- Twist-propagation matrix (for i>0 and j=0).
+	* P0 -- Base-spacecraft twist-propagation vector.
+	* pm -- Manipulator twist-propagation vector.
+	* TEE -- End-Effector Homogeneous transformation matrix.
 
