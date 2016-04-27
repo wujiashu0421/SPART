@@ -2,7 +2,7 @@
 
 SPART is a MATLAB/SIMULINK open-source modeling and control toolkit for orbiting spacecraft with robotic arms (i.e floating base robots).
 
-SPART is organized as a collection of MATLAB functions and Simulink blocks. These can be used to built plants, forward or inverse dynamic solvers and controllers.
+SPART is organized as a collection of MATLAB functions and Simulink blocks. These can be used to build plants, forward or inverse dynamic solvers and controllers.
 
 ## Installation
 
