@@ -59,18 +59,21 @@ The definitions of the Denavit-Hartenberg (DH) parameters are as follows:
 
 .. figure:: Figures/DH.png
    :scale: 50 %
+   :align: center
    :alt: DH parameters
 
    Denavit-Hertenberg parameters.
 
 .. figure:: Figures/DH_TextDef.png
    :scale: 50 %
+   :align: center
    :alt: DH text parameters
 
    Denavit-Hartenberg parameters and their geometric definition.
 
  .. figure:: Figures/GenLinksJoints.png
    :scale: 50 %
+   :align: center
    :alt: DH text parameters
 
    Schematic disposition of links and joints.
