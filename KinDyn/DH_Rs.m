@@ -22,12 +22,12 @@ function [R,s] = DH_Rs(DH,qm,type)
 %Assign the d and theta variable depending on joint type
 if type==0
     %Revolute joint
-    theta=qm;
+    theta=DH.theta+qm;
     d=DH.d;
 else
     %Prismatic joint
     theta=DH.theta;
-    d=qm;
+    d=DH.d+qm;
 end
     
 

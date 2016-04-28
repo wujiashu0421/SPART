@@ -15,6 +15,7 @@ data.man(1).type=0;
 data.man(1).DH.d = 0;
 data.man(1).DH.alpha = 0;
 data.man(1).DH.a = 1;
+data.man(1).DH.theta = 0;
 data.man(1).b = [data.man(1).DH.a/2;0;0];
 data.man(1).mass=2;
 data.man(1).I=eye(3)/10;
@@ -24,9 +25,13 @@ data.man(2).type=0;
 data.man(2).DH.d = 0;
 data.man(2).DH.alpha = 0;
 data.man(2).DH.a = 1;
+data.man(2).DH.theta = 0;
 data.man(2).b = [data.man(2).DH.a/2;0;0];
 data.man(2).mass=2;
 data.man(2).I=eye(3)/10;
+
+%End-Effector rotation about z axis
+data.EE.theta=0;
 
 %Firts joint location with respect to base
 data.base.T_L0_J1=[eye(3),[1;0;0];zeros(1,3),1];

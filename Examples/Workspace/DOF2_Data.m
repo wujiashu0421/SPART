@@ -54,6 +54,7 @@ data.man(1).type=0;
 data.man(1).DH.d = 0;
 data.man(1).DH.alpha = 0;
 data.man(1).DH.a = man_side;
+data.man(1).DH.theta=0;
 data.man(1).b = [data.man(1).DH.a/2;0;0];
 data.man(1).mass=mi;
 data.man(1).I=diag([0,0,data.man(1).mass/12*(man_side^2+man_width^2)]);
@@ -63,6 +64,10 @@ data.man(2).type=0;
 data.man(2).DH.d = 0;
 data.man(2).DH.alpha = 0;
 data.man(2).DH.a = man_side;
+data.man(2).DH.theta=0;
 data.man(2).b = [data.man(2).DH.a/2;0;0];
 data.man(2).mass=mi;
 data.man(2).I=diag([0,0,data.man(2).mass/12*(man_side^2+man_width^2)]);
+
+%End-Effector rotation about k axis
+data.EE.theta=0;

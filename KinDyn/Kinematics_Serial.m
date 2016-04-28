@@ -60,6 +60,9 @@ for i=1:n
 end
 %End-Effector
 TEE = TJ(1:4,1:4,n+1);
+TEE(1:3,1:3)=TEE(1:3,1:3)*[ cos(data.EE.theta),-sin(data.EE.theta),0;
+                            sin(data.EE.theta),cos(data.EE.theta),0;
+                            0,0,1];
 
 %--- Rotation matrices, translation, position and other geometry vectors ---%
 %Pre-allocate rotation matrices, translation and position vectors
