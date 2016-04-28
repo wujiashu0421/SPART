@@ -19,6 +19,10 @@ function [RJ,RL,r,l,e,t0,tm,Bij,Bi0,P0,pm,TEE]=Kinematics_Serial(R0,r0,qm,q0dot,
 %           otherwise prismatic.
 %           data.man(i).b -> Vector from the ith link to the following
 %           joint i+1.
+%       data.EE -> End-effector parameters
+%           data.EE.theta -> Rotation about the final z-axis so that any
+%           desired End-Effector cartesian coordinate system orientation
+%           can be achieved.
 %
 % Output ->
 %   RJ -> Joint 3x3 rotation matrices.
