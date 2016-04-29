@@ -4,8 +4,8 @@ Quickstart
 
 SPART is a collection of MATLAB and Simulink functions/blocks. The Simulink blocks are contained into the SimulinkLibrary folder. The MATLAB functions are contained into different folders:
 
-* KinDyn - contains the general Kinematics and Dynamics.
-* Utils - contains conversions between different orientation parametrization.
+* KinDyn -- contains the general Kinematics and Dynamics.
+* Utils -- contains conversions between different orientation parametrization.
 
 Most of these functions require a description of the spacecraft-manipulator system. This is provided using a MATLAB structure. Here is an example of how this looks like for a 2-link manipulator system. 
 
