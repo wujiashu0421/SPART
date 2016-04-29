@@ -31,8 +31,9 @@ data.man(3)=data.man(1);
 %Fourth joint
 data.man(4)=data.man(1);
 
-%End-Effector rotation around the k-axis
-data.EE.theta=0;
+%End-Effector 
+data.EE.theta=0; %Rotation around z-axis
+data.EE.d=0; %Translation along z-axis
 
 %--- Base Spacecraft ---%
 %Base-spacececraft side

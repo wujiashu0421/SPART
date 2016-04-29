@@ -69,5 +69,6 @@ data.man(2).b = [data.man(2).DH.a/2;0;0];
 data.man(2).mass=mi;
 data.man(2).I=diag([0,0,data.man(2).mass/12*(man_side^2+man_width^2)]);
 
-%End-Effector rotation about k axis
-data.EE.theta=0;
+%End-Effector 
+data.EE.theta=0; %Rotation around z-axis
+data.EE.d=0; %Translation along z-axis

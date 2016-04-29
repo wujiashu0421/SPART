@@ -30,8 +30,9 @@ data.man(2).b = [data.man(2).DH.a/2;0;0];
 data.man(2).mass=2;
 data.man(2).I=eye(3)/10;
 
-%End-Effector rotation about z axis
-data.EE.theta=0;
+%End-Effector 
+data.EE.theta=0; %Rotation around z-axis
+data.EE.d=0; %Translation along z-axis
 
 %Firts joint location with respect to base
 data.base.T_L0_J1=[eye(3),[1;0;0];zeros(1,3),1];
