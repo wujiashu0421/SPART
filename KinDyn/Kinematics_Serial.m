@@ -59,9 +59,12 @@ for i=1:n
 end
 %End-Effector
 TEE = TJ(1:4,1:4,n+1);
+%Add data.EE.theta rotation (around the z-axis)
 TEE(1:3,1:3)=TEE(1:3,1:3)*[ cos(data.EE.theta),-sin(data.EE.theta),0;
                             sin(data.EE.theta),cos(data.EE.theta),0;
                             0,0,1];
+%Add data.EE.d translation (along the z-axis)
+TEE(3,4)=TEE(3,4)+data.EE.d;
 %Recompute last link homogeneous transformation matrix (as we have just
 %modified the End-Effector transformation matrix).
 TL(1:4,1:4,n)=TEE*[eye(3),-data.man(n).b; zeros(1,3), 1];
