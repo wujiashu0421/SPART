@@ -6,7 +6,10 @@ function [elps_fixed,km_fixed,elps_floating,km_floating]=Kinematic_Manipulabilit
 [data,base_contour,man_contour,man_contour_end]=DOF2_Data(m0,mi);
 
 %--- Kinematics ---%
-[RJ,RL,r,l,e,t0,tm,Bij,Bi0,P0,pm,TEE]=Kinematics_Serial(R0,r0,qm,q0dot,qmdot,data);
+%Kinematics
+[RJ,RL,r,l,e,g,TEE]=Kinematics_Serial(R0,r0,qm,data);
+%Differential Kinematics
+[t0,tm,Bij,Bi0,P0,pm]=DiffKinematics_Serial(R0,r0,q0dot,qmdot,r,l,e,g,data);
 
 %--- End-Effector Jacobian ---%
 %End-effector Jacobian

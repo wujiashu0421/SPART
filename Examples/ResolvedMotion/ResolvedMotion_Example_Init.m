@@ -59,7 +59,9 @@ qmddot0=zeros(3,1);
 R0=quat_DCM([q00(1:4)]')';
 
 %Kinematics
-[RJ,RL,r,l,e,t0,tm,Bij,Bi0,P0,pm,TEE]=Kinematics_Serial(R0,q00(4:6),qm0,q0dot0,qmdot0,data);
+[RJ,RL,r,l,e,g,TEE]=Kinematics_Serial(R0,q00(4:6),qm0,data);
+%Differential Kinematics
+[t0,tm,Bij,Bi0,P0,pm]=DiffKinematics_Serial(R0,q00(4:6),q0dot0,qmdot0,r,l,e,g,data);
 %Inertias
 [I0,Im]=I_I(R0,RL,data);
 %Mass Composite Body matrix

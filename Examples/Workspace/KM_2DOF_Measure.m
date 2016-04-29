@@ -53,7 +53,8 @@ for q1=deg2rad(linspace(-90,90,n));
         qm=[q1;q2];
         
         %--- Kinematics ---%
-        [RJ,RL,r,l,e,t0,tm,Bij,Bi0,P0,pm,TEE]=Kinematics_Serial(R0,r0,qm,q0dot,qmdot,data);
+        %Kinematics
+        [RJ,RL,r,l,e,g,TEE]=Kinematics_Serial(R0,r0,qm,data);
         xEE(i,j)=TEE(1,4);
         yEE(i,j)=TEE(2,4);
         
@@ -77,7 +78,8 @@ colormap('gray');
 caxis([cmin,cmax*1.1]);
 colorbar
 qm=deg2rad([45;-90]);
-[RJ,RL,r,l,e,t0,tm,Bij,Bi0,P0,pm,TEE]=Kinematics_Serial(R0,r0,qm,q0dot,qmdot,data);
+%Kinematics
+[RJ,RL,r,l,e,g,TEE]=Kinematics_Serial(R0,r0,qm,data);
 Man_Plot(R0,r0,base_contour,man_contour,man_contour_end,RL,r,data);
 
 

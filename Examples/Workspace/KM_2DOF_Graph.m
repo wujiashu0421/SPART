@@ -38,7 +38,7 @@ mi=10;
 [data,base_contour,man_contour,man_contour_end]=DOF2_Data(m0,mi);
 
 %--- Kinematics ---%
-[RJ,RL,r,l,e,t0,tm,Bij,Bi0,P0,pm,TEE]=Kinematics_Serial(R0,r0,qm,q0dot,qmdot,data);
+[RJ,RL,r,l,e,g,TEE]=Kinematics_Serial(R0,r0,qm,data);
 
 %--- Kinematic Manipulability ---%
 [elps_fixed,km_fixed,elps_floating,km_floating]=Kinematic_Manipulability(R0,r0,m0,mi,qm,qmdot,q0dot);
@@ -53,7 +53,7 @@ mi=10;
 [data,base_contour,man_contour,man_contour_end]=DOF2_Data(m0,mi);
 
 %--- Kinematics ---%
-[RJ,RL,r,l,e,t0,tm,Bij,Bi0,P0,pm,TEE]=Kinematics_Serial(R0,r0,qm,q0dot,qmdot,data);
+[RJ,RL,r,l,e,g,TEE]=Kinematics_Serial(R0,r0,qm,data);
 
 %--- Kinematic Manipulability ---%
 [elps_fixed,km_fixed,elps_floating,km_floating]=Kinematic_Manipulability(R0,r0,m0,mi,qm,qmdot,q0dot);

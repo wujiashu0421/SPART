@@ -97,16 +97,13 @@ Once the manipulator system has been defined we can then specify the configurati
 	%Joint variables
 	qm=deg2rad([25;25]);
 
-	%Velocities
-	q0dot=[deg2rad(10);deg2rad(5);deg2rad(1);1;2;3];
-	qmdot=deg2rad([40;55]);
 
 Then we can start calling some functions. For example the kinematic function:
 
 .. code:: matlab
 
 	%Kinematics
-	[RJ,RL,r,l,e,t0,tm,Bij,Bi0,P0,pm,TEE]=Kinematics_Serial(R0,r0,qm,q0dot,qmdot,data);
+	[RJ,RL,r,l,e,g,TEE]=Kinematics_Serial(R0,r0,qm,data);
 
 The output of the function is as follows:
 	* RJ -- Joint 3x3 rotation matrices.
@@ -114,11 +111,6 @@ The output of the function is as follows:
 	* r -- Links positions.
 	* l -- Joints positions.
 	* e -- Joints rotations axis.
-	* t0 -- Base-spacecraft twist vector
-	* tm -- Manipulator twist vector.
-	* Bij -- Twist-propagation matrix (for manipulator i>0 and j>0).
-	* Bi0 -- Twist-propagation matrix (for i>0 and j=0).
-	* P0 -- Base-spacecraft twist-propagation vector.
-	* pm -- Manipulator twist-propagation vector.
+	* g -- Vector from the origin of the ith joint to the ith link [inertial]
 	* TEE -- End-Effector Homogeneous transformation matrix.
 
