@@ -67,6 +67,9 @@ TEE = TJ(1:4,1:4,n+1);
 TEE(1:3,1:3)=TEE(1:3,1:3)*[ cos(data.EE.theta),-sin(data.EE.theta),0;
                             sin(data.EE.theta),cos(data.EE.theta),0;
                             0,0,1];
+%Recompute last link homogeneous transformation matrix (as we have just
+%modified the End-Effector transformation matrix).
+TL(1:4,1:4,n)=TEE*[eye(3),-data.man(n).b; zeros(1,3), 1];
 
 %--- Rotation matrices, translation, position and other geometry vectors ---%
 %Pre-allocate rotation matrices, translation and position vectors
