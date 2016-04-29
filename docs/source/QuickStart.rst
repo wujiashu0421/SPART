@@ -21,6 +21,7 @@ Most of these functions require a description of the spacecraft-manipulator syst
 	data.man(1).DH.d = 0;
 	data.man(1).DH.alpha = 0;
 	data.man(1).DH.a = 1;
+	data.man(1).DH.theta = 0;
 	data.man(1).b = [data.man(1).DH.a/2;0;0];
 	data.man(1).mass=2;
 	data.man(1).I=eye(3)/10;
@@ -30,9 +31,13 @@ Most of these functions require a description of the spacecraft-manipulator syst
 	data.man(2).DH.d = 0;
 	data.man(2).DH.alpha = 0;
 	data.man(2).DH.a = 1;
+	data.man(2).DH.theta = 0;
 	data.man(2).b = [data.man(2).DH.a/2;0;0];
 	data.man(2).mass=2;
 	data.man(2).I=eye(3)/10;
+
+	%Final end-effector frame rotation about z axis
+	data.EE.theta=0;
 
 	%Firts joint location with respect to base
 	data.base.T_L0_J1=[eye(3),[1;0;0];zeros(1,3),1];
@@ -42,20 +47,22 @@ Most of these functions require a description of the spacecraft-manipulator syst
 	data.base.I=eye(3);
 
 The data structure has 3 fields:
-	* data.n is the number of links
-	* data.man(i) describes the ith link/joint.
+	* data.n -- Number of links.
+	* data.man(i) -- Describes the ith link/joint.
 		* data.man(i).type -- Type of joint. 0 for a revolute joint, 1 for a prismatic joint.
 		* data.man(i).DH -- Denavit-Hartenberg parameters. Definitions are included below.
 		* data.man(i).b -- Vector from the Center-of-Mass of the link to the next joint in the local frame.
 		* data.man(i).mass -- Mass of the link.
 		* data.man(i).I -- Inertia matrix of the link.
-	* data.base describes the base-spacecraft.
+	* data.base -- Describes the base-spacecraft.
 		* data.base.T_L0_J1 -- Homogeneous transformation matrix from the first 
 		* data.base.mass -- Mass of the base-spacecraft.
 		* data.base.I -- Inertia matrix of the base-spacecraft
+	* data.EE -- Provides additional information about the end-effector
+		* data.EE.theta -- Final rotation about the z axis. Last joint DH parameters are not enough to completely specify the orientation of the x and y end-effector axes.
 
 
-The definitions of the Denavit-Hartenberg (DH) parameters are as follows:
+The definitions of the Denavit-Hartenberg (DH) parameters and the other geometric magnitudes are as follows:
 
 .. figure:: Figures/DH.png
    :scale: 50 %
