@@ -23,6 +23,9 @@ function [RJ,RL,r,l,e,g,TEE]=Kinematics_Serial(R0,r0,qm,data)
 %           data.EE.theta -> Rotation about the final z-axis so that any
 %           desired End-Effector cartesian coordinate system orientation
 %           can be achieved.
+%           data.EE.d -> translation about the final z-axis so that any
+%           desired End-Effector cartesian coordinate system origin
+%           location can be achieved.
 %
 % Output ->
 %   RJ -> Joint 3x3 rotation matrices.
