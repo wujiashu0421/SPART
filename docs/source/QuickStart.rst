@@ -60,6 +60,7 @@ The data structure has 3 fields:
 		* data.base.I -- Inertia matrix of the base-spacecraft
 	* data.EE -- Provides additional information about the end-effector
 		* data.EE.theta -- Final rotation about the z axis. Last joint DH parameters are not enough to completely specify the orientation of the x and y end-effector axes.
+		* data.EE.d -- Final translation about the z axis. Last joint DH parameters are not enough to completely specify the location of the end-effector frame origin along the z-axis.
 
 
 The definitions of the Denavit-Hartenberg (DH) parameters and the other geometric magnitudes are as follows:
