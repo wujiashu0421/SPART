@@ -1,4 +1,4 @@
-function x_com = Center_of_Mass(r0,r,data)
+function x_com = Center_of_Mass(r0,r,data) %#codegen
 %Computes the center of mass (CoM) of the system
 %
 % Input ->

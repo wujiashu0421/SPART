@@ -1,4 +1,4 @@
-function [R,s] = DH_Rs(DH,qm,type)
+function [R,s] = DH_Rs(DH,qm,type) %#codegen
 % This function computes the rotation matrix R and the translation vector s
 % between two joints given their Denavit-Hartenber (DH) parameters.
 %

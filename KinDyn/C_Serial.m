@@ -1,4 +1,4 @@
-function [C0, C0m, Cm0, Cm] = C_Serial(t0,tm,I0,Im,M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,data)
+function [C0, C0m, Cm0, Cm] = C_Serial(t0,tm,I0,Im,M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,data) %#codegen
 % Computes the Generalized Convective Inertia Matrix of a Serial Manipulator.
 %
 % Input ->

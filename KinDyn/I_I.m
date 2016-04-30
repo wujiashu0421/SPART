@@ -1,4 +1,4 @@
-function [I0,Im]=I_I(R0,RL,data)
+function [I0,Im]=I_I(R0,RL,data) %#codegen
 % Converts the inertias in local frame to inertia in the inertial frame.
 %
 % Input ->

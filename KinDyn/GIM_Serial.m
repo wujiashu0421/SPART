@@ -1,4 +1,4 @@
-function [H0, H0m, Hm] = GIM_Serial(M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,data)
+function [H0, H0m, Hm] = GIM_Serial(M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,data) %#codegen
 % Computes the Generalized Inertia Matrix of a Serial Manipulator.
 %
 % Input ->

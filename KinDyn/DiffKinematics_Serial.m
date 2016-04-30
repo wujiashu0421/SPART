@@ -1,4 +1,4 @@
-function [t0,tm,Bij,Bi0,P0,pm]=DiffKinematics_Serial(R0,r0,q0dot,qmdot,r,l,e,g,data)
+function [t0,tm,Bij,Bi0,P0,pm]=DiffKinematics_Serial(R0,r0,q0dot,qmdot,r,l,e,g,data) %#codegen
 % Computes the differential kineamtics of a serial manipulator.
 %
 % Input ->

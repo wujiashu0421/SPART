@@ -1,4 +1,4 @@
-function [t0dot,tmdot]=Accelerations_Serial(t0,tm,P0,pm,Bi0,Bij,q0dot,qmdot,q0ddot,qmddot,data)
+function [t0dot,tmdot]=Accelerations_Serial(t0,tm,P0,pm,Bi0,Bij,q0dot,qmdot,q0ddot,qmddot,data) %#codegen
 % Computes the accekerations (twist-rate) of a Serial Manipulator.
 %
 % Input ->

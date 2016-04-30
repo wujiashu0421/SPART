@@ -1,4 +1,4 @@
-function [M0_tilde,Mm_tilde]=MCB_Serial(I0,Im,Bij,Bi0,data)
+function [M0_tilde,Mm_tilde]=MCB_Serial(I0,Im,Bij,Bi0,data) %#codegen
 % Computes the Mass Composite Body matrix of a Serial Manipulator.
 %
 % Input ->

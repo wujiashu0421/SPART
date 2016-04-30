@@ -1,4 +1,4 @@
-function [RJ,RL,r,l,e,g,TEE]=Kinematics_Serial(R0,r0,qm,data)
+function [RJ,RL,r,l,e,g,TEE]=Kinematics_Serial(R0,r0,qm,data) %#codegen
 % Computes the kineamtics of a serial manipulator.
 %
 % Input ->

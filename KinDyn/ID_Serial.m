@@ -1,4 +1,4 @@
-function [tauq0,tauqm] = ID_Serial(wF0,wFm,t0,tm,t0dot,tmdot,P0,pm,I0,Im,Bij,Bi0,data)
+function [tauq0,tauqm] = ID_Serial(wF0,wFm,t0,tm,t0dot,tmdot,P0,pm,I0,Im,Bij,Bi0,data) %#codegen
 % This function solves the inverse dynamics problem (it obtains the
 % generalized forces from the accelerations) for a Serial Manipulator.
 %

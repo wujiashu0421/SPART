@@ -1,4 +1,4 @@
-function [tauqm,q0ddot] = Floating_ID_Serial(wF0,wFm,Mm_tilde,H0,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,qmddot,data)
+function [tauqm,q0ddot] = Floating_ID_Serial(wF0,wFm,Mm_tilde,H0,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,qmddot,data) %#codegen
 % This function solves the inverse dynamics problem (it obtains the
 % generalized forces from the accelerations) for a Serial Manipulator with 
 % a floating base.

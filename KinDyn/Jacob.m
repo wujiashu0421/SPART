@@ -1,4 +1,4 @@
-function [J0, Jm]=Jacob(rxi,r0,r,P0,pm,i,n)
+function [J0, Jm]=Jacob(rxi,r0,r,P0,pm,i,n) %#codegen
 % Computes the Jacobian of the xi point.
 %
 % Input ->

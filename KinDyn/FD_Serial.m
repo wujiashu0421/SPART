@@ -1,4 +1,4 @@
-function [q0ddot,qmddot] = FD_Serial(tauq0,tauqm,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,data)
+function [q0ddot,qmddot] = FD_Serial(tauq0,tauqm,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,data) %#codegen
 % This function solves the inverse dynamics problem (it obtains the
 % generalized forces from the accelerations) for a Serial Manipulator with 
 % a floating base.
