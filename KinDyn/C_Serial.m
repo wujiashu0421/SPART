@@ -32,8 +32,10 @@ n=data.n;
 %Base-spacecraft Omega
 Omega0=[SkewSym(t0(1:3)), zeros(3,3);
         zeros(3,3), SkewSym(t0(1:3))];
-%Pre-allocate Omega
-Omega=zeros(6,6,n);
+if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
+    %Pre-allocate Omega
+    Omega=zeros(6,6,n);
+end
 %Compute Omega
 for i=1:n
     Omega(1:6,1:6,i)=[SkewSym(tm(1:3,i)), zeros(3,3);
@@ -43,16 +45,20 @@ end
 %--- Mdot ---%
 %Base-spacecraft Mdot
 Mdot0=[Omega0(1:3,1:3)*I0, zeros(3,3); zeros(3,3), zeros(3,3)];
-%Pre-allocate
-Mdot=zeros(6,6,n);
+if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
+    %Pre-allocate
+    Mdot=zeros(6,6,n);
+end
 %Compute Mdot
 for i=1:n
     Mdot(1:6,1:6,i)=[Omega(1:3,1:3,i)*Im(1:3,1:3,i), zeros(3,3); zeros(3,3), zeros(3,3)];
 end
 
 %--- Mdot tilde ---%
-%Pre-Allocate
-Mdot_tilde=zeros(6,6,n);
+if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
+    %Pre-Allocate
+    Mdot_tilde=zeros(6,6,n);
+end
 %Initialize
 Mdot_tilde(1:6,1:6,n)=Mdot(1:6,1:6,n);
 %Backwards recursion
@@ -63,8 +69,10 @@ end
 Mdot0_tilde = Mdot0+Mdot_tilde(1:6,1:6,1);
 
 %--- Hij tilde ---%
-%Pre-allocate Hij_tilde
-Hij_tilde=zeros(6,6,n,n);
+if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
+    %Pre-allocate Hij_tilde
+    Hij_tilde=zeros(6,6,n,n);
+end
 %Hij_tilde
 for j=n:-1:1
     for i=n:-1:1
@@ -79,9 +87,11 @@ for j=n:-1:1
         Hij_tilde(1:6,1:6,i,j)=Mm_tilde(1:6,1:6,i)*Bdot+Bij_pre'*Hij_tilde_pre;
     end
 end
-%Pre-allocate Hi0_tilde and H0j_tilde
-Hi0_tilde=zeros(6,6,n);
-H0j_tilde=zeros(6,6,n);
+if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
+    %Pre-allocate Hi0_tilde and H0j_tilde
+    Hi0_tilde=zeros(6,6,n);
+    H0j_tilde=zeros(6,6,n);
+end
 %Hi0_tilde
 for i=n:-1:1
     if i==n
@@ -107,10 +117,12 @@ end
 % H0_tilde(1:6,1:6)=M0_tilde*Bdot+Bi0(1:6,1:6,1)'*Hij_tilde_pre;
 
 %--- C Matrix ---%
-%Pre-allocate
-Cm=zeros(n,n);
-C0m=zeros(6,n);
-Cm0=zeros(n,6);
+if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
+    %Pre-allocate
+    Cm=zeros(n,n);
+    C0m=zeros(6,n);
+    Cm0=zeros(n,6);
+end
 %Cm Matrix
 for j=n:-1:1
     for i=n:-1:1

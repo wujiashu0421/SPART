@@ -39,24 +39,30 @@ function [t0,tm,Bij,Bi0,P0,pm]=DiffKinematics_Serial(R0,r0,q0dot,qmdot,r,l,e,g,d
 n=data.n;
 
 %--- Twist-propagtaion matrix ---%
-%Pre-allocate Bij
-Bij=zeros(6,6,n,n);
+if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
+    %Pre-allocate Bij
+    Bij=zeros(6,6,n,n);
+end
 %Compute Bij
 for j=1:n
     for i=1:n
         Bij(1:6,1:6,i,j)=[eye(3), zeros(3,3); SkewSym(r(1:3,j)-r(1:3,i)), eye(3)];
     end
 end
-%Pre-allocate Bi0
-Bi0=zeros(6,6,n);
+if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
+    %Pre-allocate Bi0
+    Bi0=zeros(6,6,n);
+end
 %Compute Bi0
 for i=1:n
     Bi0(1:6,1:6,i)=[eye(3), zeros(3,3); SkewSym(r0-r(1:3,i)), eye(3)];
 end
 
 %--- Twist-Propagation vector ---%
-%Pre-allocate
-pm=zeros(6,n);
+if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
+    %Pre-allocate
+    pm=zeros(6,n);
+end
 %Base-spacecraft
 P0=[R0,zeros(3,3); zeros(3,3), eye(3)];
 %Fordward recursion to obtain the Twist-Propagation vector
@@ -71,15 +77,17 @@ for i=1:n
 end
 
 %--- Generalized twist vector ---%
-%Pre-Allocate
-tm=zeros(6,n);
+if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
+    %Pre-Allocate
+    tm=zeros(6,n);
+end
 %Base-spacecraft
 t0=P0*q0dot;
 %First link
 tm(1:6,1)=Bi0(1:6,1:6,1)*t0+pm(1:6,1)*qmdot(1);
 %Fordward recursion to obtain the twist vector
 for i=2:n
-    tm(1:6,i)=Bij(1:6,1:6,i,i-1)*tm(1:6,i-1)+pm(1:6,i)*qmdot(i); 
+    tm(1:6,i)=Bij(1:6,1:6,i,i-1)*tm(1:6,i-1)+pm(1:6,i)*qmdot(i);
 end
 
 end

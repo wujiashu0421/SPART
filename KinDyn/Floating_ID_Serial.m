@@ -41,7 +41,10 @@ n=data.n;
 [tauq0_0ddot,tauqm] = ID_Serial(wF0,wFm,t0,tm,t0dot,tmdot,P0,pm,I0,Im,Bij,Bi0,data);
 
 %Compute Kappa
-kappa=zeros(n,6);
+if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
+    %Pre-allocate kappa
+    kappa=zeros(n,6);
+end
 for i=1:n
     kappa(i,1:6)=pm(1:6,i)'*Mm_tilde(1:6,1:6,i)*Bi0(1:6,1:6,i);
 end

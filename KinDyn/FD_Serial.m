@@ -48,10 +48,12 @@ phi=tauqm-tauqm_0ddot;
 
 
 %--- M hat, psi hat and psi  ---%
-%Pre-allocate
-M_hat=zeros(6,6,n);
-psi_hat=zeros(6,n);
-psi=zeros(6,n);
+if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
+    %Pre-allocate
+    M_hat=zeros(6,6,n);
+    psi_hat=zeros(6,n);
+    psi=zeros(6,n);
+end
 %Initialize
 M_hat(1:6,1:6,n)=[Im(1:3,1:3,n),zeros(3,3);zeros(3,3),data.man(n).mass*eye(3)];
 psi_hat(1:6,n)=M_hat(1:6,1:6,n)*pm(1:6,n);
@@ -72,11 +74,14 @@ psi_hat0=M_hat0*P0;
 %psi0=psi_hat0/(P0'*psi_hat0);
 
 %--- eta ---
-%Pre-allocate and initialize
-eta=zeros(6,n);
-phi_hat=zeros(n);
-phi_tilde=zeros(n);
+if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
+    %Pre-allocate and initialize
+    eta=zeros(6,n);
+    phi_hat=zeros(n);
+    phi_tilde=zeros(n);
+end
 %Initialize
+eta(1:6,n)=zeros(6,1);
 phi_hat(n)=phi(n)-pm(1:6,n)'*eta(1:6,n);
 phi_tilde(n)=phi_hat(n)/(pm(1:6,n)'*psi_hat(1:6,n));
 %Backwards recursion
@@ -95,9 +100,11 @@ phi_tilde0=(P0'*psi_hat0)\phi_hat0;
 q0ddot=phi_tilde0;
 
 %--- Manipulator acceleration (and mu) ---%
-%Pre-allocate
-mu=zeros(6,n);
-qmddot=zeros(n,1);
+if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
+    %Pre-allocate
+    mu=zeros(6,n);
+    qmddot=zeros(n,1);
+end
 %Initialize
 mu(1:6,1)=Bi0(1:6,1:6,1)*(P0*q0ddot);
 qmddot(1)=phi_tilde(1)-psi(1:6,1)'*mu(1:6,1);

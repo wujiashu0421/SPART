@@ -34,8 +34,10 @@ n=data.n;
 %--- Mdot ---%
 %Base-spacecraft Mdot
 Mdot0=[SkewSym(t0(1:3))*I0, zeros(3,3); zeros(3,3), zeros(3,3)];
-%Pre-allocate
-Mdot=zeros(6,6,n);
+if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
+    %Pre-allocate
+    Mdot=zeros(6,6,n);
+end
 %Manipulator Mdot
 for i=1:n
     Mdot(1:6,1:6,i)=[SkewSym(tm(1:3,i))*Im(1:3,1:3,i), zeros(3,3); zeros(3,3), zeros(3,3)];
@@ -44,14 +46,18 @@ end
 %--- Forces ---%
 %Base-spacecraft
 wq0=[I0,zeros(3,3);zeros(3,3),data.base.mass*eye(3)]*t0dot+Mdot0*t0-wF0;
-%Pre-allocate
-wq=zeros(6,n);
+if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
+    %Pre-allocate
+    wq=zeros(6,n);
+end
 %Manipulator
 for i=1:n
     wq(1:6,i)=[Im(1:3,1:3,i),zeros(3,3);zeros(3,3),data.man(i).mass*eye(3)]*tmdot(1:6,i)+Mdot(1:6,1:6,i)*tm(1:6,i)-wFm(1:6,i);
 end
-%Pre-allocate
-wq_tilde=zeros(6,n);
+if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
+    %Pre-allocate
+    wq_tilde=zeros(6,n);
+end
 %Initialize wq_tilde
 wq_tilde(1:6,n)=wq(1:6,n);
 %Backwards recursion
@@ -64,8 +70,10 @@ wq_tilde0=wq0+Bi0(1:6,1:6,1)'*wq_tilde(1:6,1);
 %---- Joint forces ---%
 %Base-spacecraft
 tauq0=P0'*wq_tilde0;
-%Pre-allocate
-tauqm=zeros(n,1);
+if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
+    %Pre-allocate
+    tauqm=zeros(n,1);
+end
 %Manipulator joint forces.
 for i=1:n
     tauqm(i,1)=pm(1:6,i)'*wq_tilde(1:6,i);

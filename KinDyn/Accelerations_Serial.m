@@ -29,11 +29,13 @@ function [t0dot,tmdot]=Accelerations_Serial(t0,tm,P0,pm,Bi0,Bij,q0dot,qmdot,q0dd
 n=data.n;
 
 %--- Omega matrices ---%
-%Base-Spacecraft 
+%Base-Spacecraft
 Omega0=[SkewSym(t0(1:3)), zeros(3,3);
         zeros(3,3), SkewSym(t0(1:3))];
-%Pre-allocate
-Omegam=zeros(6,6,n);
+if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
+    %Pre-allocate
+    Omegam=zeros(6,6,n);
+end
 %Compute Omega for manipulator
 for i=1:n
     Omegam(1:6,1:6,i)=[SkewSym(tm(1:3,i)), zeros(3,3);
@@ -43,8 +45,10 @@ end
 %--- Twist Rate ---%
 %Base-spacecraft
 t0dot = Omega0*P0*q0dot+P0*q0ddot;
-%Pre-allocate
-tmdot=zeros(6,n);
+if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations) 
+    %Pre-allocate
+    tmdot=zeros(6,n);
+end
 %First link
 tmdot(1:6,1)=Bi0(1:6,1:6,1)*t0dot+[zeros(3,6);SkewSym(t0(4:6)-tm(4:6,1)),zeros(3,3)]*t0+ Omegam(1:6,1:6,1)*pm(1:6,1)*qmdot(1)+pm(1:6,1)*qmddot(1);
 %Forward recursion for rest of the links.

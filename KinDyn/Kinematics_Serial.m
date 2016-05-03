@@ -44,14 +44,16 @@ function [RJ,RL,r,l,e,g,TEE]=Kinematics_Serial(R0,r0,qm,data) %#codegen
 n=data.n;
 
 %--- Homogeneous transformation matrices ---%
-%Pre-allocate homogeneous transformations matrices
-TJ=zeros(4,4,n+1);
-TL=zeros(4,4,n);
+if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
+    %Pre-allocate homogeneous transformations matrices
+    TJ=zeros(4,4,n+1);
+    TL=zeros(4,4,n);
+end
 %Base-spacecraft
 T0 = [R0,r0;zeros(1,3),1];
 %First Joint
 TJ(1:4,1:4,1) =T0*data.base.T_L0_J1;
-%Fordward recursive for rest of joints and links 
+%Fordward recursive for rest of joints and links
 for i=1:n
     %Compute Rotation matrix and translation vector from DH parameters
     [R,s] = DH_Rs(data.man(i).DH,qm(i),data.man(i).type);
@@ -73,15 +75,17 @@ TEE(3,4)=TEE(3,4)+data.EE.d;
 TL(1:4,1:4,n)=TEE*[eye(3),-data.man(n).b; zeros(1,3), 1];
 
 %--- Rotation matrices, translation, position and other geometry vectors ---%
-%Pre-allocate rotation matrices, translation and position vectors
-RJ=zeros(3,3,n);
-RL=zeros(3,3,n);
-r=zeros(3,n);
-l=zeros(3,n);
-%Pre-allocate axis
-e=zeros(3,n);
-%Pre-allocate other gemotery vectors
-g=zeros(3,n);
+if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
+    %Pre-allocate rotation matrices, translation and position vectors
+    RJ=zeros(3,3,n);
+    RL=zeros(3,3,n);
+    r=zeros(3,n);
+    l=zeros(3,n);
+    %Pre-allocate axis
+    e=zeros(3,n);
+    %Pre-allocate other gemotery vectors
+    g=zeros(3,n);
+end
 %Format Rotation matrices, link positions, joint axis and other geometry
 %vectors
 for i=1:n

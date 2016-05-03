@@ -27,8 +27,10 @@ n=data.n;
 %--- H Martix ---%
 %Base-spacecraft Inertia matrix
 H0 = P0'*M0_tilde*P0;
-%Pre-allocate Hm
-Hm=zeros(n,n);
+if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
+    %Pre-allocate Hm
+    Hm=zeros(n,n);
+end
 %Manipulator Inertia matrix Hm
 for j=1:n
     for i=j:n
@@ -36,8 +38,10 @@ for j=1:n
         Hm(j,i)=Hm(i,j);
     end
 end
-%Pre-allocate H0m
-H0m=zeros(6,n);
+if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
+    %Pre-allocate H0m
+    H0m=zeros(6,n);
+end
 %Coupling Inertia matrix
 for i=1:n
     H0m(1:6,i)=(pm(1:6,i)'*Mm_tilde(1:6,1:6,i)*Bi0(1:6,1:6,i)*P0)';

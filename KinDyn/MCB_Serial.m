@@ -20,8 +20,10 @@ function [M0_tilde,Mm_tilde]=MCB_Serial(I0,Im,Bij,Bi0,data) %#codegen
 %=== CODE ===%
 %Number of links and Joints
 n=data.n;
-%Pre-allocate
-Mm_tilde=zeros(6,6,n);
+if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
+    %Pre-allocate
+    Mm_tilde=zeros(6,6,n);
+end
 %Initialize M tilde
 Mm_tilde(1:6,1:6,n)=[Im(1:3,1:3,n),zeros(3,3);zeros(3,3),data.man(n).mass*eye(3)];
 %Backwards recursion 

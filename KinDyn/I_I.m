@@ -17,8 +17,10 @@ function [I0,Im]=I_I(R0,RL,data) %#codegen
 
 %Base-spacecraft inertia
 I0 = R0*data.base.I;
-%Pre-allocate inertias
-Im=zeros(3,3,data.n);
+if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
+    %Pre-allocate inertias
+    Im=zeros(3,3,data.n);
+end
 %Inertias of the links
 for i=1:(data.n)
     Im(1:3,1:3,i)=RL(1:3,1:3,i)*data.man(i).I*RL(1:3,1:3,i)';
