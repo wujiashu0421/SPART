@@ -14,8 +14,8 @@ SPART allows to compute:
 Additionally SPART supports:
 * Symbolic computation of all the magnitudes.
 * Automatic Code Generation support
-** Code can be integrated in Simulink models
-** Efficient C/C++ code can be automatically generated.
+	* Code can be integrated in Simulink models
+	* Efficient C/C++ code can be automatically generated.
 
 
 ## Installation
