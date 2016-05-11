@@ -2,17 +2,17 @@ function [J0, Jm]=Jacob(rxi,r0,r,P0,pm,i,n) %#codegen
 % Computes the Jacobian of the xi point.
 %
 % Input ->
-%   rEE -> Position of the End-Effector.
-%   r0 -> Position of the base-spacecraft to the inertial frame.
-%   r -> Links positions.
+%   rxi -> Inertial position of the point of interest.
+%   r0 -> Inertial position of the base-spacecraft.
+%   r -> Links inertial positions.
 %   P0 -> Base-spacecraft twist-propagation vector.
 %   pm -> Manipulator twist-propagation vector.
 %   i -> Link where the point xi is located.
 %   n -> Manipulator number of joints and links.
 %       
 % Output ->
-%   J0EE -> End-Effector base-spacecraft Jacobian
-%   JmEE -> End-Effector manipulator Jacobian
+%   J0 -> Base-spacecraft Jacobian
+%   Jm -> Manipulator Jacobian
 
 %=== LICENSE ===%
 
