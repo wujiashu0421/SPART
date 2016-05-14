@@ -24,7 +24,7 @@ Just clone or download the toolkit and in Matlab run the `SPART2path` script. Th
 
 ## Usage
 
-An [extensive documentation](http://spart.readthedocs.org) is available, including a [Quickstart guide](http://spart.readthedocs.io/en/latest/QuickStart.html).
+An [extensive documentation](http://spart.readthedocs.org) is available, including a [Tutorial](http://spart.readthedocs.io/en/latest/Tutorial.html).
 
 Additionally, some usage examples, illustrating the basic functionality of the toolkit, can be found in the `Examples` folder.
 
