@@ -2,7 +2,7 @@ SPART Tutorial
 ==============
 
 
-This SPART tutorial will cover the basic operation of the library. Before starting make sure you have correctly installed and configured SPART.
+This SPART tutorial will cover the basic operation of the library. Before starting make sure you have correctly installed and configured SPART (:doc:`/Installation`).
 
 In this tutorial we will model the following spacecraft with a 5 degree-of-freedom manipulator with the following dimensions: L0=50, L1=125, L2=144, L3=47, L4=142, L5=80, L6=70 mm.
 
