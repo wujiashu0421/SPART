@@ -24,8 +24,8 @@ function [t0,tm,Bij,Bi0,P0,pm]=DiffKinematics_Serial(R0,r0,q0dot,qmdot,r,l,e,g,d
 %           can be achieved.
 %
 % Output ->
-%   t0 -> Base-spacecraft twist vector
-%   tm -> Manipulator twist vector.
+%   t0 -> Base-spacecraft twist vector [wx,wy,wz,vx,vy,vz].
+%   tm -> Manipulator twist vector [wx,wy,wz,vx,vy,vz].
 %   Bij -> Twist-propagation matrix (for manipulator i>0 and j>0).
 %   Bi0 -> Twist-propagation matrix (for i>0 and j=0).
 %   P0 -> Base-spacecraft twist-propagation vector.
