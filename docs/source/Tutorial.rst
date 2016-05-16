@@ -129,7 +129,7 @@ We can then create our data structure:
 	data.man(5).DH.alpha =-pi/2;
 	data.man(5).DH.a = 0;
 	data.man(5).DH.theta=-pi/2;
-data.man(5).b = [L6/2;0;0];
+	data.man(5).b = [L6/2;0;0];
 
 Once the manipulator system has been defined we can then specify the configuration of the spacecraft manipulator system as follows.
 
