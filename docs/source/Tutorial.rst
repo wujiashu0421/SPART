@@ -210,3 +210,21 @@ The output of the differential kinematics as follows:
 	* P0 -- Base-spacecraft twist-propagation vector.
 	* pm -- Manipulator twist-propagation vector.
 
+The twist vector encapsulates the angular and linear velocities in a vector.
+
+.. math::
+
+	t_{i}=\left[\begin{array}{c}\omega_{i}\\\dot{r}_{i}\end{array}\right]
+
+The twist vector can be propagated as follows from a link to the next using the 3x3 :math:`B_{ij}` twist-propagation matrix and the 6x1 :math:`p_{i}` twist-propagation vector as follows.
+
+.. math::
+	
+	t_{i}=B_{ij}t_{j}+p_{i}\dot{q}_{i}
+
+For the base-spacecraft the twist-propagation only uses the a modified 6x6 :math:`P_{0}` twist-propagation vector.
+
+.. math::
+	
+	t_{0}=P_{0}\dot{q}_{0}
+
