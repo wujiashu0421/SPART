@@ -1,3 +1,4 @@
+==============
 SPART Tutorial
 ==============
 
@@ -12,6 +13,9 @@ In this tutorial we will model the following spacecraft with a 5 degree-of-freed
    :alt: Tutorial model configuration
 
    Spacecraft-manipulator system.
+
+Kinematics
+==========
 
 Before SPART can start computing any kinematic or dynamic magnitude it needs a representation of the geometry and dynamic properties of the spacecraft-manipulator system. These fixed parameters are introduced into a `data` structure.
 
@@ -83,7 +87,7 @@ The resulting links and joints Cartesian Coordinate Systems are shown in the fol
 
 We can then create our data structure:
 
-.. code:: matlab
+.. code-block:: matlab
 	
 	%--- Manipulator Definition ----%
 	%Number of joints/links
@@ -133,7 +137,7 @@ We can then create our data structure:
 
 Once the manipulator system has been defined we can then specify the configuration of the spacecraft manipulator system as follows.
 
-.. code:: matlab
+.. code-block:: matlab
 
 	%Base position
 	R0=eye(3);  %Rotation from base-spacecraft to the inertial frame
@@ -144,7 +148,7 @@ Once the manipulator system has been defined we can then specify the configurati
 
 Then we can start calling some functions. For example the kinematic function:
 
-.. code:: matlab
+.. code-block:: matlab
 
 	%Kinematics
 	[RJ,RL,r,l,e,g,TEE]=Kinematics_Serial(R0,r0,qm,data);
@@ -162,7 +166,7 @@ Now you can check that the r and l vectors provide the correct answers when qm=[
 
 If you change the joint variables and re-run the kinematic function you will get the new positions with that particular configuration. The same can be done with the orientation R0 and position r0 of the base-spacecraft.
 
-.. code:: matlab
+.. code-block:: matlab
 
 	%Joint variables [rad]
 	qm=[45;10;-45;20;-90]*pi/180;
@@ -172,7 +176,7 @@ If you change the joint variables and re-run the kinematic function you will get
 
 You can also define the joint variables as symbolic and obtain symbolic expressions.
 
-.. code:: matlab
+.. code-block:: matlab
 
 	%Joint variables [rad]
 	qm=sym('qm',[5,1],'real');
@@ -187,9 +191,12 @@ You can also define the joint variables as symbolic and obtain symbolic expressi
 	%Kinematics
 	[RJ,RL,r,l,e,g,TEE]=Kinematics_Serial(R0,r0,qm,data);
 
+Differential Kinematics
+=======================
+
 To compute the differential kinematics (including the Jacobians) can be computed if the base-spacecraft and joint velocities are specified.
 
-.. code:: matlab
+.. code-block:: matlab
 
 	%Velocities
 	q0dot=zeros(6,1); %Base-spacecraft velocity
@@ -203,12 +210,12 @@ To compute the differential kinematics (including the Jacobians) can be computed
 	[J0EE, JmEE]=Jacob(TEE(1:3,4),r0,r,P0,pm,data.n,data.n);
 
 The output of the differential kinematics as follows:
-	* t0 -- Base-spacecraft twist vector [wx,wy,wz,vx,vy,vz].
+	* t0 -- Base--spacecraft twist vector [wx,wy,wz,vx,vy,vz].
 	* tm -- Manipulator twist vector [wx,wy,wz,vx,vy,vz].
-	* Bij -- Twist-propagation matrix (for manipulator i>0 and j>0).
-	* Bi0 -- Twist-propagation matrix (for i>0 and j=0).
-	* P0 -- Base-spacecraft twist-propagation vector.
-	* pm -- Manipulator twist-propagation vector.
+	* Bij -- Twist--propagation matrix (for manipulator i>0 and j>0).
+	* Bi0 -- Twist--propagation matrix (for i>0 and j=0).
+	* P0 -- Base--spacecraft twist--propagation vector.
+	* pm -- Manipulator twist--propagation vector.
 
 The twist vector encapsulates the angular and linear velocities in a vector.
 
@@ -216,15 +223,142 @@ The twist vector encapsulates the angular and linear velocities in a vector.
 
 	t_{i}=\left[\begin{array}{c}\omega_{i}\\\dot{r}_{i}\end{array}\right]
 
-The twist vector can be propagated as follows from a link to the next using the 3x3 :math:`B_{ij}` twist-propagation matrix and the 6x1 :math:`p_{i}` twist-propagation vector as follows.
+The twist vector can be propagated as follows from a link to the next using the 3x3 :math:`B_{ij}` twist--propagation matrix and the 6x1 :math:`p_{i}` twist--propagation vector as follows.
 
 .. math::
 	
 	t_{i}=B_{ij}t_{j}+p_{i}\dot{q}_{i}
 
-For the base-spacecraft the twist-propagation only uses the a modified 6x6 :math:`P_{0}` twist-propagation vector.
+For the base-spacecraft the twist--propagation only uses the a modified 6x6 :math:`P_{0}` twist-propagation vector.
 
 .. math::
 	
 	t_{0}=P_{0}\dot{q}_{0}
+
+Equations of Motion and inertia matrices
+========================================
+
+The generic equations of motion can be written as follows.
+
+.. math::
+	
+	H\left(q\right)\ddot{q}+C\left(q,\dot{q}\right)\dot{q}=\mathcal{\tau}
+
+With :math:`H` being the generalized inertia matrix, :math:`C` the generalized convective inertia matrix, :math:`q` the generalized joint variables and :math:`\tau` the generalized joint forces.
+
+The generalized joint variables are composed by the base-spacecraft variables :math:`q_{0}` and the manipulator joint variables :math:`q_{m}`.
+The contributions of the base-spacecraft and the manipulator can be made explicit when writing the equations of motion.
+
+.. math::
+	
+	\left[\begin{array}{cc} H_{0} & H_{0m}\\ H_{0m}^{T} & H_{m} \end{array}\right]
+	\left[\begin{array}{c} \ddot{q}_{0}\\ \ddot{q}_{m} \end{array}\right]+
+	\left[\begin{array}{cc} C_{0} & C_{0m}\\ C_{m0} & C_{m} \end{array}\right]
+	\left[\begin{array}{c} \dot{q}_{0}\\ \dot{q}_{m} \end{array}\right]=
+	\left[\begin{array}{c} \tau_{0}\\ \tau_{m} \end{array}\right]
+
+To obtain the inertia matrices we need to specify the mass and inertia of the base--spacecraft and of the joints.
+
+Let's assume, for the sake of simplicity, that all the links masses are 2 kg and have diagonal inertia matrices with :math:`I_{xx}=2/10` kg/m2 :math:`I_{yy}=1/10` :math:`I_{zz}=3/10`. And the base-spacecarft has a mass of 20 kg and inertia of :math:`I_{xx}=2` kg/m2 :math:`I_{yy}=1` :math:`I_{zz}=3`.
+
+These variables can be added to the data structure as follows.
+
+.. code-block:: matlab
+
+	%First joint
+	data.man(1).mass=2;
+	data.man(1).I=diag([2,1,3])/10;
+
+	%Second joint
+	data.man(2).mass=2;
+	data.man(2).I=diag([2,1,3])/10;
+
+	%Third joint
+	data.man(3).mass=2;
+	data.man(3).I=diag([2,1,3])/10;
+
+	%Fourth joint
+	data.man(4).mass=2;
+	data.man(4).I=diag([2,1,3])/10;
+
+	%Fifth joint
+	data.man(5).mass=2;
+	data.man(5).I=diag([2,1,3])/10;
+
+	%Base-spacecraft mass and inertia
+	data.base.mass=20;
+	data.base.I=diag([2,1,3]);
+
+You can now compute the inertia matrices as follows.
+
+.. code-block:: matlab
+
+	%Inertias in inertial frames
+	[I0,Im]=I_I(R0,RL,data);
+	%Mass Composite Body matrix
+	[M0_tilde,Mm_tilde]=MCB_Serial(I0,Im,Bij,Bi0,data);
+	%Generalized Inertia matrix
+	[H0,H0m,Hm]=GIM_Serial(M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,data);
+	%Generalized Convective Inertia matrix
+	[C0,C0m,Cm0,Cm]=C_Serial(t0,tm,I0,Im,M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,data);
+
+Although the equations of motion can be used to solve the forward dynamic problem (determining the motion of the system given a set of applied forces :math:`\tau\rightarrow\ddot{q}`) and the inverse dynamic problem (determining the forces required to produce a prescribe motion :math:`\ddot{q}\rightarrow\tau`) there are more efficient ways of doing so.
+
+
+Forward Dynamics
+================
+
+To solve the forward dynamics you will need to specify the forces acting on the spacecraft-manipulator system. There are two ways of specifying them and you can specify your forces in both of them if that is easier.
+
+The joint forces :math:`\tau` are the forces acting on the joints :math:`tau_{m}` (thus is an nx1 vector) and also at the base-spacecraft :math:`tau_{0}` (thus a 6x1 vector). For :math:`\tau_{0}`, as in the twist vector, the torques come first and then the linear forces.
+
+Also you can specify the wrenches :math:`w` (torques and forces) for each body (applied at their center-of-mass). Again these can be decomposed into base-spacecraft 6x1 wrenches :math:`w_{0}` and manipulator {6xn} wrenches :math:`w_{n}`.
+
+Here is an example of how to do it.
+
+.. code-block:: matlab
+
+	%External forces
+	wF0=zeros(6,1);
+	wFm=zeros(6,data.n);
+
+	%Joint torques
+	tauq0=zeros(6,1);
+	tauqm=zeros(5,1);
+
+Then a forward dynamic solver is available.
+
+.. code-block:: matlab
+	
+	%Forward Dynamics
+	[q0ddot_FD,qmddot_FD] = FD_Serial(tauq0,tauqm,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,data);
+
+
+Inverse Dynamics
+================
+
+Similarly for the inverse dynamics the acceleration of the base-spacecraft and the joint need to be specified and then a function to compute the inverse dynamics is available.
+
+.. code-block:: matlab
+	
+	%Accelerations
+	q0ddot=zeros(6,1);
+	qmddot=zeros(5,1);
+
+	%Accelerations
+	[t0dot,tmdot]=Accelerations_Serial(t0,tm,P0,pm,Bi0,Bij,q0dot,qmdot,q0ddot,qmddot,data);
+
+	%Inverse Dynamics - Flying base
+	[tau0,taum]=ID_Serial(wF0,wFm,t0,tm,t0dot,tmdot,P0,pm,I0,Im,Bij,Bi0,data);
+
+
+If the base-spacecraft is left uncontrolled (floating case) and thus its acceleration is unknown a different routine is available.
+
+.. code-block:: matlab
+	
+	%Accelerations
+	qmddot=zeros(5,1);
+
+	%Inverse Dynamics - Floating Base
+	[taum_floating,q0ddot_floating]=Floating_ID_Serial(wF0,wFm,Mm_tilde,H0,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,qmddot,data);
 
