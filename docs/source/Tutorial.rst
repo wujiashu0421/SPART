@@ -310,7 +310,7 @@ Forward Dynamics
 
 To solve the forward dynamics you will need to specify the forces acting on the spacecraft-manipulator system. There are two ways of specifying them and you can specify your forces in both of them if that is easier.
 
-The joint forces :math:`\tau` are the forces acting on the joints :math:`tau_{m}` (thus is an nx1 vector) and also at the base-spacecraft :math:`tau_{0}` (thus a 6x1 vector). For :math:`\tau_{0}`, as in the twist vector, the torques come first and then the linear forces.
+The joint forces :math:`\tau` are the forces acting on the joints :math:`\tau_{m}` (thus is an nx1 vector) and also at the base-spacecraft :math:`tau_{0}` (thus a 6x1 vector). For :math:`\tau_{0}`, as in the twist vector, the torques come first and then the linear forces.
 
 Also you can specify the wrenches :math:`w` (torques and forces) for each body (applied at their center-of-mass). Again these can be decomposed into base-spacecraft 6x1 wrenches :math:`w_{0}` and manipulator {6xn} wrenches :math:`w_{n}`.
 
