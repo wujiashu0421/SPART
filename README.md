@@ -18,6 +18,12 @@ Additionally SPART supports:
 	* Efficient C/C++ code can be automatically generated.
 
 
+Here is an example of a plannar Desired-Reaction-Maneuver, where the kinematic redundancy of a manipulator is used to make floating base point to the end-effector while this one is moving along a prescribed path.
+
+![DRM](DRM.gif "Desired-Reaction Maneuver")
+
+
+
 ## Installation
 
 Just clone or download the toolkit and in Matlab run the `SPART2path` script. This will add all the SPART functions and Simulink library to the path and save it. Then you can use it as any other MATLAB toolbox.
