@@ -20,7 +20,7 @@ Additionally SPART supports:
 
 Here is an example of a plannar Desired-Reaction-Maneuver, where the kinematic redundancy of a manipulator is used to make floating base point to the end-effector while this one is moving along a prescribed path.
 
-->![DRM](DRM.gif "Desired-Reaction-Maneuver")<-
+-> ![DRM](DRM.gif "Desired-Reaction-Maneuver") <-
 
 
 
