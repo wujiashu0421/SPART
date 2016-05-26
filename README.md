@@ -37,11 +37,11 @@ Additionally, some usage examples, illustrating the basic functionality of the t
 
 Here is an example of a planar Desired-Reaction-Maneuver, where the kinematic redundancy of a manipulator is used to make floating base point to the end-effector while this one is moving along a prescribed path.
 
-![DRM](docs/source/FiguresDRM.gif "Desired-Reaction-Maneuver")
+![DRM](docs/source/Figures/DRM.gif "Desired-Reaction-Maneuver")
 
 SPART can also be used to control real manipulators. Here is an example of resolved motion-rate control of the R5D3 manipulator (the end-effector is describing a triangle).
 
-![R5D3](docs/source/R5D3.gif "R5D3 resolved motion-rate control")
+![R5D3](docs/source/Figures/R5D3.gif "R5D3 resolved motion-rate control")
 
 ## License
 
