@@ -18,9 +18,8 @@ Additionally SPART supports:
 	* Efficient C/C++ code can be automatically generated.
 
 
-Here is an example of a plannar Desired-Reaction-Maneuver, where the kinematic redundancy of a manipulator is used to make floating base point to the end-effector while this one is moving along a prescribed path.
 
-![DRM](DRM.gif "Desired-Reaction-Maneuver")
+
 
 
 
@@ -33,6 +32,16 @@ Just clone or download the toolkit and in Matlab run the `SPART2path` script. Th
 An [extensive documentation](http://spart.readthedocs.org) is available, including a [Tutorial](http://spart.readthedocs.io/en/latest/Tutorial.html).
 
 Additionally, some usage examples, illustrating the basic functionality of the toolkit, can be found in the `Examples` folder.
+
+## Examples
+
+Here is an example of a planar Desired-Reaction-Maneuver, where the kinematic redundancy of a manipulator is used to make floating base point to the end-effector while this one is moving along a prescribed path.
+
+![DRM](docs/source/FiguresDRM.gif "Desired-Reaction-Maneuver")
+
+SPART can also be used to control real manipulators. Here is an example of resolved motion-rate control of the R5D3 manipulator (the end-effector is describing a triangle).
+
+![R5D3](docs/source/R5D3.gif "R5D3 resolved motion-rate control")
 
 ## License
 
