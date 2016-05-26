@@ -39,7 +39,7 @@ Here is an example of a planar Desired-Reaction-Maneuver, where the kinematic re
 
 ![DRM](docs/source/Figures/DRM.gif "Desired-Reaction-Maneuver")
 
-SPART can also be used to control real manipulators. Here is an example of resolved motion-rate control of the R5D3 manipulator (the end-effector is describing a triangle).
+SPART can also be used to control real manipulators. Here is an example of resolved motion-rate control of the R5D3 manipulator (the end-effector is describing a triangle) done by NPS AE4820 - Robotic Multibody Systems students.
 
 ![R5D3](docs/source/Figures/R5D3.gif "R5D3 resolved motion-rate control")
 
