@@ -14,6 +14,8 @@ In this tutorial we will model the following spacecraft with a 5 degree-of-freed
 
    Spacecraft-manipulator system.
 
+The code of this tutorial can be found in `Examples/Tutorial/Tutorial.m`.
+
 Kinematics
 ==========
 
@@ -324,7 +326,7 @@ Here is an example of how to do it.
 
 	%Joint torques
 	tauq0=zeros(6,1);
-	tauqm=zeros(5,1);
+	tauqm=zeros(data.n,1);
 
 Then a forward dynamic solver is available.
 
@@ -332,6 +334,18 @@ Then a forward dynamic solver is available.
 	
 	%Forward Dynamics
 	[q0ddot_FD,qmddot_FD] = FD_Serial(tauq0,tauqm,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,data);
+
+
+I you have forces that act on the links, for example gravity (with z being the vertical direction), they can be added through the wrenches as follows.
+	.. code-block:: matlab
+
+	%Gravity
+	g=9.8; %[m s-2]
+
+	%External forces (includes gravity and assumes z is the vertical direction)
+	wF0=[0;0;0;0;0;-data.base.mass*g];
+	wFm=[zeros(5,data.n);
+    -data.man(1).mass*g,-data.man(2).mass*g,-data.man(3).mass*g,-data.man(4).mass*g,-data.man(5).mass*g];
 
 
 Inverse Dynamics
