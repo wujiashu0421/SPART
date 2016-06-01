@@ -338,7 +338,7 @@ Then a forward dynamic solver is available.
 
 I you have forces that act on the links, for example gravity (with z being the vertical direction), they can be added through the wrenches as follows.
 	.. code-block:: matlab
-
+	
 	%Gravity
 	g=9.8; %[m s-2]
 
