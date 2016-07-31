@@ -44,7 +44,7 @@ This software is released under the GPLv3 license.
 
 ## Contributors
 
-The software has been developed at the Spacecraft Robotics Laboratory at the Naval Postgraduate School (Monterey, CA).
+The software has been developed at the [Spacecraft Robotics Laboratory](http://my.nps.edu/web/srl/) at the [Naval Postgraduate School](http://nps.edu) (Monterey, CA).
 
 A list of contributors can be found [here](contributors.md).
 
