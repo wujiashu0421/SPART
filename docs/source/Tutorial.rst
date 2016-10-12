@@ -87,9 +87,9 @@ Joint/Link    DH.d    DH.alpha          DH.a             DH.theta              b
 ===========  ======  ==========  ===================  ===============  =================
  Joint 1       L1       pi/2             0                   0             [0;L1/2;0] 
  Joint 2       0         0         sqrt(L2^2+L3^2)      atan2(L2,L3)       *see below
- Joint 3       0         0              L4             -atan2(L2,L3)       [L4/2;0;0] 
- Joint 4       0       	pi/2             0                  pi/2          [0;0;-L5/2] 
- Joint 5     L5+L6      -pi/2            0                 -pi/2           [L6/2;0;0] 
+ Joint 3       0         0              L4             --atan2(L2,L3)       [L4/2;0;0] 
+ Joint 4       0       	pi/2             0                  pi/2          [0;0;--L5/2] 
+ Joint 5     L5+L6      --pi/2            0                 -pi/2           [L6/2;0;0] 
 ===========  ======  ==========  ===================  ===============  =================
 
 data.man(2).b = [cos(-data.man(2).DH.theta),-sin(-data.man(2).DH.theta),0;sin(-data.man(2).DH.theta),cos(-data.man(2).DH.theta),0;0,0,1]*[L3^2/2;L2^2/2 + L3*L2;0]/(L2 + L3);
@@ -167,7 +167,7 @@ We can then create our data structure:
 	%End-Effector
 	data.EE.theta=-pi/2;
 	data.EE.d=0;
-	
+
 
 Once the manipulator system has been defined we can then specify the configuration of the spacecraft manipulator system as follows.
 
