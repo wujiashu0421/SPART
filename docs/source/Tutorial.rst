@@ -30,7 +30,7 @@ The data structure has 3 fields:
 		* data.man(i).mass -- Mass of the link.
 		* data.man(i).I -- Inertia matrix of the link.
 	* data.base -- Describes the base-spacecraft.
-		* data.base.T_L0_J1 -- Homogeneous transformation matrix from the first 
+		* data.base.T_L0_J1 -- Homogeneous transformation matrix from the base to the first joint.
 		* data.base.mass -- Mass of the base-spacecraft.
 		* data.base.I -- Inertia matrix of the base-spacecraft
 	* data.EE -- Provides additional information about the end-effector
@@ -62,6 +62,23 @@ Additional geometric definitions are included in the following figure.
 
    Schematic disposition of links and joints.
 
+The DH convention does not specify the orientation and origin of the first joint CCS (it's origin must lie within the rotation or sliding axis). We then have freedom to set these. The orientation and the origin of the first joint are specified through the homogeneous transformation matrix data.base.T_L0_J1. An homogeneous transformation matrix encapsulates the orientation and position for a CCS with respect to another one, and in this particular case it can be written as follows.
+
+.. math::
+	
+	^{\mathcal{L}_{0}}T_{\mathcal{J}_{1}}=\left[\begin{array}{cc}
+	^{\mathcal{L}_{0}}R_{\mathcal{J}_{1}} & ^{\mathcal{L}_{0}}s_{\mathcal{J}_{1}}\\
+	0_{1,3} & 1
+	\end{array}\right]
+
+
+For this example we will assume that the base CCS and the first joint frame :math:`\mathcal{J}_{1}` share the same orientation :math:`^{\mathcal{L}_{0}}R_{\mathcal{J}_{1}}=I_{3\times 3}` and that :math:`\mathcal{J}_{1}` is only displaced L0 in the :math:`k` direction  :math:`^{\mathcal{L}_{0}}s_{\mathcal{J}_{1}}=\left[0,0,L_{0}\right]^{T}`.
+
+.. code-block:: matlab
+
+	%Firts joint location with respect to base
+	data.base.T_L0_J1=[eye(3),[0;0;L0];zeros(1,3),1];
+
 We will also assume that the links are homogeneous bodies and so their center-of-mass will be located at their geometric center, which allows to easily determine the data.man(i).b vector. The data.man(i).b vector goes from the center-of-mass of the ith link to the origin of the ith+1 joint in the local ith link reference frame.
 Using the DH parameters and assuming homogeneous bodies the DH and b vector are given below.
 
@@ -85,6 +102,15 @@ The resulting links and joints Cartesian Coordinate Systems are shown in the fol
    :alt: CCS of the tutorial model configuration
 
    CCS of the spacecraft-manipulator system.
+
+
+Finally, the DH parameters do not allow to freely set the end-effector CCS. For that we need two additional :math:`d` and :math:`\theta` DH parameters, that are applied to the last transformation. In this case the required values are as follows.
+
+.. code-block:: matlab
+	
+	%End-Effector
+	data.EE.theta=-pi/2;
+	data.EE.d=0;
 
 
 We can then create our data structure:
@@ -119,7 +145,6 @@ We can then create our data structure:
 	data.man(3).DH.theta=-atan2(L2,L3);
 	data.man(3).b = [L4/2;0;0];
 
-
 	%Fourth joint
 	data.man(4).type=0;
 	data.man(4).DH.d = 0;
@@ -128,7 +153,6 @@ We can then create our data structure:
 	data.man(4).DH.theta=pi/2;
 	data.man(4).b = [0;0;-L5/2];
 
-
 	%Fifth joint
 	data.man(5).type=0;
 	data.man(5).DH.d = L5+L6;
@@ -136,6 +160,14 @@ We can then create our data structure:
 	data.man(5).DH.a = 0;
 	data.man(5).DH.theta=-pi/2;
 	data.man(5).b = [L6/2;0;0];
+
+	%Firts joint location with respect to base
+	data.base.T_L0_J1=[eye(3),[0;0;L0];zeros(1,3),1];
+
+	%End-Effector
+	data.EE.theta=-pi/2;
+	data.EE.d=0;
+	
 
 Once the manipulator system has been defined we can then specify the configuration of the spacecraft manipulator system as follows.
 
