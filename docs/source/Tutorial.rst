@@ -44,7 +44,7 @@ The kinematic relationship between a pair of connected joints is expressed by th
    :align: center
    :alt: DH parameters
 
-   Denavit-Hertenberg parameters.
+   Denavit-Hartenberg parameters.
 
 .. figure:: Figures/DH_TextDef.png
    :scale: 50 %
