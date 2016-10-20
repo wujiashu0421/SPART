@@ -232,12 +232,14 @@ To compute the differential kinematics (including the Jacobians) can be computed
 
 .. code-block:: matlab
 
-	%Velocities
+	%Velocities (joint space)
 	q0dot=zeros(6,1); %Base-spacecraft velocity
 	qmdot=[4;-1;5;2;1]*pi/180; %Joint velocities
 
 	%Differential Kinematics
-	[t0,tm,Bij,Bi0,P0,pm]=DiffKinematics_Serial(R0,r0,q0dot,qmdot,r,l,e,g,data);
+	[Bij,Bi0,P0,pm]=DiffKinematics_Serial(R0,r0,r,e,g,data);
+	%Velocities (operational space)
+	[t0,tm]=Velocities_Serial(Bij,Bi0,P0,pm,q0dot,qmdot,data);
 	%Jacobian of the Link 3
 	[J03, Jm3]=Jacob(r(1:3,3),r0,r,P0,pm,3,data.n);
 	%End-effector Jacobian
