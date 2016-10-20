@@ -1,4 +1,4 @@
-function [t0,tm,Bij,Bi0,P0,pm]=DiffKinematics_Serial(R0,r0,q0dot,qmdot,r,l,e,g,data) %#codegen
+function [Bij,Bi0,P0,pm]=DiffKinematics_Serial(R0,r0,r,e,g,data) %#codegen
 % Computes the differential kineamtics of a serial manipulator.
 %
 % Input ->
@@ -24,8 +24,6 @@ function [t0,tm,Bij,Bi0,P0,pm]=DiffKinematics_Serial(R0,r0,q0dot,qmdot,r,l,e,g,d
 %           can be achieved.
 %
 % Output ->
-%   t0 -> Base-spacecraft twist vector [wx,wy,wz,vx,vy,vz].
-%   tm -> Manipulator twist vector [wx,wy,wz,vx,vy,vz].
 %   Bij -> Twist-propagation matrix (for manipulator i>0 and j>0).
 %   Bi0 -> Twist-propagation matrix (for i>0 and j=0).
 %   P0 -> Base-spacecraft twist-propagation vector.
@@ -74,20 +72,6 @@ for i=1:n
         %Prismatic joint
         pm(1:6,i)=[zeros(3,1);e(1:3,i)];
     end
-end
-
-%--- Generalized twist vector ---%
-if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
-    %Pre-Allocate
-    tm=zeros(6,n);
-end
-%Base-spacecraft
-t0=P0*q0dot;
-%First link
-tm(1:6,1)=Bi0(1:6,1:6,1)*t0+pm(1:6,1)*qmdot(1);
-%Fordward recursion to obtain the twist vector
-for i=2:n
-    tm(1:6,i)=Bij(1:6,1:6,i,i-1)*tm(1:6,i-1)+pm(1:6,i)*qmdot(i);
 end
 
 end
