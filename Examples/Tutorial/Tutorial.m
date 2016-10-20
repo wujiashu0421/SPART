@@ -90,17 +90,19 @@ qm=[0;0;0;0;0];
 q0dot=zeros(6,1); %Base-spacecraft velocity
 qmdot=[4;-1;5;2;1]*pi/180; %Joint velocities
 
-
 %--- Kinematics ---%
 [RJ,RL,r,l,e,g,TEE]=Kinematics_Serial(R0,r0,qm,data);
 
 %--- Differential Kinematics ---%
 %Differential kinematics
-[t0,tm,Bij,Bi0,P0,pm]=DiffKinematics_Serial(R0,r0,q0dot,qmdot,r,l,e,g,data);
+[Bij,Bi0,P0,pm]=DiffKinematics_Serial(R0,r0,r,e,g,data);
 %Jacobian of the Link 3
 [J03, Jm3]=Jacob(r(1:3,3),r0,r,P0,pm,3,data.n);
 %End-effector Jacobian
 [J0EE, JmEE]=Jacob(TEE(1:3,4),r0,r,P0,pm,data.n,data.n);
+%Velocities
+[t0,tm]=Velocities_Serial(Bij,Bi0,P0,pm,q0dot,qmdot,data);
+
 
 %--- Inertia Matrices ---%
 %Inertias in inertial frames

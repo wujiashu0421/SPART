@@ -24,10 +24,6 @@ leg={};
 %Joint variables
 qm=deg2rad([45;-90]);
 
-%Velocities
-q0dot=[deg2rad(0);deg2rad(0);deg2rad(0);0;0;0];
-qmdot=deg2rad([0;0]);
-
 %Base position
 R0=eye(3);
 r0=[0;0;0];
@@ -41,7 +37,7 @@ mi=10;
 [RJ,RL,r,l,e,g,TEE]=Kinematics_Serial(R0,r0,qm,data);
 
 %--- Kinematic Manipulability ---%
-[elps_fixed,km_fixed,elps_floating,km_floating]=Kinematic_Manipulability(R0,r0,m0,mi,qm,qmdot,q0dot);
+[elps_fixed,km_fixed,elps_floating,km_floating]=Kinematic_Manipulability(R0,r0,m0,mi,qm);
 plot(elps_fixed(1,:)+TEE(1,4),elps_fixed(2,:)+TEE(2,4),'k','linewidth',2);
 leg(end+1)={'Fixed'};
 plot(elps_floating(1,:)+TEE(1,4),elps_floating(2,:)+TEE(2,4),'k:','linewidth',2);
@@ -56,7 +52,7 @@ mi=10;
 [RJ,RL,r,l,e,g,TEE]=Kinematics_Serial(R0,r0,qm,data);
 
 %--- Kinematic Manipulability ---%
-[elps_fixed,km_fixed,elps_floating,km_floating]=Kinematic_Manipulability(R0,r0,m0,mi,qm,qmdot,q0dot);
+[elps_fixed,km_fixed,elps_floating,km_floating]=Kinematic_Manipulability(R0,r0,m0,mi,qm);
 plot(elps_floating(1,:)+TEE(1,4),elps_floating(2,:)+TEE(2,4),'k--','linewidth',2);
 leg(end+1)={sprintf('Floating m_{0}=%d kg',m0)};
 

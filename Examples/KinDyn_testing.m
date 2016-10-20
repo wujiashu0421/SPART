@@ -72,7 +72,9 @@ profile on
 %Kinematics
 [RJ,RL,r,l,e,g,TEE]=Kinematics_Serial(R0,r0,qm,data);
 %Differential Kinematics
-[t0,tm,Bij,Bi0,P0,pm]=DiffKinematics_Serial(R0,r0,q0dot,qmdot,r,l,e,g,data);
+[Bij,Bi0,P0,pm]=DiffKinematics_Serial(R0,r0,r,e,g,data);
+%Velocities
+[t0,tm]=Velocities_Serial(Bij,Bi0,P0,pm,q0dot,qmdot,data);
 %Accelerations
 [t0dot,tmdot]=Accelerations_Serial(t0,tm,P0,pm,Bi0,Bij,q0dot,qmdot,q0ddot,qmddot,data);
 %Inertias

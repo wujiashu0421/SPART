@@ -26,10 +26,6 @@ mi=10;
 
 %--- Joint States ---%
 
-%Velocities
-q0dot=[deg2rad(0);deg2rad(0);deg2rad(0);0;0;0];
-qmdot=deg2rad([0;0]);
-
 %Base position
 R0=eye(3);
 r0=[0;0;0];
@@ -60,7 +56,7 @@ for q1=deg2rad(linspace(-90,90,n));
         
         
         %--- Kinematic Manipulability ---%
-        [~,km_fixed(i,j),~,km_floating(i,j)]=Kinematic_Manipulability(R0,r0,m0,mi,qm,qmdot,q0dot);
+        [~,km_fixed(i,j),~,km_floating(i,j)]=Kinematic_Manipulability(R0,r0,m0,mi,qm);
         
         %Counter
         j=j+1;
