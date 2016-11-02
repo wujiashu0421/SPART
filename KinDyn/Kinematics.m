@@ -71,17 +71,8 @@ if cjoint.parent_link==0
     %Parent link is base link
     TJ(1:4,1:4,cjoint.id)=T0*cjoint.T;
 else
-    %Transformation due to parent joint variable
-    pjoint=robot.joints(robot.links(cjoint.parent_link).parent_joint);
-    if strcmp(pjoint.type,'revolute')
-        T_qm=[Euler_DCM(cjoint.axis,qm(pjoint.id)),zeros(3,1);zeros(1,3),1];
-    elseif strcmp(cjoint.type,'prismatic')
-        T_qm=[eye(3),pjoint.axis*qm(pjoint.id);zeros(1,3),1];
-    else
-        T_qm=[eye(3),zeros(3,1);zeros(1,3),1];
-    end
     %Joint kinematics
-    TJ(1:4,1:4,cjoint.id)=TJ(1:4,1:4,robot.links(cjoint.parent_link).parent_joint)*T_qm*cjoint.T;
+    TJ(1:4,1:4,cjoint.id)=TL(1:4,1:4,cjoint.parent_link)*cjoint.T; 
 end
 
 %Transformation due to current joint variable

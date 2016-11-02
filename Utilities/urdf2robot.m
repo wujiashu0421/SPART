@@ -154,6 +154,10 @@ for k = 0:robot.n_joints-1
         links(joint.child_link) = child;
     end
     
+    %Correct homogeneous transformation so that it is from previous link
+    %inertial
+    joint.T=parent.T\joint.T;
+    
     %Store this joint in the joints map
     joints(char(joint.name))=joint;
 end
