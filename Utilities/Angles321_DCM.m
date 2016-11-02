@@ -1,4 +1,4 @@
-function DCM = Angles321_DCM(Angles)
+function DCM = Angles321_DCM(Angles) %#codegen
 %Convert the Euler angles (321 sequence), x-phi, y-theta, z-psi to DCM.
 
 phi = Angles(1);

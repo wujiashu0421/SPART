@@ -1,4 +1,4 @@
-function DCM = Angles123_DCM(Angles)
+function DCM = Angles123_DCM(Angles) %#codegen
 %Convert the Euler angles (123 sequence), x-phi, y-theta, z-psi to DCM.
 
 %Define angles
