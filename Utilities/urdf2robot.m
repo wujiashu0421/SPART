@@ -47,6 +47,9 @@ while i<joints_urdf.getLength
     end
 end
 
+%Create number of joint variables (to be poulated later)
+robot.n_q=[];
+
 %Count links and joints
 robot.n_links = links_urdf.getLength;
 robot.n_joints = joints_urdf.getLength;
@@ -180,6 +183,7 @@ end
 %Create ID maps
 robot.link_id=containers.Map();
 robot.joint_id=containers.Map();
+robot.q_id=containers.Map();
 
 %Remove base link from the number of total links
 robot.n_links=robot.n_links-1;
@@ -203,11 +207,16 @@ robot.link_id(base_link)=0;
 %Add links and joints into the structure with the standard numbering
 nl=-1; %Link index
 nj=-1; %Joint index
+nq=1; %Joint variable index 
 %Recursively scan through the tree structure
 for n=1:length(clink.child_joint)
     robot.base_link.child_joint(end+1)=nj+2;
-    [robot,nl,nj]=urdf2robot_recursive(robot,links,joints,joints(clink.child_joint{n}),nl+1,nj+1);
+    [robot,nl,nj,nq]=urdf2robot_recursive(robot,links,joints,joints(clink.child_joint{n}),nl+1,nj+1,nq);
 end
+
+%Populate number of joint variables
+robot.n_q=nq-1;
+fprintf('Number of joint variables: %d\n',robot.n_q);
 
 %--- Assign robot model origin ---%
 robot.origin='urdf';
@@ -215,13 +224,21 @@ robot.origin='urdf';
 end
 
 %--- Recursive function ---%
-function [robot,nl,nj]=urdf2robot_recursive(robot,links,joints,child_joint,nl,nj)%#codegen
+function [robot,nl,nj,nq]=urdf2robot_recursive(robot,links,joints,child_joint,nl,nj,nq)%#codegen
 
 %Copy the elements of child joint
 robot.joints(nj+1).id=nj+1;
 robot.joints(nj+1).xml=child_joint.xml;
 robot.joints(nj+1).name=child_joint.name;
 robot.joints(nj+1).type=child_joint.type;
+%Assign joint variable if joint is revolute or prismatic
+if strcmp(child_joint.type,'revolute') || strcmp(child_joint.type,'prismatic')
+    robot.joints(nj+1).q_id=nq;
+    robot.q_id(child_joint.name)=nq;
+    nq=nq+1;
+else
+    robot.joints(nj+1).q_id=[];
+end
 robot.joints(nj+1).parent_link=robot.link_id(child_joint.parent_link);
 robot.joints(nj+1).child_link=nl+1;
 robot.joints(nj+1).axis=child_joint.axis;
@@ -245,7 +262,7 @@ robot.link_id(clink.name)=nl+1;
 %Recursively scan through the tree structure
 for n=1:length(clink.child_joint)
     robot.links(nl+1).child_joint(end+1)=nj+2;
-    [robot,nl,nj]=urdf2robot_recursive(robot,links,joints,joints(clink.child_joint{n}),nl+1,nj+1);
+    [robot,nl,nj,nq]=urdf2robot_recursive(robot,links,joints,joints(clink.child_joint{n}),nl+1,nj+1,nq);
 end
 
 end

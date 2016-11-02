@@ -77,9 +77,9 @@ end
 
 %Transformation due to current joint variable
 if strcmp(cjoint.type,'revolute')
-    T_qm=[Euler_DCM(cjoint.axis,qm(cjoint.id)),zeros(3,1);zeros(1,3),1];
+    T_qm=[Euler_DCM(cjoint.axis,qm(cjoint.q_id)),zeros(3,1);zeros(1,3),1];
 elseif strcmp(cjoint.type,'prismatic')
-    T_qm=[eye(3),cjoint.axis*qm(cjoint.id);zeros(1,3),1];
+    T_qm=[eye(3),cjoint.axis*qm(cjoint.q_id);zeros(1,3),1];
 else
     T_qm=[eye(3),zeros(3,1);zeros(1,3),1];
 end
