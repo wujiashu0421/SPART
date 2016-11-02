@@ -65,8 +65,7 @@ for k = 0:robot.n_links-1
     link = struct();
     link.xml = links_urdf.item(k);
     link.name = char(link.xml.getAttribute('name'));
-    link.s=zeros(3,1);
-    link.R=eye(3);
+    link.T=[eye(3),zeros(3,1);zeros(1,3),1];
     link.parent_joint = {};
     link.child_joint = {};
     
@@ -77,11 +76,11 @@ for k = 0:robot.n_links-1
     origin = inertial.getElementsByTagName('origin').item(0);
     if ~isempty(origin)
         if ~isempty(char(origin.getAttribute('xyz')))
-            link.s = eval(['[',char(origin.getAttribute('xyz')),']'])';
+            link.T(1:3,4) = eval(['[',char(origin.getAttribute('xyz')),']'])';
         end
         if ~isempty(char(origin.getAttribute('rpy')))
             rpy = eval(['[',char(origin.getAttribute('rpy')),']']);
-            link.R=Angles123_DCM(rpy');
+            link.T(1:3,1:3)=Angles123_DCM(rpy');
         end
     end
     
@@ -112,20 +111,18 @@ for k = 0:robot.n_joints-1
     joint.type = char(joint.xml.getAttribute('type'));
     joint.parent_link = '';
     joint.child_link = '';
-    joint.s =zeros(3,1);
-    joint.R =eye(3);
+    joint.T=[eye(3),zeros(3,1);zeros(1,3),1];
     joint.axis = [0; 0; 1];
     
     %Get origin properties
     origin = joint.xml.getElementsByTagName('origin').item(0);
     if ~isempty(origin)
         if ~isempty(char(origin.getAttribute('xyz')))
-            joint.s = eval(['[',char(origin.getAttribute('xyz')),']'])';
+            joint.T(1:3,4) = eval(['[',char(origin.getAttribute('xyz')),']'])';
         end
         if ~isempty(char(origin.getAttribute('rpy')))
-            
             rpy = eval(['[',char(origin.getAttribute('rpy')),']']);
-            joint.R= Angles123_DCM(rpy');
+            joint.T(1:3,1:3) = Angles123_DCM(rpy');
         end
     end
     
@@ -192,8 +189,7 @@ clink=links(base_link);
 robot.base_link.xml=clink.xml;
 robot.base_link.name=clink.name;
 robot.base_link.child_joint=[];
-robot.base_link.R=clink.R;
-robot.base_link.s=clink.s;
+robot.base_link.T=clink.T;
 robot.base_link.mass=clink.mass;
 robot.base_link.inertia=clink.inertia;
 
@@ -225,8 +221,7 @@ robot.joints(nj+1).type=child_joint.type;
 robot.joints(nj+1).parent_link=robot.link_id(child_joint.parent_link);
 robot.joints(nj+1).child_link=nl+1;
 robot.joints(nj+1).axis=child_joint.axis;
-robot.joints(nj+1).R=child_joint.R;
-robot.joints(nj+1).s=child_joint.s;
+robot.joints(nj+1).T=child_joint.T;
 
 %Copy elements of child link
 clink=links(child_joint.child_link);
@@ -235,8 +230,7 @@ robot.links(nl+1).xml=clink.xml;
 robot.links(nl+1).name=clink.name;
 robot.links(nl+1).parent_joint=nj+1;
 robot.links(nl+1).child_joint=[];
-robot.links(nl+1).R=clink.R;
-robot.links(nl+1).s=clink.s;
+robot.links(nl+1).T=clink.T;
 robot.links(nl+1).mass=clink.mass;
 robot.links(nl+1).inertia=clink.inertia;
 

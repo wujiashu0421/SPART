@@ -20,7 +20,7 @@ end
 
 %--- Base link ---%
 clink = robot.base_link;
-T0=[R0,r0;zeros(1,3),1]*[clink.R,clink.s;zeros(1,3),1];
+T0=[R0,r0;zeros(1,3),1]*clink.T;
 RB=T0(1:3,1:3);
 rB=T0(1:3,4);
 
@@ -69,7 +69,7 @@ function [TJ,TL]=Kin_recursive(cjoint,robot,qm,T0,TJ,TL)
 %Joint kinematics
 if cjoint.parent_link==0
     %Parent link is base link
-    TJ(1:4,1:4,cjoint.id)=T0*[cjoint.R,cjoint.s;zeros(1,3),1];
+    TJ(1:4,1:4,cjoint.id)=T0*cjoint.T;
 else
     %Transformation due to parent joint variable
     pjoint=robot.joints(robot.links(cjoint.parent_link).parent_joint);
@@ -81,7 +81,7 @@ else
         T_qm=[eye(3),zeros(3,1);zeros(1,3),1];
     end
     %Joint kinematics
-    TJ(1:4,1:4,cjoint.id)=TJ(1:4,1:4,robot.links(cjoint.parent_link).parent_joint)*T_qm*[cjoint.R,cjoint.s;zeros(1,3),1];
+    TJ(1:4,1:4,cjoint.id)=TJ(1:4,1:4,robot.links(cjoint.parent_link).parent_joint)*T_qm*cjoint.T;
 end
 
 %Transformation due to current joint variable
@@ -95,7 +95,7 @@ end
 
 %Link Kinematics
 clink=robot.links(cjoint.child_link);
-TL(1:4,1:4,clink.id)=TJ(1:4,1:4,clink.parent_joint)*T_qm*[clink.R,clink.s;zeros(1,3),1];
+TL(1:4,1:4,clink.id)=TJ(1:4,1:4,clink.parent_joint)*T_qm*clink.T;
 
 %Forward recursive for rest of joints and links
 for n=1:length(clink.child_joint)
