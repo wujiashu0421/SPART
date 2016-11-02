@@ -209,6 +209,9 @@ for n=1:length(clink.child_joint)
     [robot,nl,nj]=urdf2robot_recursive(robot,links,joints,joints(clink.child_joint{n}),nl+1,nj+1);
 end
 
+%--- Assign robot model origin ---%
+robot.origin='urdf';
+
 end
 
 %--- Recursive function ---%
