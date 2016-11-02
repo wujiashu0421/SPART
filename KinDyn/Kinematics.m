@@ -1,4 +1,4 @@
-function [RB,RJ,RL,rB,rJ,rL,e,g]=Kinematics_urdf(R0,r0,qm,robot) %#codegen
+function [RB,RJ,RL,rB,rJ,rL,e,g]=Kinematics(R0,r0,qm,robot) %#codegen
 %[RJ,RL,r,l,e,g,TEE]=Kinematics_serial_urdf(R0,r0,qm,robot)
 
 
