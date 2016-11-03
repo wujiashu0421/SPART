@@ -30,7 +30,7 @@ for n=1:length(clink.child_joint)
     %Get child joint
     cjoint=robot.joints(clink.child_joint(n));
     % Forward Kinematics recursion
-    [TJ,TL]=Kin_recursive(cjoint,robot,qm,T0,TJ,TL);
+    [TJ,TL]=Kin_recursive(cjoint(1),robot,qm,T0,TJ,TL);
 end
 
 %--- Rotation matrices, translation, position and other geometry vectors ---%
@@ -93,7 +93,7 @@ for n=1:length(clink.child_joint)
     %Select child joint
     cjoint=robot.joints(clink.child_joint);
     %Recursive
-    [TJ,TL]=Kin_recursive(cjoint,robot,qm,T0,TJ,TL); 
+    [TJ,TL]=Kin_recursive(cjoint(1),robot,qm,T0,TJ,TL); 
 end
 
 end
