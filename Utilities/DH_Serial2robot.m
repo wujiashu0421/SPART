@@ -21,11 +21,6 @@ robot.n_links=DH_data.n;
 robot.n_joints=DH_data.n;
 robot.n_q=DH_data.n;
 
-%Key maps
-robot.link_id=containers.Map();
-robot.joint_id=containers.Map();
-robot.q_id=containers.Map();
-
 %Create links and joints structures
 robot.links=struct();
 robot.joints=struct();
@@ -37,8 +32,6 @@ robot.origin='DH';
 %--- Base link ---%
 %Get name
 robot.base_link.name='Base';
-%Add name into the key
-robot.link_id(robot.base_link.name)=0;
 %Child joint
 robot.base_link.child_joint=1;
 %Homogeneous transformation
@@ -46,8 +39,6 @@ robot.base_link.T=[eye(3),zeros(3,1);zeros(1,3),1];
 %Mass and inertia
 robot.base_link.mass=DH_data.base.mass;
 robot.base_link.inertia=DH_data.base.I;
-
-
 
 
 %--- Iterate through joints and links ---%
@@ -58,8 +49,6 @@ for i=1:DH_data.n
     robot.links(i).id=i;
     %Get name
     robot.links(i).name=sprintf('L%d',i);
-    %Add name into the key
-    robot.link_id(robot.links(i).name)=i;
     %Parent and child joints
     robot.links(i).parent_joint=i;
     if i<DH_data.n
@@ -89,10 +78,6 @@ for i=1:DH_data.n
     robot.joints(i).id=i;
     %Get name
     robot.joints(i).name=sprintf('J%d',i);
-    %Add name into the key
-    robot.joint_id(robot.joints(i).name)=i;
-    %Add joint variable into the key
-    robot.q_id(robot.links(i).name)=i;
     %Type
     robot.joints(i).type=DH_data.man(i).type;
     %Joint variable ID
