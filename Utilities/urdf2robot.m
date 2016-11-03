@@ -1,4 +1,4 @@
-function [robot] = urdf2robot(filename) %#codegen
+function [robot,robot_keys] = urdf2robot(filename) %#codegen
 %Creates the SPART robot model from an URDF file.
 
 %This function was inspired by:
@@ -66,14 +66,14 @@ fprintf('Number of joints: %d (including fixed joints)\n',robot.n_joints);
 for k = 0:robot.n_links-1
     %Create basic structure with default values
     link = struct();
-    link.xml = links_urdf.item(k);
-    link.name = char(link.xml.getAttribute('name'));
+    link_xml = links_urdf.item(k);
+    link.name = char(link_xml.getAttribute('name'));
     link.T=[eye(3),zeros(3,1);zeros(1,3),1];
     link.parent_joint = {};
     link.child_joint = {};
     
     %Grab inertial properties
-    inertial = link.xml.getElementsByTagName('inertial').item(0);
+    inertial = link_xml.getElementsByTagName('inertial').item(0);
     
     %Grab origin properties
     origin = inertial.getElementsByTagName('origin').item(0);
@@ -109,16 +109,16 @@ end
 for k = 0:robot.n_joints-1  
     %Create basic structure with default values
     joint = struct();
-    joint.xml = joints_urdf.item(k);
-    joint.name = char(joint.xml.getAttribute('name'));
-    joint.type = char(joint.xml.getAttribute('type'));
+    joint_xml = joints_urdf.item(k);
+    joint.name = char(joint_xml.getAttribute('name'));
+    joint.type = char(joint_xml.getAttribute('type'));
     joint.parent_link = '';
     joint.child_link = '';
     joint.T=[eye(3),zeros(3,1);zeros(1,3),1];
     joint.axis = [0; 0; 1];
     
     %Get origin properties
-    origin = joint.xml.getElementsByTagName('origin').item(0);
+    origin = joint_xml.getElementsByTagName('origin').item(0);
     if ~isempty(origin)
         if ~isempty(char(origin.getAttribute('xyz')))
             joint.T(1:3,4) = eval(['[',char(origin.getAttribute('xyz')),']'])';
@@ -130,13 +130,13 @@ for k = 0:robot.n_joints-1
     end
     
     %Get rotation axis
-    axis = joint.xml.getElementsByTagName('axis').item(0);
+    axis = joint_xml.getElementsByTagName('axis').item(0);
     if ~isempty(axis)
         joint.axis = eval(['[',char(axis.getAttribute('xyz')),']'])';
     end
     
     %Get parent link name
-    parent = joint.xml.getElementsByTagName('parent').item(0);
+    parent = joint_xml.getElementsByTagName('parent').item(0);
     if ~isempty(parent)
         joint.parent_link = char(parent.getAttribute('link'));
         
@@ -147,7 +147,7 @@ for k = 0:robot.n_joints-1
     end
     
     %Get child link name
-    child = joint.xml.getElementsByTagName('child').item(0);
+    child = joint_xml.getElementsByTagName('child').item(0);
     if ~isempty(child)
         joint.child_link = char(child.getAttribute('link'));
         
@@ -181,9 +181,9 @@ end
 %names and IDs.
 
 %Create ID maps
-robot.link_id=containers.Map();
-robot.joint_id=containers.Map();
-robot.q_id=containers.Map();
+robot_keys.link_id=containers.Map();
+robot_keys.joint_id=containers.Map();
+robot_keys.q_id=containers.Map();
 
 %Remove base link from the number of total links
 robot.n_links=robot.n_links-1;
@@ -194,7 +194,6 @@ robot.joints(robot.n_joints) = struct();
 
 %Save base link on its own structure
 clink=links(base_link);
-robot.base_link.xml=clink.xml;
 robot.base_link.name=clink.name;
 robot.base_link.child_joint=[];
 robot.base_link.T=clink.T;
@@ -202,7 +201,7 @@ robot.base_link.mass=clink.mass;
 robot.base_link.inertia=clink.inertia;
 
 %Assign base ID
-robot.link_id(base_link)=0;
+robot_keys.link_id(base_link)=0;
 
 %Add links and joints into the structure with the standard numbering
 nl=-1; %Link index
@@ -211,7 +210,7 @@ nq=1; %Joint variable index
 %Recursively scan through the tree structure
 for n=1:length(clink.child_joint)
     robot.base_link.child_joint(end+1)=nj+2;
-    [robot,nl,nj,nq]=urdf2robot_recursive(robot,links,joints,joints(clink.child_joint{n}),nl+1,nj+1,nq);
+    [robot,robot_keys,nl,nj,nq]=urdf2robot_recursive(robot,robot_keys,links,joints,joints(clink.child_joint{n}),nl+1,nj+1,nq);
 end
 
 %Populate number of joint variables
@@ -224,22 +223,21 @@ robot.origin='urdf';
 end
 
 %--- Recursive function ---%
-function [robot,nl,nj,nq]=urdf2robot_recursive(robot,links,joints,child_joint,nl,nj,nq)%#codegen
+function [robot,robot_keys,nl,nj,nq]=urdf2robot_recursive(robot,robot_keys,links,joints,child_joint,nl,nj,nq)%#codegen
 
 %Copy the elements of child joint
 robot.joints(nj+1).id=nj+1;
-robot.joints(nj+1).xml=child_joint.xml;
 robot.joints(nj+1).name=child_joint.name;
 robot.joints(nj+1).type=child_joint.type;
 %Assign joint variable if joint is revolute or prismatic
 if strcmp(child_joint.type,'revolute') || strcmp(child_joint.type,'prismatic')
     robot.joints(nj+1).q_id=nq;
-    robot.q_id(child_joint.name)=nq;
+    robot_keys.q_id(child_joint.name)=nq;
     nq=nq+1;
 else
     robot.joints(nj+1).q_id=[];
 end
-robot.joints(nj+1).parent_link=robot.link_id(child_joint.parent_link);
+robot.joints(nj+1).parent_link=robot_keys.link_id(child_joint.parent_link);
 robot.joints(nj+1).child_link=nl+1;
 robot.joints(nj+1).axis=child_joint.axis;
 robot.joints(nj+1).T=child_joint.T;
@@ -247,7 +245,6 @@ robot.joints(nj+1).T=child_joint.T;
 %Copy elements of child link
 clink=links(child_joint.child_link);
 robot.links(nl+1).id=nl+1;
-robot.links(nl+1).xml=clink.xml;
 robot.links(nl+1).name=clink.name;
 robot.links(nl+1).parent_joint=nj+1;
 robot.links(nl+1).child_joint=[];
@@ -256,13 +253,13 @@ robot.links(nl+1).mass=clink.mass;
 robot.links(nl+1).inertia=clink.inertia;
 
 %Assign ID
-robot.joint_id(child_joint.name)=nj+1;
-robot.link_id(clink.name)=nl+1;
+robot_keys.joint_id(child_joint.name)=nj+1;
+robot_keys.link_id(clink.name)=nl+1;
 
 %Recursively scan through the tree structure
 for n=1:length(clink.child_joint)
     robot.links(nl+1).child_joint(end+1)=nj+2;
-    [robot,nl,nj,nq]=urdf2robot_recursive(robot,links,joints,joints(clink.child_joint{n}),nl+1,nj+1,nq);
+    [robot,robot_keys,nl,nj,nq]=urdf2robot_recursive(robot,robot_keys,links,joints,joints(clink.child_joint{n}),nl+1,nj+1,nq);
 end
 
 end
