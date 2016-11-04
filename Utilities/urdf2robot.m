@@ -83,7 +83,7 @@ for k = 0:robot.n_links-1
         end
         if ~isempty(char(origin.getAttribute('rpy')))
             rpy = eval(['[',char(origin.getAttribute('rpy')),']']);
-            link.T(1:3,1:3)=Angles123_DCM(rpy');
+            link.T(1:3,1:3)=Angles321_DCM(rpy')';
         end
     end
     
@@ -111,11 +111,20 @@ for k = 0:robot.n_joints-1
     joint = struct();
     joint_xml = joints_urdf.item(k);
     joint.name = char(joint_xml.getAttribute('name'));
-    joint.type = char(joint_xml.getAttribute('type'));
+    joint.type_name = char(joint_xml.getAttribute('type'));
     joint.parent_link = '';
     joint.child_link = '';
     joint.T=[eye(3),zeros(3,1);zeros(1,3),1];
     joint.axis = [0; 0; 1];
+    
+    if strcmp(joint.type_name,'revolute')
+        joint.type=1;
+    elseif strcmp(joint.type_name,'prismatic')
+        joint.type=2;
+    elseif strcmp(joint.type_name,'fixed')
+        joint.type=0;
+    end
+    
     
     %Get origin properties
     origin = joint_xml.getElementsByTagName('origin').item(0);
@@ -125,7 +134,7 @@ for k = 0:robot.n_joints-1
         end
         if ~isempty(char(origin.getAttribute('rpy')))
             rpy = eval(['[',char(origin.getAttribute('rpy')),']']);
-            joint.T(1:3,1:3) = Angles123_DCM(rpy');
+            joint.T(1:3,1:3)=Angles321_DCM(rpy')';
         end
     end
     
@@ -230,7 +239,7 @@ robot.joints(nj+1).id=nj+1;
 robot.joints(nj+1).name=child_joint.name;
 robot.joints(nj+1).type=child_joint.type;
 %Assign joint variable if joint is revolute or prismatic
-if strcmp(child_joint.type,'revolute') || strcmp(child_joint.type,'prismatic')
+if child_joint.type
     robot.joints(nj+1).q_id=nq;
     robot_keys.q_id(child_joint.name)=nq;
     nq=nq+1;
@@ -260,6 +269,10 @@ robot_keys.link_id(clink.name)=nl+1;
 for n=1:length(clink.child_joint)
     robot.links(nl+1).child_joint(end+1)=nj+2;
     [robot,robot_keys,nl,nj,nq]=urdf2robot_recursive(robot,robot_keys,links,joints,joints(clink.child_joint{n}),nl+1,nj+1,nq);
+end
+
+if isempty(robot.links(nl+1).child_joint)
+    robot.links(nl+1).child_joint=-1;
 end
 
 end
