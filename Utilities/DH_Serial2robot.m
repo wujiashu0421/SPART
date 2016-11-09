@@ -32,8 +32,6 @@ robot.origin='DH';
 %--- Base link ---%
 %Get name
 robot.base_link.name='Base';
-%Child joint
-robot.base_link.child_joint=1;
 %Homogeneous transformation
 robot.base_link.T=[eye(3),zeros(3,1);zeros(1,3),1];
 %Mass and inertia
@@ -49,13 +47,8 @@ for i=1:DH_data.n
     robot.links(i).id=i;
     %Get name
     robot.links(i).name=sprintf('L%d',i);
-    %Parent and child joints
+    %Parent joints
     robot.links(i).parent_joint=i;
-    if i<DH_data.n
-        robot.links(i).child_joint=i+1;
-    else
-        robot.links(i).child_joint=[];
-    end
     %Compute Rotation matrix and translation vector from DH parameters
     [R,s] = DH_Rs(DH_data.man(i).DH,0,DH_data.man(i).type);
     %Homogeneous transformation matrix

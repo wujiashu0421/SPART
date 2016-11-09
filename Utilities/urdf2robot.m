@@ -204,7 +204,6 @@ robot.joints(robot.n_joints) = struct();
 %Save base link on its own structure
 clink=links(base_link);
 robot.base_link.name=clink.name;
-robot.base_link.child_joint=[];
 robot.base_link.T=clink.T;
 robot.base_link.mass=clink.mass;
 robot.base_link.inertia=clink.inertia;
@@ -218,7 +217,6 @@ nj=-1; %Joint index
 nq=1; %Joint variable index 
 %Recursively scan through the tree structure
 for n=1:length(clink.child_joint)
-    robot.base_link.child_joint(end+1)=nj+2;
     [robot,robot_keys,nl,nj,nq]=urdf2robot_recursive(robot,robot_keys,links,joints,joints(clink.child_joint{n}),nl+1,nj+1,nq);
 end
 
@@ -256,7 +254,6 @@ clink=links(child_joint.child_link);
 robot.links(nl+1).id=nl+1;
 robot.links(nl+1).name=clink.name;
 robot.links(nl+1).parent_joint=nj+1;
-robot.links(nl+1).child_joint=[];
 robot.links(nl+1).T=clink.T;
 robot.links(nl+1).mass=clink.mass;
 robot.links(nl+1).inertia=clink.inertia;
@@ -267,12 +264,7 @@ robot_keys.link_id(clink.name)=nl+1;
 
 %Recursively scan through the tree structure
 for n=1:length(clink.child_joint)
-    robot.links(nl+1).child_joint(end+1)=nj+2;
     [robot,robot_keys,nl,nj,nq]=urdf2robot_recursive(robot,robot_keys,links,joints,joints(clink.child_joint{n}),nl+1,nj+1,nq);
-end
-
-if isempty(robot.links(nl+1).child_joint)
-    robot.links(nl+1).child_joint=-1;
 end
 
 end
