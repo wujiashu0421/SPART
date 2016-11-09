@@ -30,4 +30,12 @@ for j=1:i
     Jm(1:6,j)=[eye(3),zeros(3,3);SkewSym(r(1:3,j)-rxi),eye(3)]*pm(1:6,j);
 end
 
+%Add zeros if required
+if isempty(coder.target) %Only when not pre-allocated
+    if i<n
+        Jm(1:6,i+1:n)=zeros(6,n-i);
+    end
+end
+
+
 end
