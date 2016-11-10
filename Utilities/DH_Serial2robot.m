@@ -90,4 +90,7 @@ for i=1:DH_data.n
     
 end
 
+%--- Add Conectivity Map ---%
+robot.Con=ConnectivityMap(robot);
+
 end

@@ -1,4 +1,4 @@
-function [J0, Jm]=Jacob(rxi,r0,r,P0,pm,i,n) %#codegen
+function [J0, Jm]=Jacob(rxi,r0,rL,P0,pm,i,robot) %#codegen
 % Computes the Jacobian of the xi point.
 %
 % Input ->
@@ -9,7 +9,7 @@ function [J0, Jm]=Jacob(rxi,r0,r,P0,pm,i,n) %#codegen
 %   pm -> Manipulator twist-propagation vector.
 %   i -> Link where the point xi is located.
 %   n -> Manipulator number of joints and links.
-%       
+%
 % Output ->
 %   J0 -> Base-spacecraft Jacobian
 %   Jm -> Manipulator Jacobian
@@ -18,22 +18,31 @@ function [J0, Jm]=Jacob(rxi,r0,r,P0,pm,i,n) %#codegen
 
 %=== CODE ===%
 
+%--- Number of links  ---%
+
 %Base Jacobian
 J0=[eye(3),zeros(3,3);SkewSym(r0-rxi),eye(3)]*P0;
 
 %Pre-allocate
 if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
-    Jm=zeros(6,n);
+    Jm=zeros(6,robot.n_q);
 end
 %Manipulator Jacobian
 for j=1:i
-    Jm(1:6,j)=[eye(3),zeros(3,3);SkewSym(r(1:3,j)-rxi),eye(3)]*pm(1:6,j);
+    %If joint is not fixed
+    if robot.joints(j).type~=0
+        if robot.Con(i,j)==1
+            Jm(1:6,robot.joints(j).q_id)=[eye(3),zeros(3,3);SkewSym(rL(1:3,j)-rxi),eye(3)]*pm(1:6,j);
+        else
+            Jm(1:6,robot.joints(j).q_id)=zeros(6,1);
+        end
+    end
 end
 
 %Add zeros if required
 if isempty(coder.target) %Only when not pre-allocated
-    if i<n
-        Jm(1:6,i+1:n)=zeros(6,n-i);
+    if i<robot.n_q
+        Jm(1:6,i+1:robot.n_q)=zeros(6,robot.n_q-i);
     end
 end
 
