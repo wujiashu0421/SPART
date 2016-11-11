@@ -63,7 +63,7 @@ end
 %Forward recursion
 for i=1:n
     
-    if robot.joints(i).parent_link
+    if robot.joints(i).parent_link==0
         %First Link
         tmdot(1:6,i)=Bi0(1:6,1:6,i)*t0dot+[zeros(3,6);SkewSym(t0(4:6)-tm(4:6,i)),zeros(3,3)]*t0;
     else
