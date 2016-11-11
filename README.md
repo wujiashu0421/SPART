@@ -40,7 +40,7 @@ SPART can also be used to control real manipulators. Here is an example of resol
 
 ## License
 
-This software is released under the GPLv3 license.
+This software is released under the LGPLv3 license.
 
 ## Contributors
 
