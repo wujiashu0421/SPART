@@ -1,5 +1,5 @@
 function [t0,tm]=Velocities(Bij,Bi0,P0,pm,q0dot,qmdot,robot) %#codegen
-% Computes the velocities of a serial manipulator.
+% Computes the velocities of the manipulator links.
 %
 % Input ->
 %   Bij -> Twist-propagation matrix (for manipulator i>0 and j>0).
@@ -9,27 +9,26 @@ function [t0,tm]=Velocities(Bij,Bi0,P0,pm,q0dot,qmdot,robot) %#codegen
 %   q0dot -> Base-spacecraft velocities [angular velocity in body, linear
 %   velocity in inertial].
 %   qmdot -> Manipulator joint rates.
-%   data -> Manipulator data.
-%       data.n -> Manipulator number of joints and links.
-%       data.base -> Base-spacecraft data
-%           data.base.T_L0_J1 -> Homogeneous transformation of the first
-%           joint w.r.t. the base-spacecraft.
-%       data.man -> Manipulator data.
-%           data.man(i).DH -> DH parameters of the ith joint.
-%           data.man(i).type -> Type of joint. type==0 for revolute,
-%           otherwise prismatic.
-%           data.man(i).b -> Vector from the ith link to the following
-%           joint i+1.
-%       data.EE -> End-effector parameters
-%           data.EE.theta -> Rotation about the final z-axis so that any
-%           desired End-Effector cartesian coordinate system orientation
-%           can be achieved.
+%   robot -> Robot model.
 %
 % Output ->
 %   t0 -> Base-spacecraft twist vector [wx,wy,wz,vx,vy,vz].
 %   tm -> Manipulator twist vector [wx,wy,wz,vx,vy,vz].
 
 %=== LICENSE ===%
+
+%     This program is free software: you can redistribute it and/or modify
+%     it under the terms of the GNU Lesser General Public License as published by
+%     the Free Software Foundation, either version 3 of the License, or
+%     (at your option) any later version.
+% 
+%     This program is distributed in the hope that it will be useful,
+%     but WITHOUT ANY WARRANTY; without even the implied warranty of
+%     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%     GNU Lesser General Public License for more details.
+% 
+%     You should have received a copy of the GNU Lesser General Public License
+%     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 %=== CODE ===%
 
