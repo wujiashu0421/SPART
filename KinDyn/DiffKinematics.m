@@ -28,7 +28,7 @@ end
 %Compute Bij
 for j=1:n
     for i=1:n
-        if robot.Con(i,j)==1
+        if robot.Con.Branch(i,j)==1
             %Links are in the same branch
             Bij(1:6,1:6,i,j)=[eye(3), zeros(3,3); SkewSym(rL(1:3,j)-rL(1:3,i)), eye(3)];
         else
