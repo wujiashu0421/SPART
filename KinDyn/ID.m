@@ -55,14 +55,14 @@ end
 
 %--- Forces ---%
 %Base-spacecraft
-wq0=[I0,zeros(3,3);zeros(3,3),data.base.mass*eye(3)]*t0dot+Mdot0*t0-wF0;
+wq0=[I0,zeros(3,3);zeros(3,3),robot.base_link.mass*eye(3)]*t0dot+Mdot0*t0-wF0;
 if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
     %Pre-allocate
     wq=zeros(6,n);
 end
 %Manipulator
 for i=1:n
-    wq(1:6,i)=[Im(1:3,1:3,i),zeros(3,3);zeros(3,3),data.man(i).mass*eye(3)]*tmdot(1:6,i)+Mdot(1:6,1:6,i)*tm(1:6,i)-wFm(1:6,i);
+    wq(1:6,i)=[Im(1:3,1:3,i),zeros(3,3);zeros(3,3),robot.links(i).mass*eye(3)]*tmdot(1:6,i)+Mdot(1:6,1:6,i)*tm(1:6,i)-wFm(1:6,i);
 end
 if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
     %Pre-allocate
