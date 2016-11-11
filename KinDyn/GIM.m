@@ -8,8 +8,7 @@ function [H0, H0m, Hm] = GIM(M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,robot) %#codegen
 %   Bi0 -> Twist-propagation matrix (for i>0 and j=0).
 %   P0 -> Base-spacecraft twist-propagation vector.
 %   pm -> Manipulator twist-propagation vector.
-%   data -> Manipulator data.
-%       data.n -> Manipulator number of joints and links.
+%   robot -> Robot model
 %
 % Output ->
 %   H0 -> Base-spacecraft inertia matrix.

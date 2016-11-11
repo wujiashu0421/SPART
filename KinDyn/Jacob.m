@@ -8,7 +8,7 @@ function [J0, Jm]=Jacob(rxi,r0,rL,P0,pm,i,robot) %#codegen
 %   P0 -> Base-spacecraft twist-propagation vector.
 %   pm -> Manipulator twist-propagation vector.
 %   i -> Link where the point xi is located.
-%   n -> Manipulator number of joints and links.
+%   robot -> Robot model.
 %
 % Output ->
 %   J0 -> Base-spacecraft Jacobian
@@ -45,6 +45,5 @@ if isempty(coder.target) %Only when not pre-allocated
         Jm(1:6,i+1:robot.n_q)=zeros(6,robot.n_q-i);
     end
 end
-
 
 end

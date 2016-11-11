@@ -6,6 +6,7 @@ function [M0_tilde,Mm_tilde]=MCB(I0,Im,Bij,Bi0,robot) %#codegen
 %   Im -> Manipulator inertia in inertial frame.
 %   Bij -> Twist-propagation matrix (for manipulator i>0 and j>0).
 %   Bi0 -> Twist-propagation matrix (for i>0 and j=0).
+%   robot -> Robot model.
 %
 % Output ->
 %   M0_tilde -> Base-spacecraft mass matrix of composite body.

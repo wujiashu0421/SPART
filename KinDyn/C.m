@@ -13,8 +13,8 @@ function [C0, C0m, Cm0, Cm] = C(t0,tm,I0,Im,M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,robo
 %   B0j -> Twist-propagation matrix (for i=0 and j>0).
 %   P0 -> Base-spacecraft twist-propagation vector.
 %   pm -> Manipulator twist-propagation vector.
-%   data -> Manipulator data.
-%       data.n -> Manipulator number of joints and links.
+%   robot -> Robot model
+%
 % Output ->
 %   C0 -> Base-spacecraft convective inertia matrix.
 %   C0m -> Base-spacecraft - manipulator coupling convective inertia matrix.

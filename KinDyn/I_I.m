@@ -4,7 +4,7 @@ function [I0,Im]=I_I(R0,RL,robot) %#codegen
 % Input ->
 %   R0 -> Rotation matrix from the base-spacecraft to the inertial frame.
 %   RL -> Links 3x3 rotation matrices.
-%   robot -> Robot model
+%   robot -> Robot model.
 %
 % Output ->
 %   I0 -> Base-spacecraft inertia in inertial frame.

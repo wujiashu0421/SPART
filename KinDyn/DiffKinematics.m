@@ -4,6 +4,10 @@ function [Bij,Bi0,P0,pm]=DiffKinematics(R0,r0,rL,e,g,robot) %#codegen
 % Input ->
 %   R0 -> Rotation matrix from the base-spacecraft to the inertial frame.
 %   r0 -> Position of the base-spacecraft to the inertial frame.
+%   rL -> Position of links.
+%   e -> Joint axis.
+%   g -> Vector from joint to link center-of-mass
+%   robot -> Robot model.
 %
 % Output ->
 %   Bij -> Twist-propagation matrix (for manipulator i>0 and j>0).
