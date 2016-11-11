@@ -91,6 +91,9 @@ for i=1:DH_data.n
 end
 
 %--- Add Conectivity Map ---%
-robot.Con=ConnectivityMap(robot);
+[Branch,Child,Child_base]=ConnectivityMap(robot);
+robot.Con.Branch=Branch;
+robot.Con.Child=Child;
+robot.Con.Child_base=Child_base;
 
 end

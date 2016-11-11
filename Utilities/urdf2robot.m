@@ -225,7 +225,10 @@ robot.n_q=nq-1;
 fprintf('Number of joint variables: %d\n',robot.n_q);
 
 %--- Add Conectivity Map ---%
-robot.Con=ConnectivityMap(robot);
+[Branch,Child,Child_base]=ConnectivityMap(robot);
+robot.Con.Branch=Branch;
+robot.Con.Child=Child;
+robot.Con.Child_base=Child_base;
 
 %--- Assign robot model origin ---%
 robot.origin='urdf';
