@@ -1,5 +1,5 @@
 function [M0_tilde,Mm_tilde]=MCB(I0,Im,Bij,Bi0,robot) %#codegen
-% Computes the Mass Composite Body matrix of a Serial Manipulator.
+% Computes the Mass Composite Body matrix of a manipulator.
 %
 % Input ->
 %   I0 -> Base-spacecraft inertia in inertial frame.
