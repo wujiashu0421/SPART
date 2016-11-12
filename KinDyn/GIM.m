@@ -33,6 +33,7 @@ function [H0, H0m, Hm] = GIM(M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,robot) %#codegen
 %=== CODE ===%
 
 %--- Number of links and Joints ---%
+n_q=robot.n_q;
 n=robot.n_links;
 
 %--- H Martix ---%
@@ -40,13 +41,15 @@ n=robot.n_links;
 H0 = P0'*M0_tilde*P0;
 if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
     %Pre-allocate Hm
-    Hm=zeros(n,n);
+    Hm=zeros(n_q,n_q);
 end
 %Manipulator Inertia matrix Hm
 for j=1:n
     for i=j:n
-        Hm(i,j)=pm(1:6,i)'*Mm_tilde(1:6,1:6,i)*Bij(1:6,1:6,i,j)*pm(1:6,j);
-        Hm(j,i)=Hm(i,j);
+        if robot.joints(i).type~=0 && robot.joints(j).type~=0
+            Hm(robot.joints(i).q_id,robot.joints(j).q_id)=pm(1:6,i)'*Mm_tilde(1:6,1:6,i)*Bij(1:6,1:6,i,j)*pm(1:6,j);
+            Hm(robot.joints(j).q_id,robot.joints(i).q_id)=Hm(robot.joints(i).q_id,robot.joints(j).q_id);
+        end
     end
 end
 if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
@@ -55,7 +58,9 @@ if not(isempty(coder.target)) %Only use during code generation (allowing symboli
 end
 %Coupling Inertia matrix
 for i=1:n
-    H0m(1:6,i)=(pm(1:6,i)'*Mm_tilde(1:6,1:6,i)*Bi0(1:6,1:6,i)*P0)';
+    if robot.joints(i).type~=0
+        H0m(1:6,robot.joints(i).q_id)=(pm(1:6,i)'*Mm_tilde(1:6,1:6,i)*Bi0(1:6,1:6,i)*P0)';
+    end
 end
 
 end
