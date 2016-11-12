@@ -49,7 +49,7 @@ end
 M0_tilde=[I0,zeros(3,3);zeros(3,3),robot.base_link.mass*eye(3)];
 %Add children contributions
 for j=find(robot.Con.Child_base)'
-    Mm_tilde(1:6,1:6,i)=Mm_tilde(1:6,1:6,i)+Bi0(1:6,1:6,j)'*Mm_tilde(1:6,1:6,j)*Bi0(1:6,1:6,j);
+    M0_tilde=M0_tilde+Bi0(1:6,1:6,j)'*Mm_tilde(1:6,1:6,j)*Bi0(1:6,1:6,j);
 end
 
 
