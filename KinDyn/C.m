@@ -27,12 +27,12 @@ function [C0, C0m, Cm0, Cm] = C(t0,tm,I0,Im,M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,robo
 %     it under the terms of the GNU Lesser General Public License as published by
 %     the Free Software Foundation, either version 3 of the License, or
 %     (at your option) any later version.
-% 
+%
 %     This program is distributed in the hope that it will be useful,
 %     but WITHOUT ANY WARRANTY; without even the implied warranty of
 %     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 %     GNU Lesser General Public License for more details.
-% 
+%
 %     You should have received a copy of the GNU Lesser General Public License
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
@@ -135,16 +135,17 @@ end
 %Cm Matrix
 for j=n:-1:1
     for i=n:-1:1
-        if i<=j
-            %Add children contributions
-            child_con=zeros(6,6);
-            for k=find(robot.Con.Child(:,j))'
-                child_con=Bij(1:6,1:6,k,i)'*Hij_tilde(1:6,1:6,k,j);
+        if robot.joints(i).type~=0 && robot.joints(j).type~=0
+            if i<=j
+                %Add children contributions
+                child_con=zeros(6,6);
+                for k=find(robot.Con.Child(:,j))'
+                    child_con=Bij(1:6,1:6,k,i)'*Hij_tilde(1:6,1:6,k,j);
+                end
+                Cm(robot.joints(i).q_id,robot.joints(j).q_id)=pm(1:6,i)'*(Bij(1:6,1:6,j,i)'*Mm_tilde(1:6,1:6,j)*Omega(1:6,1:6,j)+child_con+Mdot_tilde(1:6,1:6,j))*pm(1:6,j);
+            else
+                Cm(robot.joints(i).q_id,robot.joints(j).q_id)=pm(1:6,i)'*(Mm_tilde(1:6,1:6,i)*Bij(1:6,1:6,i,j)*Omega(1:6,1:6,j)+Hij_tilde(1:6,1:6,i,j)+Mdot_tilde(1:6,1:6,i))*pm(1:6,j);
             end
-            Cm(i,j)=pm(1:6,i)'*(Bij(1:6,1:6,j,i)'*Mm_tilde(1:6,1:6,j)*Omega(1:6,1:6,j)+child_con+Mdot_tilde(1:6,1:6,j))*pm(1:6,j);
-            
-        else
-            Cm(i,j)=pm(1:6,i)'*(Mm_tilde(1:6,1:6,i)*Bij(1:6,1:6,i,j)*Omega(1:6,1:6,j)+Hij_tilde(1:6,1:6,i,j)+Mdot_tilde(1:6,1:6,i))*pm(1:6,j);
         end
     end
 end
@@ -157,20 +158,24 @@ end
 C0 = P0'*(M0_tilde*Omega0+child_con+Mdot0_tilde)*P0;
 %C0m
 for j=1:n
-    if j==n
-        C0m(1:6,j)=P0'*(Bi0(1:6,1:6,j)'*Mm_tilde(1:6,1:6,j)*Omega(1:6,1:6,j)+Mdot_tilde(1:6,1:6,j))*pm(1:6,j);
-    else
-        %Add children contributions
-        child_con=zeros(6,6);
-        for k=find(robot.Con.Child(:,j))'
-            child_con=Bi0(1:6,1:6,k)'*Hij_tilde(1:6,1:6,k,j);
+    if  robot.joints(j).type~=0
+        if j==n
+            C0m(1:6,robot.joints(j).q_id)=P0'*(Bi0(1:6,1:6,j)'*Mm_tilde(1:6,1:6,j)*Omega(1:6,1:6,j)+Mdot_tilde(1:6,1:6,j))*pm(1:6,j);
+        else
+            %Add children contributions
+            child_con=zeros(6,6);
+            for k=find(robot.Con.Child(:,j))'
+                child_con=Bi0(1:6,1:6,k)'*Hij_tilde(1:6,1:6,k,j);
+            end
+            C0m(1:6,robot.joints(j).q_id)=P0'*(Bi0(1:6,1:6,j)'*Mm_tilde(1:6,1:6,j)*Omega(1:6,1:6,j)+child_con+Mdot_tilde(1:6,1:6,j))*pm(1:6,j);
         end
-        C0m(1:6,j)=P0'*(Bi0(1:6,1:6,j)'*Mm_tilde(1:6,1:6,j)*Omega(1:6,1:6,j)+child_con+Mdot_tilde(1:6,1:6,j))*pm(1:6,j);
     end
 end
 %Cm0
 for i=1:n
-    Cm0(i,1:6)=pm(1:6,i)'*(Mm_tilde(1:6,1:6,i)*Bi0(1:6,1:6,i)*Omega0+Hi0_tilde(1:6,1:6,i)+Mdot_tilde(1:6,1:6,i))*P0;
+    if  robot.joints(i).type~=0  
+        Cm0(robot.joints(i).q_id,1:6)=pm(1:6,i)'*(Mm_tilde(1:6,1:6,i)*Bi0(1:6,1:6,i)*Omega0+Hi0_tilde(1:6,1:6,i)+Mdot_tilde(1:6,1:6,i))*P0;
+    end
 end
 
 end
