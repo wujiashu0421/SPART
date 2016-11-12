@@ -16,6 +16,7 @@ Additionally SPART supports:
 * Automatic Code Generation support.
 	* Code can be integrated in Simulink models.
 	* Efficient C/C++ code can be automatically generated.
+* Can read URDF files.
 
 
 ## Installation
