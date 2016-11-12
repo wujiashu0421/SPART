@@ -1,5 +1,22 @@
 function [RB,RJ,RL,rB,rJ,rL,e,g]=Kinematics(R0,r0,qm,robot) %#codegen
-%[RJ,RL,r,l,e,g,TEE]=Kinematics_serial_urdf(R0,r0,qm,robot)
+% Computes the kineamtics of a manipulator.
+%
+% Input ->
+%   R0 -> Rotation matrix from the base-spacecraft to the inertial frame.
+%   r0 -> Position of the base-spacecraft to the inertial frame.
+%   qm -> Manipulator joint varibles.
+%   q0dot -> Base-spacecraft velocities [angular velocity in body, linear
+%   velocity in inertial].
+%   qmdot -> Manipulator joint rates.
+%   robot -> Robot model.
+%
+% Output ->
+%   RJ -> Joint 3x3 rotation matrices.
+%   RL -> Links 3x3 rotation matrices.
+%   rJ -> Joints positions.
+%   rL -> Links positions.
+%   e -> Joints axis.
+%   g -> Vector from the origin of the ith joint to the ith link [inertial]
 
 %=== LICENSE ===%
 
