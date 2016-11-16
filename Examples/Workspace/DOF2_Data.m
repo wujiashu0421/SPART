@@ -1,4 +1,4 @@
-function [data,base_contour,man_contour,man_contour_end]=DOF2_Data(m0,mi)
+function [robot,TEE_Ln,base_contour,man_contour,man_contour_end]=DOF2_Data(m0,mi)
 % Function that resturns the 2DOF manipulator data and base/manipulator
 % contours.
 
@@ -10,7 +10,7 @@ base_side = 0.5;
 
 %Base-spacecraft inertia matrix
 data.base.mass=m0;
-data.base.I=diag([0,0,data.base.mass/6*(base_side^2)]);
+data.base.I=diag(ones(3,1)*data.base.mass/6*(base_side^2));
 
 
 %Firts joint location with respect to base
@@ -50,7 +50,7 @@ base_contour = [base_side/2,base_side/2;
 data.n=2;
 
 %First joint
-data.man(1).type=0;
+data.man(1).type=1;
 data.man(1).DH.d = 0;
 data.man(1).DH.alpha = 0;
 data.man(1).DH.a = man_side;
@@ -60,7 +60,7 @@ data.man(1).mass=mi;
 data.man(1).I=diag([0,0,data.man(1).mass/12*(man_side^2+man_width^2)]);
 
 %Second joint
-data.man(2).type=0;
+data.man(2).type=1;
 data.man(2).DH.d = 0;
 data.man(2).DH.alpha = 0;
 data.man(2).DH.a = man_side;
@@ -72,3 +72,6 @@ data.man(2).I=diag([0,0,data.man(2).mass/12*(man_side^2+man_width^2)]);
 %End-Effector 
 data.EE.theta=0; %Rotation around z-axis
 data.EE.d=0; %Translation along z-axis
+
+%--- Create robot structure ---%
+[robot,TEE_Ln] = DH_Serial2robot(data);

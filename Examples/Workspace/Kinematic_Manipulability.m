@@ -3,26 +3,27 @@ function [elps_fixed,km_fixed,elps_floating,km_floating]=Kinematic_Manipulabilit
 
 
 %--- 2DOF Data ---%
-[data,base_contour,man_contour,man_contour_end]=DOF2_Data(m0,mi);
+[robot,TEE_Ln,base_contour,man_contour,man_contour_end]=DOF2_Data(m0,mi);
 
 %--- Kinematics ---%
 %Kinematics
-[RJ,RL,r,l,e,g,TEE]=Kinematics_Serial(R0,r0,qm,data);
+[RB,RJ,RL,rB,rJ,rL,e,g]=Kinematics(R0,r0,qm,robot);
+TEE=[RL(1:3,1:3,end),rL(1:3,end);zeros(1,3),1]*TEE_Ln;
 %Differential Kinematics
-[Bij,Bi0,P0,pm]=DiffKinematics_Serial(R0,r0,r,e,g,data);
+[Bij,Bi0,P0,pm]=DiffKinematics(R0,r0,rL,e,g,robot);
 
 %--- End-Effector Jacobian ---%
 %End-effector Jacobian
-[J0EE, JmEE]=Jacob(TEE(1:3,4),r0,r,P0,pm,data.n,data.n);
+[J0EE, JmEE]=Jacob(TEE(1:3,4),r0,rL,P0,pm,robot.n_links,robot);
 
 %--- Generalized Inertia Matrices ---%
 
 %Inertias
-[I0,Im]=I_I(R0,RL,data);
+[I0,Im]=I_I(R0,RL,robot);
 %Mass Composite Body matrix
-[M0_tilde,Mm_tilde]=MCB_Serial(I0,Im,Bij,Bi0,data);
+[M0_tilde,Mm_tilde]=MCB(I0,Im,Bij,Bi0,robot);
 %Generalized Inertia matrix
-[H0, H0m, Hm] = GIM_Serial(M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,data);
+[H0, H0m, Hm] = GIM(M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,robot);
 
 %--- Floating Jacobian ---%
 JEE_star = JmEE-J0EE*(H0\H0m);

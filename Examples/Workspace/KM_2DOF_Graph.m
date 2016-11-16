@@ -1,4 +1,8 @@
 % 2DOF Kinematic Manipulability Ellipse
+%
+%
+% This example plots the kinematic manipullability ellipsoid for a 2-link
+% planar manipulator.
 
 
 %=== CODE ===%
@@ -28,36 +32,44 @@ qm=deg2rad([45;-90]);
 R0=eye(3);
 r0=[0;0;0];
 
-%--- 2DOF Data 100 kg ---%
+%--- 2DOF Data with base 100 kg and manipulator 10 kg ---%
 m0=100;
 mi=10;
-[data,base_contour,man_contour,man_contour_end]=DOF2_Data(m0,mi);
-
-%--- Kinematics ---%
-[RJ,RL,r,l,e,g,TEE]=Kinematics_Serial(R0,r0,qm,data);
+[robot,TEE_Ln,base_contour,man_contour,man_contour_end]=DOF2_Data(m0,mi);
 
 %--- Kinematic Manipulability ---%
 [elps_fixed,km_fixed,elps_floating,km_floating]=Kinematic_Manipulability(R0,r0,m0,mi,qm);
+
+%--- Plot---%
+%kinematics
+[RB,RJ,RL,rB,rJ,rL,e,g]=Kinematics(R0,r0,qm,robot);
+%End-Effector
+TEE=[RL(1:3,1:3,end),rL(1:3,end);zeros(1,3),1]*TEE_Ln;
+%Plots
 plot(elps_fixed(1,:)+TEE(1,4),elps_fixed(2,:)+TEE(2,4),'k','linewidth',2);
 leg(end+1)={'Fixed'};
 plot(elps_floating(1,:)+TEE(1,4),elps_floating(2,:)+TEE(2,4),'k:','linewidth',2);
-leg(end+1)={sprintf('Floating m_{0}=%d kg',m0)};
+leg(end+1)={sprintf('Floating m_{0}/m_{l}=%d',m0/mi)};
 
-%--- 2DOF Data 500 kg ---%
+%--- 2DOF Data with base 500 kg and manipulator 10 kg ---%
 m0=500;
 mi=10;
-[data,base_contour,man_contour,man_contour_end]=DOF2_Data(m0,mi);
-
-%--- Kinematics ---%
-[RJ,RL,r,l,e,g,TEE]=Kinematics_Serial(R0,r0,qm,data);
+[robot,TEE_Ln,base_contour,man_contour,man_contour_end]=DOF2_Data(m0,mi);
 
 %--- Kinematic Manipulability ---%
 [elps_fixed,km_fixed,elps_floating,km_floating]=Kinematic_Manipulability(R0,r0,m0,mi,qm);
+
+%--- Plot---%
+%kinematics
+[RB,RJ,RL,rB,rJ,rL,e,g]=Kinematics(R0,r0,qm,robot);
+%End-Effector
+TEE=[RL(1:3,1:3,end),rL(1:3,end);zeros(1,3),1]*TEE_Ln;
+%Plots
 plot(elps_floating(1,:)+TEE(1,4),elps_floating(2,:)+TEE(2,4),'k--','linewidth',2);
-leg(end+1)={sprintf('Floating m_{0}=%d kg',m0)};
+leg(end+1)={sprintf('Floating m_{0}/m_{l}=%d',m0/mi)};
 
 %--- Plot Manipulator ---%
-Man_Plot(R0,r0,base_contour,man_contour,man_contour_end,RL,r,data);
+Man_Plot(R0,r0,base_contour,man_contour,man_contour_end,RL,rL,robot.n_links);
 legend(leg,'Location','best');
 
 
