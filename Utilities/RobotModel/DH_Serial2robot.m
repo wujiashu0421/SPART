@@ -1,4 +1,4 @@
-function [robot] = DH_Serial2robot(DH_data) %#codegen
+function [robot,TEE_Ln] = DH_Serial2robot(DH_data) %#codegen
 %Transforms a description of the robot provided in DH parameters into the
 %robot model.
 
@@ -110,5 +110,8 @@ end
 robot.Con.Branch=Branch;
 robot.Con.Child=Child;
 robot.Con.Child_base=Child_base;
+
+%-- Transformation matrix for the end-effector ---%
+TEE_Ln=[eye(3),DH_data.man(end).b;zeros(1,3),1];
 
 end
