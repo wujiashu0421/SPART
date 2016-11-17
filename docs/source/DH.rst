@@ -21,7 +21,7 @@ Before SPART can start computing any kinematic or dynamic magnitude it needs a r
 The data structure has 3 fields:
 	* data.n -- Number of links.
 	* data.man(i) -- Describes the ith link/joint.
-		* data.man(i).type -- Type of joint. 0 for a revolute joint, 1 for a prismatic joint.
+		* data.man(i).type -- Type of joint. 0 for fixed, 1 for a revolute joint, 2 for a prismatic joint.
 		* data.man(i).DH -- Denavit--Hartenberg parameters. Definitions are included below.
 		* data.man(i).b -- Vector from the Center-of-Mass of the link to the next joint in the local frame.
 		* data.man(i).mass -- Mass of the link.
@@ -119,7 +119,7 @@ We can then create our data structure:
 	data.n=5;
 
 	%First joint
-	data.man(1).type=0;
+	data.man(1).type=1;
 	data.man(1).DH.d = L1;
 	data.man(1).DH.alpha = pi/2;
 	data.man(1).DH.a = 0;
@@ -127,7 +127,7 @@ We can then create our data structure:
 	data.man(1).b = [0;L1/2;0];
 
 	%Second joint
-	data.man(2).type=0;
+	data.man(2).type=1;
 	data.man(2).DH.d = 0;
 	data.man(2).DH.alpha = 0;
 	data.man(2).DH.a = sqrt(L2^2+L3^2);
@@ -135,7 +135,7 @@ We can then create our data structure:
 	data.man(2).b = [cos(-data.man(2).DH.theta),-sin(-data.man(2).DH.theta),0;sin(-data.man(2).DH.theta),cos(-data.man(2).DH.theta),0;0,0,1]*[L3^2/2;L2^2/2 + L3*L2;0]/(L2 + L3);
 
 	%Third joint
-	data.man(3).type=0;
+	data.man(3).type=1;
 	data.man(3).DH.d = 0;
 	data.man(3).DH.alpha = 0;
 	data.man(3).DH.a =L4;
@@ -143,7 +143,7 @@ We can then create our data structure:
 	data.man(3).b = [L4/2;0;0];
 
 	%Fourth joint
-	data.man(4).type=0;
+	data.man(4).type=1;
 	data.man(4).DH.d = 0;
 	data.man(4).DH.alpha = pi/2;
 	data.man(4).DH.a = 0;
@@ -151,7 +151,7 @@ We can then create our data structure:
 	data.man(4).b = [0;0;-L5/2];
 
 	%Fifth joint
-	data.man(5).type=0;
+	data.man(5).type=1;
 	data.man(5).DH.d = L5+L6;
 	data.man(5).DH.alpha =-pi/2;
 	data.man(5).DH.a = 0;
