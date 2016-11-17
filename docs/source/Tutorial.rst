@@ -5,55 +5,54 @@ SPART Tutorial
 
 This SPART tutorial will cover the basic operation of the library. Before starting make sure you have correctly installed and configured SPART (:doc:`/Installation`).
 
-In this tutorial we will model the following spacecraft with a 5 degree-of-freedom manipulator with the following dimensions: L0=50, L1=125, L2=144, L3=47, L4=142, L5=80, L6=70 mm.
+Getting the Robot Model
+=======================
 
-.. figure:: Figures/Tutorial_Configuration.png
-   :scale: 50 %
-   :align: center
-   :alt: Tutorial model configuration
+The first step is to create the robot model. This model contains all the kinematic and dynamic data of the robot. Take a look at (:doc:`/Robot_Model`) to get a detailed description of how this model is structured.
 
-   Spacecraft-manipulator system.
+There are 3 different ways to create the robot model:
+	* Use an Universal Robot Descriptor File (URDF). Check (:doc:`/URDF`) for a description on how to convert a URDF file into a robot model.
+	* Use the Denavit-Hartenberg (DH) convention to define the geometry of your robot. Check (:doc:`/DH`) for a description on how to convert a URDF file into a robot model.
+	* Create the robot model directly. Refer to (:doc:`/Robot_Model`) for further guidance.
 
-The code of this tutorial can be found in `Examples/Tutorial/Tutorial.m`.
+Weather if you choose to start from a URDF file or from a DH description this tutorial code can be found either in `Examples/URDF_Tutorial/URDF_Tutorial.m` or `Examples/DH_Tutorial/DH_Tutorial.m`.
 
 Kinematics
 ==========
 
-Before SPART can start computing any kinematic or dynamic magnitude it needs a representation of the geometry and dynamic properties of the spacecraft-manipulator system. These fixed parameters are introduced into a `data` structure.
+After creating the robot model the next step is to compute the kinematics of the multi-body system.
 
-The data structure has 3 fields:
-	* data.n -- Number of links.
-	* data.man(i) -- Describes the ith link/joint.
-		* data.man(i).type -- Type of joint. 0 for a revolute joint, 1 for a prismatic joint.
-		* data.man(i).DH -- Denavit-Hartenberg parameters. Definitions are included below.
-		* data.man(i).b -- Vector from the Center-of-Mass of the link to the next joint in the local frame.
-		* data.man(i).mass -- Mass of the link.
-		* data.man(i).I -- Inertia matrix of the link.
-	* data.base -- Describes the base-spacecraft.
-		* data.base.T_L0_J1 -- Homogeneous transformation matrix from the base to the first joint.
-		* data.base.mass -- Mass of the base-spacecraft.
-		* data.base.I -- Inertia matrix of the base-spacecraft
-	* data.EE -- Provides additional information about the end-effector
-		* data.EE.theta -- Final rotation about the z axis. Last joint DH parameters are not enough to completely specify the orientation of the x and y end-effector axes.
-		* data.EE.d -- Final translation about the z axis. Last joint DH parameters are not enough to completely specify the location of the end-effector frame origin along the z-axis.
+First we need to define the position and orientation of the base.
 
-The kinematic relationship between a pair of connected joints is expressed by the Denavit-Hartenberg parameters.
+.. code-block:: matlab
 
-.. figure:: Figures/DH.png
-   :scale: 50 %
-   :align: center
-   :alt: DH parameters
+	%Base position
+	R0=eye(3);  %Rotation from base-spacecraft to the inertial frame
+	r0=[0;0;0]; %Position of the base-spacecraft in the inertial frame
 
-   Denavit-Hartenberg parameters.
+Also the generalized joint variables need to be defined.
 
-.. figure:: Figures/DH_TextDef.png
-   :scale: 50 %
-   :align: center
-   :alt: DH text parameters
+.. code-block:: matlab
 
-   Denavit-Hartenberg parameters and their geometric definition.
+	%Joint variables [rad]
+	qm=[0;0;0;0;0]; %Adjust the length according to your robot model
 
-Additional geometric definitions are included in the following figure.
+We can now compute the kinematics of the system.
+
+.. code-block:: matlab
+
+	%Kinematics
+	[RJ,RL,rJ,rL,e,g]=Kinematics(R0,r0,qm,robot);
+
+The output of the function is as follows:
+	* RJ -- Joint 3x3 rotation matrices.
+	* RL -- Links 3x3 rotation matrices.
+	* rJ -- Joints positions.
+	* rL -- Links positions.
+	* e -- Joints rotations axis.
+	* g -- Vector from the origin of the ith joint to the ith link [inertial]
+
+Some geometric definitions are also included in the following figure.
 
 .. figure:: Figures/GenLinksJoints.png
    :scale: 50 %
@@ -62,141 +61,6 @@ Additional geometric definitions are included in the following figure.
 
    Schematic disposition of links and joints.
 
-The DH convention does not specify the orientation and origin of the first joint CCS (it's origin must lie within the rotation or sliding axis). We then have freedom to set these. The orientation and the origin of the first joint are specified through the homogeneous transformation matrix data.base.T_L0_J1. An homogeneous transformation matrix encapsulates the orientation and position for a CCS with respect to another one, and in this particular case it can be written as follows.
-
-.. math::
-	
-	^{\mathcal{L}_{0}}T_{\mathcal{J}_{1}}=\left[\begin{array}{cc}
-	^{\mathcal{L}_{0}}R_{\mathcal{J}_{1}} & ^{\mathcal{L}_{0}}s_{\mathcal{J}_{1}}\\
-	0_{1,3} & 1
-	\end{array}\right]
-
-
-For this example we will assume that the base CCS and the first joint frame :math:`\mathcal{J}_{1}` share the same orientation :math:`^{\mathcal{L}_{0}}R_{\mathcal{J}_{1}}=I_{3\times 3}` and that :math:`\mathcal{J}_{1}` is only displaced L0 in the :math:`k` direction  :math:`^{\mathcal{L}_{0}}s_{\mathcal{J}_{1}}=\left[0,0,L_{0}\right]^{T}`.
-
-.. code-block:: matlab
-
-	%Firts joint location with respect to base
-	data.base.T_L0_J1=[eye(3),[0;0;L0];zeros(1,3),1];
-
-We will also assume that the links are homogeneous bodies and so their center-of-mass will be located at their geometric center, which allows to easily determine the data.man(i).b vector. The data.man(i).b vector goes from the center-of-mass of the ith link to the origin of the ith+1 joint in the local ith link reference frame.
-Using the DH parameters and assuming homogeneous bodies the DH and b vector are given below.
-
-===========  ======  ==========  ===================  ===============  =================
-Joint/Link    DH.d    DH.alpha          DH.a             DH.theta              b
-===========  ======  ==========  ===================  ===============  =================
- Joint 1       L1       pi/2             0                   0             [0;L1/2;0] 
- Joint 2       0         0         sqrt(L2^2+L3^2)      atan2(L2,L3)       \*see below
- Joint 3       0         0              L4             --atan2(L2,L3)       [L4/2;0;0] 
- Joint 4       0       	pi/2             0                  pi/2          [0;0;--L5/2] 
- Joint 5     L5+L6      --pi/2            0                 -pi/2           [L6/2;0;0] 
-===========  ======  ==========  ===================  ===============  =================
-
-data.man(2).b = [cos(-data.man(2).DH.theta),-sin(-data.man(2).DH.theta),0;sin(-data.man(2).DH.theta),cos(-data.man(2).DH.theta),0;0,0,1]*[L3^2/2;L2^2/2 + L3*L2;0]/(L2 + L3);
-
-The resulting links and joints Cartesian Coordinate Systems are shown in the following image.
-
-.. figure:: Figures/Tutorial_DH.png
-   :scale: 50 %
-   :align: center
-   :alt: CCS of the tutorial model configuration
-
-   CCS of the spacecraft-manipulator system.
-
-
-Finally, the DH parameters do not allow to freely set the end-effector CCS. For that we need two additional :math:`d` and :math:`\theta` DH parameters, that are applied to the last transformation. In this case the required values are as follows.
-
-.. code-block:: matlab
-	
-	%End-Effector
-	data.EE.theta=-pi/2;
-	data.EE.d=0;
-
-
-We can then create our data structure:
-
-.. code-block:: matlab
-	
-	%--- Manipulator Definition ----%
-	%Number of joints/links
-	data.n=5;
-
-	%First joint
-	data.man(1).type=0;
-	data.man(1).DH.d = L1;
-	data.man(1).DH.alpha = pi/2;
-	data.man(1).DH.a = 0;
-	data.man(1).DH.theta=0;
-	data.man(1).b = [0;L1/2;0];
-
-	%Second joint
-	data.man(2).type=0;
-	data.man(2).DH.d = 0;
-	data.man(2).DH.alpha = 0;
-	data.man(2).DH.a = sqrt(L2^2+L3^2);
-	data.man(2).DH.theta=atan2(L2,L3);
-	data.man(2).b = [cos(-data.man(2).DH.theta),-sin(-data.man(2).DH.theta),0;sin(-data.man(2).DH.theta),cos(-data.man(2).DH.theta),0;0,0,1]*[L3^2/2;L2^2/2 + L3*L2;0]/(L2 + L3);
-
-	%Third joint
-	data.man(3).type=0;
-	data.man(3).DH.d = 0;
-	data.man(3).DH.alpha = 0;
-	data.man(3).DH.a =L4;
-	data.man(3).DH.theta=-atan2(L2,L3);
-	data.man(3).b = [L4/2;0;0];
-
-	%Fourth joint
-	data.man(4).type=0;
-	data.man(4).DH.d = 0;
-	data.man(4).DH.alpha = pi/2;
-	data.man(4).DH.a = 0;
-	data.man(4).DH.theta=pi/2;
-	data.man(4).b = [0;0;-L5/2];
-
-	%Fifth joint
-	data.man(5).type=0;
-	data.man(5).DH.d = L5+L6;
-	data.man(5).DH.alpha =-pi/2;
-	data.man(5).DH.a = 0;
-	data.man(5).DH.theta=-pi/2;
-	data.man(5).b = [L6/2;0;0];
-
-	%Firts joint location with respect to base
-	data.base.T_L0_J1=[eye(3),[0;0;L0];zeros(1,3),1];
-
-	%End-Effector
-	data.EE.theta=-pi/2;
-	data.EE.d=0;
-
-
-Once the manipulator system has been defined we can then specify the configuration of the spacecraft manipulator system as follows.
-
-.. code-block:: matlab
-
-	%Base position
-	R0=eye(3);  %Rotation from base-spacecraft to the inertial frame
-	r0=[0;0;0]; %Position of the base-spacecraft in the inertial frame
-
-	%Joint variables [rad]
-	qm=[0;0;0;0;0];
-
-Then we can start calling some functions. For example the kinematic function:
-
-.. code-block:: matlab
-
-	%Kinematics
-	[RJ,RL,r,l,e,g,TEE]=Kinematics_Serial(R0,r0,qm,data);
-
-The output of the function is as follows:
-	* RJ -- Joint 3x3 rotation matrices.
-	* RL -- Links 3x3 rotation matrices.
-	* r -- Links positions.
-	* l -- Joints positions.
-	* e -- Joints rotations axis.
-	* g -- Vector from the origin of the ith joint to the ith link [inertial]
-	* TEE -- End-Effector Homogeneous transformation matrix.
-
-Now you can check that the r and l vectors provide the correct answers when qm=[0;0;0;0;0].
 
 If you change the joint variables and re-run the kinematic function you will get the new positions with that particular configuration. The same can be done with the orientation R0 and position r0 of the base-spacecraft.
 
@@ -206,14 +70,14 @@ If you change the joint variables and re-run the kinematic function you will get
 	qm=[45;10;-45;20;-90]*pi/180;
 
 	%Kinematics
-	[RJ,RL,r,l,e,g,TEE]=Kinematics_Serial(R0,r0,qm,data);
+	[RJ,RL,rJ,rL,e,g]=Kinematics(R0,r0,qm,robot);
 
 You can also define the joint variables as symbolic and obtain symbolic expressions.
 
 .. code-block:: matlab
 
 	%Joint variables [rad]
-	qm=sym('qm',[5,1],'real');
+	qm=sym('qm',[robot.n_q,1],'real');
 
 	%Base-spacecraft position
 	r0=sym('r0',[3,1],'real');
@@ -223,35 +87,39 @@ You can also define the joint variables as symbolic and obtain symbolic expressi
 	R0 = Angles321_DCM(Euler_Ang)';
 
 	%Kinematics
-	[RJ,RL,r,l,e,g,TEE]=Kinematics_Serial(R0,r0,qm,data);
+	[RJ,RL,rJ,rL,e,g]=Kinematics(R0,r0,qm,robot);
 
 Differential Kinematics
 =======================
 
-To compute the differential kinematics (including the Jacobians) can be computed if the base-spacecraft and joint velocities are specified.
+To compute the differential kinematics the twist propgation matrices and twist propagation vectors need to be computed first.
 
 .. code-block:: matlab
 
-	%Velocities (joint space)
-	q0dot=zeros(6,1); %Base-spacecraft velocity
-	qmdot=[4;-1;5;2;1]*pi/180; %Joint velocities
-
 	%Differential Kinematics
-	[Bij,Bi0,P0,pm]=DiffKinematics_Serial(R0,r0,r,e,g,data);
-	%Velocities (operational space)
-	[t0,tm]=Velocities_Serial(Bij,Bi0,P0,pm,q0dot,qmdot,data);
-	%Jacobian of the Link 3
-	[J03, Jm3]=Jacob(r(1:3,3),r0,r,P0,pm,3,data.n);
-	%End-effector Jacobian
-	[J0EE, JmEE]=Jacob(TEE(1:3,4),r0,r,P0,pm,data.n,data.n);
+	[Bij,Bi0,P0,pm]=DiffKinematics(R0,r0,rL,e,g,robot);
 
-The output of the differential kinematics as follows:
-	* t0 -- Base--spacecraft twist vector [wx,wy,wz,vx,vy,vz].
-	* tm -- Manipulator twist vector [wx,wy,wz,vx,vy,vz].
+The output of the differential kinematics are as follows:
 	* Bij -- Twist--propagation matrix (for manipulator i>0 and j>0).
 	* Bi0 -- Twist--propagation matrix (for i>0 and j=0).
 	* P0 -- Base--spacecraft twist--propagation vector.
 	* pm -- Manipulator twist--propagation vector.
+
+With this quantities the velocities of all the links can be determined if the base and joint velocities are previously defined.
+	
+.. code-block:: matlab
+
+	%Velocities (joint space)
+	q0dot=zeros(6,1); %Base-spacecraft velocity
+	qmdot=[4;-1;5;2;1]*pi/180; %Joint velocities (adjust the length according to your robot model)
+
+
+	%Velocities (operational space)
+	[t0,tm]=Velocities(Bij,Bi0,P0,pm,q0dot,qmdot,robot);
+
+The output of the operational space velocities are as follows:
+	* t0 -- Base--spacecraft twist vector [wx,wy,wz,vx,vy,vz].
+	* tm -- Manipulator twist vector [wx,wy,wz,vx,vy,vz].
 
 The twist vector encapsulates the angular and linear velocities in a vector.
 
@@ -270,6 +138,19 @@ For the base-spacecraft the twist--propagation only uses the a modified 6x6 :mat
 .. math::
 	
 	t_{0}=P_{0}\dot{q}_{0}
+
+The Jacobians of any point can also be easily computed as follows.
+
+.. code-block:: matlab
+
+	%Jacobian of the 3rd Link
+	[J03, Jm3]=Jacob(rL(1:3,3),r0,rL,P0,pm,3,robot);
+
+The Jacobians map joint space velocities into operational space velocities.
+
+.. math::
+	
+	t_{x}=J_{0x}\dot{q}_{0}+J_{mx}\dot{q}_{m}
 
 Equations of Motion and inertia matrices
 ========================================
@@ -295,56 +176,25 @@ The contributions of the base-spacecraft and the manipulator can be made explici
 
 To obtain the inertia matrices we need to specify the mass and inertia of the base--spacecraft and of the joints.
 
-Let's assume, for the sake of simplicity, that all the links masses are 2 kg and have diagonal inertia matrices with :math:`I_{xx}=2/10` kg/m2 :math:`I_{yy}=1/10` :math:`I_{zz}=3/10`. And the base-spacecarft has a mass of 20 kg and inertia of :math:`I_{xx}=2` kg/m2 :math:`I_{yy}=1` :math:`I_{zz}=3`.
-
-These variables can be added to the data structure as follows.
-
-.. code-block:: matlab
-
-	%First joint
-	data.man(1).mass=2;
-	data.man(1).I=diag([2,1,3])/10;
-
-	%Second joint
-	data.man(2).mass=2;
-	data.man(2).I=diag([2,1,3])/10;
-
-	%Third joint
-	data.man(3).mass=2;
-	data.man(3).I=diag([2,1,3])/10;
-
-	%Fourth joint
-	data.man(4).mass=2;
-	data.man(4).I=diag([2,1,3])/10;
-
-	%Fifth joint
-	data.man(5).mass=2;
-	data.man(5).I=diag([2,1,3])/10;
-
-	%Base-spacecraft mass and inertia
-	data.base.mass=20;
-	data.base.I=diag([2,1,3]);
-
-You can now compute the inertia matrices as follows.
+You can now compute these inertia matrices as follows.
 
 .. code-block:: matlab
 
 	%Inertias in inertial frames
-	[I0,Im]=I_I(R0,RL,data);
+	[I0,Im]=I_I(R0,RL,robot);
 	%Mass Composite Body matrix
-	[M0_tilde,Mm_tilde]=MCB_Serial(I0,Im,Bij,Bi0,data);
+	[M0_tilde,Mm_tilde]=MCB(I0,Im,Bij,Bi0,robot);
 	%Generalized Inertia matrix
-	[H0,H0m,Hm]=GIM_Serial(M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,data);
+	[H0, H0m, Hm] = GIM(M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,robot);
 	%Generalized Convective Inertia matrix
-	[C0,C0m,Cm0,Cm]=C_Serial(t0,tm,I0,Im,M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,data);
+	[C0, C0m, Cm0, Cm] = C(t0,tm,I0,Im,M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,robot);
 
 Although the equations of motion can be used to solve the forward dynamic problem (determining the motion of the system given a set of applied forces :math:`\tau\rightarrow\ddot{q}`) and the inverse dynamic problem (determining the forces required to produce a prescribe motion :math:`\ddot{q}\rightarrow\tau`) there are more efficient ways of doing so.
-
 
 Forward Dynamics
 ================
 
-To solve the forward dynamics you will need to specify the forces acting on the spacecraft-manipulator system. There are two ways of specifying them and you can specify your forces in both of them if that is easier.
+To solve the forward dynamics you will need to specify the forces acting on the spacecraft--manipulator system. There are two ways of specifying them and you can specify your forces in both of them if that is easier.
 
 The joint forces :math:`\tau` are the forces acting on the joints :math:`\tau_{m}` (thus is an nx1 vector) and also at the base-spacecraft :math:`tau_{0}` (thus a 6x1 vector). For :math:`\tau_{0}`, as in the twist vector, the torques come first and then the linear forces.
 
@@ -360,14 +210,14 @@ Here is an example of how to do it.
 
 	%Joint torques
 	tauq0=zeros(6,1);
-	tauqm=zeros(data.n,1);
+	tauqm=zeros(robot.n_links,1);
 
 Then a forward dynamic solver is available.
 
 .. code-block:: matlab
 	
 	%Forward Dynamics
-	[q0ddot_FD,qmddot_FD] = FD_Serial(tauq0,tauqm,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,data);
+	[q0ddot_FD,qmddot_FD] = FD(tauq0,tauqm,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,robot);
 
 
 I you have forces that act on the links, for example gravity (with z being the vertical direction), they can be added through the wrenches as follows.
@@ -378,10 +228,11 @@ I you have forces that act on the links, for example gravity (with z being the v
 	g=9.8; %[m s-2]
 
 	%External forces (includes gravity and assumes z is the vertical direction)
-	wF0=[0;0;0;0;0;-data.base.mass*g];
-	wFm=[zeros(5,data.n);
-    -data.man(1).mass*g,-data.man(2).mass*g,-data.man(3).mass*g,-data.man(4).mass*g,-data.man(5).mass*g];
-
+	wF0=zeros(6,1);
+	wFm=zeros(6,robot.n_links);
+	for i=1:robot.n_links
+    	wFm(1:6,6)=-robot.links(i).mass*g;
+	end
 
 Inverse Dynamics
 ================
@@ -392,13 +243,13 @@ Similarly for the inverse dynamics the acceleration of the base-spacecraft and t
 	
 	%Accelerations
 	q0ddot=zeros(6,1);
-	qmddot=zeros(5,1);
+	qmddot=zeros(robot.n_q,1);
 
 	%Accelerations
-	[t0dot,tmdot]=Accelerations_Serial(t0,tm,P0,pm,Bi0,Bij,q0dot,qmdot,q0ddot,qmddot,data);
+	[t0dot,tmdot]=Accelerations(t0,tm,P0,pm,Bi0,Bij,q0dot,qmdot,q0ddot,qmddot,robot);
 
 	%Inverse Dynamics - Flying base
-	[tau0,taum]=ID_Serial(wF0,wFm,t0,tm,t0dot,tmdot,P0,pm,I0,Im,Bij,Bi0,data);
+	[tau0,taum] = ID(wF0,wFm,t0,tm,t0dot,tmdot,P0,pm,I0,Im,Bij,Bi0,robot);
 
 
 If the base-spacecraft is left uncontrolled (floating case) and thus its acceleration is unknown a different routine is available.
@@ -406,8 +257,8 @@ If the base-spacecraft is left uncontrolled (floating case) and thus its acceler
 .. code-block:: matlab
 	
 	%Accelerations
-	qmddot=zeros(5,1);
+	qmddot=zeros(robot.n_q,,1);
 
 	%Inverse Dynamics - Floating Base
-	[taum_floating,q0ddot_floating]=Floating_ID_Serial(wF0,wFm,Mm_tilde,H0,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,qmddot,data);
+	[taum_floating,q0ddot_floating] = Floating_ID(wF0,wFm,Mm_tilde,H0,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,qmddot,robot);
 
