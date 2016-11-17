@@ -40,16 +40,18 @@ for i=n:-1:1
     %Initialize M tilde
     Mm_tilde(1:6,1:6,i)=[Im(1:3,1:3,i),zeros(3,3);zeros(3,3),robot.links(i).mass*eye(3)];%+Bij(1:6,1:6,i+1,i)'*Mm_tilde(1:6,1:6,i+1)*Bij(1:6,1:6,i+1,i);
     %Add children contributions
-    for j=find(robot.Con.Child(:,i))'
-        Mm_tilde(1:6,1:6,i)=Mm_tilde(1:6,1:6,i)+Bij(1:6,1:6,j,i)'*Mm_tilde(1:6,1:6,j)*Bij(1:6,1:6,j,i);
+    child=find(robot.Con.Child(:,i))';
+    for j=1:length(child)
+        Mm_tilde(1:6,1:6,i)=Mm_tilde(1:6,1:6,i)+Bij(1:6,1:6,child(j),i)'*Mm_tilde(1:6,1:6,child(j))*Bij(1:6,1:6,child(j),i);
     end
 end
 
 %Base-spacecraft M tilde
 M0_tilde=[I0,zeros(3,3);zeros(3,3),robot.base_link.mass*eye(3)];
 %Add children contributions
-for j=find(robot.Con.Child_base)'
-    M0_tilde=M0_tilde+Bi0(1:6,1:6,j)'*Mm_tilde(1:6,1:6,j)*Bi0(1:6,1:6,j);
+child=find(robot.Con.Child_base)';
+for j=1:length(child);
+    M0_tilde=M0_tilde+Bi0(1:6,1:6,child(j))'*Mm_tilde(1:6,1:6,child(j))*Bi0(1:6,1:6,child(j));
 end
 
 

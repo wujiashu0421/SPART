@@ -77,15 +77,17 @@ for i=n:-1:1
     %Initialize
     Mdot_tilde(1:6,1:6,i)=Mdot(1:6,1:6,i);
     %Add children contributions
-    for j=find(robot.Con.Child(:,i))'
-        Mdot_tilde(1:6,1:6,i)=Mdot_tilde(1:6,1:6,i)+Mdot_tilde(1:6,1:6,j);
+    child=find(robot.Con.Child(:,i))';
+    for j=1:length(child)
+        Mdot_tilde(1:6,1:6,i)=Mdot_tilde(1:6,1:6,i)+Mdot_tilde(1:6,1:6,child(j));
     end
 end
 %Base-spacecraft
 Mdot0_tilde = Mdot0;
 %Add children contributions
-for j=find(robot.Con.Child_base)'
-    Mdot0_tilde = Mdot0_tilde+Mdot_tilde(1:6,1:6,j);
+child=find(robot.Con.Child_base)';
+for j=1:length(child)
+    Mdot0_tilde = Mdot0_tilde+Mdot_tilde(1:6,1:6,child(j));
 end
 
 %--- Hij tilde ---%
@@ -99,8 +101,9 @@ for j=n:-1:1
         Bdot=[zeros(3,3), zeros(3,3); SkewSym(tm(4:6,j)-tm(4:6,i)), zeros(3,3)];
         Hij_tilde(1:6,1:6,i,j)=Mm_tilde(1:6,1:6,i)*Bdot;
         %Add children contributions
-        for k=find(robot.Con.Child(:,i))'
-            Hij_tilde(1:6,1:6,i,j)=Hij_tilde(1:6,1:6,i,j)+Bij(1:6,1:6,k,i)'*Hij_tilde(1:6,1:6,k,i);
+        child=find(robot.Con.Child(:,i))';
+        for k=1:length(child)
+            Hij_tilde(1:6,1:6,i,j)=Hij_tilde(1:6,1:6,i,j)+Bij(1:6,1:6,child(k),i)'*Hij_tilde(1:6,1:6,child(k),i);
         end
     end
 end
@@ -114,8 +117,9 @@ for i=n:-1:1
     Bdot=[zeros(3,3), zeros(3,3); SkewSym(t0(4:6)-tm(4:6,i)), zeros(3,3)];
     Hi0_tilde(1:6,1:6,i)=Mm_tilde(1:6,1:6,i)*Bdot;
     %Add children contributions
-    for k=find(robot.Con.Child_base)'
-        Hi0_tilde(1:6,1:6,i)=Hi0_tilde(1:6,1:6,i)+Bij(1:6,1:6,k,i)'*Hij_tilde(1:6,1:6,k,i);
+    child=find(robot.Con.Child_base)';
+    for k=1:length(child)
+        Hi0_tilde(1:6,1:6,i)=Hi0_tilde(1:6,1:6,i)+Bij(1:6,1:6,child(k),i)'*Hij_tilde(1:6,1:6,child(k),i);
     end
 end
 %H0j_tilde
@@ -139,8 +143,9 @@ for j=n:-1:1
             if i<=j
                 %Add children contributions
                 child_con=zeros(6,6);
-                for k=find(robot.Con.Child(:,j))'
-                    child_con=Bij(1:6,1:6,k,i)'*Hij_tilde(1:6,1:6,k,j);
+                child=find(robot.Con.Child(:,j))';
+                for k=1:length(child)
+                    child_con=Bij(1:6,1:6,child(k),i)'*Hij_tilde(1:6,1:6,child(k),j);
                 end
                 Cm(robot.joints(i).q_id,robot.joints(j).q_id)=pm(1:6,i)'*(Bij(1:6,1:6,j,i)'*Mm_tilde(1:6,1:6,j)*Omega(1:6,1:6,j)+child_con+Mdot_tilde(1:6,1:6,j))*pm(1:6,j);
             else
@@ -152,8 +157,9 @@ end
 %C0 matrix
 %Add children contributions
 child_con=zeros(6,6);
-for k=find(robot.Con.Child_base)'
-    child_con=Bi0(1:6,1:6,k)'*Hi0_tilde(1:6,1:6,k);
+child=find(robot.Con.Child_base)';
+for k=1:length(child)
+    child_con=Bi0(1:6,1:6,child(k))'*Hi0_tilde(1:6,1:6,child(k));
 end
 C0 = P0'*(M0_tilde*Omega0+child_con+Mdot0_tilde)*P0;
 %C0m
@@ -164,8 +170,9 @@ for j=1:n
         else
             %Add children contributions
             child_con=zeros(6,6);
-            for k=find(robot.Con.Child(:,j))'
-                child_con=Bi0(1:6,1:6,k)'*Hij_tilde(1:6,1:6,k,j);
+            child=find(robot.Con.Child(:,j))';
+            for k=1:length(child)
+                child_con=Bi0(1:6,1:6,child(k))'*Hij_tilde(1:6,1:6,child(k),j);
             end
             C0m(1:6,robot.joints(j).q_id)=P0'*(Bi0(1:6,1:6,j)'*Mm_tilde(1:6,1:6,j)*Omega(1:6,1:6,j)+child_con+Mdot_tilde(1:6,1:6,j))*pm(1:6,j);
         end
