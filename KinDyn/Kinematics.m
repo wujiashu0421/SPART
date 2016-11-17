@@ -1,4 +1,4 @@
-function [RB,RJ,RL,rB,rJ,rL,e,g]=Kinematics(R0,r0,qm,robot) %#codegen
+function [RJ,RL,rJ,rL,e,g]=Kinematics(R0,r0,qm,robot) %#codegen
 % Computes the kineamtics of a manipulator.
 %
 % Input ->
@@ -49,8 +49,6 @@ end
 %--- Base link ---%
 clink = robot.base_link;
 T0=[R0,r0;zeros(1,3),1]*clink.T;
-RB=T0(1:3,1:3);
-rB=T0(1:3,4);
 
 %--- Forward kinematics recursion ---%
 %Obtain of joints and links kinematics

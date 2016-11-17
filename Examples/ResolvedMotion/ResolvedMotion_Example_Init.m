@@ -62,7 +62,7 @@ qmddot0=zeros(3,1);
 R0=quat_DCM([q00(1:4)]')';
 
 %Kinematics
-[RB,RJ,RL,rB,rJ,rL,e,g]=Kinematics(R0,q00(4:6),qm0,robot);
+[RJ,RL,rJ,rL,e,g]=Kinematics(R0,q00(4:6),qm0,robot);
 %Differential Kinematics
 [Bij,Bi0,P0,pm]=DiffKinematics(R0,q00(4:6),rL,e,g,robot);
 

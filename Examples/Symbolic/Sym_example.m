@@ -88,7 +88,7 @@ tauqm=[0;0];
 profile on
 
 %Kinematics
-[RB,RJ,RL,rB,rJ,rL,e,g]=Kinematics(R0,r0,qm,robot);
+[RJ,RL,rJ,rL,e,g]=Kinematics(R0,r0,qm,robot);
 %Differential Kinematics
 [Bij,Bi0,P0,pm]=DiffKinematics(R0,r0,rL,e,g,robot);
 %Velocities

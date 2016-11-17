@@ -1,4 +1,4 @@
-%SPART Tutorial
+%SPART DH Tutorial
 
 %--- Clean and clear ---%
 clc
@@ -94,7 +94,7 @@ qmdot=[4;-1;5;2;1]*pi/180; %Joint velocities
 [robot,T_Ln_EE] = DH_Serial2robot(data);
 
 %--- Kinematics ---%
-[RB,RJ,RL,rB,rJ,rL,e,g]=Kinematics(R0,r0,qm,robot);
+[RJ,RL,rJ,rL,e,g]=Kinematics(R0,r0,qm,robot);
 %End-Effector
 TEE=[RL(1:3,1:3,end),rL(1:3,end);zeros(1,3),1]*T_Ln_EE;
 

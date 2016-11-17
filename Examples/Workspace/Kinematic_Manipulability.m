@@ -7,7 +7,7 @@ function [elps_fixed,km_fixed,elps_floating,km_floating]=Kinematic_Manipulabilit
 
 %--- Kinematics ---%
 %Kinematics
-[RB,RJ,RL,rB,rJ,rL,e,g]=Kinematics(R0,r0,qm,robot);
+[RJ,RL,rJ,rL,e,g]=Kinematics(R0,r0,qm,robot);
 TEE=[RL(1:3,1:3,end),rL(1:3,end);zeros(1,3),1]*TEE_Ln;
 %Differential Kinematics
 [Bij,Bi0,P0,pm]=DiffKinematics(R0,r0,rL,e,g,robot);
