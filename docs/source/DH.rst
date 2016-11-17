@@ -1,5 +1,5 @@
 ===================================================
-Using the Denavit--Hartenbger convention with SPART
+Using the Denavit--Hartenberg convention with SPART
 ===================================================
 
 The DEnavit--Hartenberg (DH) convention is a classical way to provide the kinematic description of a manipulator. To illustrate how to input DH description into SPART we will use the following spacecraft with a 5 degree-of-freedom manipulator example with the following dimensions: L0=50, L1=125, L2=144, L3=47, L4=142, L5=80, L6=70 mm.
