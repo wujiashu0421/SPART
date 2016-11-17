@@ -14,6 +14,9 @@ Contents:
 
    Installation
    Tutorial
+   Robot_Model
+   URDF
+   DH
 
 
 Indices and tables
