@@ -44,10 +44,6 @@ if not(isempty(coder.target)) %Only use during code generation (allowing symboli
     %Pre-allocate homogeneous transformations matrices
     TJ=zeros(4,4,n_joints);
     TL=zeros(4,4,n_links);
-else
-    %Create variables
-    TJ=[];
-    TL=[];
 end
 
 %--- Base link ---%
