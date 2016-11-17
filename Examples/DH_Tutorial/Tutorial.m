@@ -91,10 +91,12 @@ q0dot=zeros(6,1); %Base-spacecraft velocity
 qmdot=[4;-1;5;2;1]*pi/180; %Joint velocities
 
 %--- Create robot structure ---%
-[robot] = DH_Serial2robot(data);
+[robot,T_Ln_EE] = DH_Serial2robot(data);
 
 %--- Kinematics ---%
 [RB,RJ,RL,rB,rJ,rL,e,g]=Kinematics(R0,r0,qm,robot);
+%End-Effector
+TEE=[RL(1:3,1:3,end),rL(1:3,end);zeros(1,3),1]*T_Ln_EE;
 
 %--- Differential Kinematics ---%
 %Differential kinematics
@@ -102,7 +104,7 @@ qmdot=[4;-1;5;2;1]*pi/180; %Joint velocities
 %Jacobian of the Link 3
 [J03, Jm3]=Jacob(rL(1:3,3),r0,rL,P0,pm,3,robot);
 %End-effector Jacobian
-[J0EE, JmEE]=Jacob(rL(1:3,end),r0,rL,P0,pm,robot.n_links,robot);
+[J0EE, JmEE]=Jacob(TEE(1:3,4),r0,rL,P0,pm,robot.n_links,robot);
 %Velocities
 [t0,tm]=Velocities(Bij,Bi0,P0,pm,q0dot,qmdot,robot);
 
