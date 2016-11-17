@@ -11,7 +11,7 @@ Getting the Robot Model
 The first step is to create the robot model. This model contains all the kinematic and dynamic data of the robot. Take a look at (:doc:`/Robot_Model`) to get a detailed description of how this model is structured.
 
 There are 3 different ways to create the robot model:
-	* Use an Universal Robot Descriptor File (URDF). Check (:doc:`/URDF`) for a description on how to convert a URDF file into a robot model.
+	* Use an Unified Robot Description Format (URDF file). Check (:doc:`/URDF`) for a description on how to convert a URDF file into a robot model.
 	* Use the Denavit-Hartenberg (DH) convention to define the geometry of your robot. Check (:doc:`/DH`) for a description on how to convert a URDF file into a robot model.
 	* Create the robot model directly. Refer to (:doc:`/Robot_Model`) for further guidance.
 
