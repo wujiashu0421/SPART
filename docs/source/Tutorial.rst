@@ -86,7 +86,7 @@ Using the DH parameters and assuming homogeneous bodies the DH and b vector are 
 Joint/Link    DH.d    DH.alpha          DH.a             DH.theta              b
 ===========  ======  ==========  ===================  ===============  =================
  Joint 1       L1       pi/2             0                   0             [0;L1/2;0] 
- Joint 2       0         0         sqrt(L2^2+L3^2)      atan2(L2,L3)       *see below
+ Joint 2       0         0         sqrt(L2^2+L3^2)      atan2(L2,L3)       \*see below
  Joint 3       0         0              L4             --atan2(L2,L3)       [L4/2;0;0] 
  Joint 4       0       	pi/2             0                  pi/2          [0;0;--L5/2] 
  Joint 5     L5+L6      --pi/2            0                 -pi/2           [L6/2;0;0] 
