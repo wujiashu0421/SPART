@@ -13,7 +13,7 @@ man_side = 1;
 man_width = 0.05;
 
 %First joint
-data.man(1).type=0;
+data.man(1).type=1;
 data.man(1).DH.d = 0;
 data.man(1).DH.alpha = 0;
 data.man(1).DH.a = man_side;
@@ -47,6 +47,8 @@ data.base.I=diag([0,0,data.base.mass/6*(base_side^2)]);
 %Firts joint location with respect to base
 data.base.T_L0_J1=[eye(3),[base_side/2;0;0];zeros(1,3),1];
 
+%--- Create robot structure ---%
+[robot,TEE_Ln] = DH_Serial2robot(data);
 
 %--- Initial conditions ---%
 q00=[0;0;0;1;zeros(3,1)];
@@ -60,14 +62,15 @@ qmddot0=zeros(3,1);
 R0=quat_DCM([q00(1:4)]')';
 
 %Kinematics
-[RJ,RL,r,l,e,g,TEE]=Kinematics_Serial(R0,q00(4:6),qm0,data);
+[RB,RJ,RL,rB,rJ,rL,e,g]=Kinematics(R0,q00(4:6),qm0,robot);
 %Differential Kinematics
-[Bij,Bi0,P0,pm]=DiffKinematics_Serial(R0,q00(4:6),r,e,g,data);
+[Bij,Bi0,P0,pm]=DiffKinematics(R0,q00(4:6),rL,e,g,robot);
+
 %Inertias
-[I0,Im]=I_I(R0,RL,data);
+[I0,Im]=I_I(R0,RL,robot);
 %Mass Composite Body matrix
-[M0_tilde,Mm_tilde]=MCB_Serial(I0,Im,Bij,Bi0,data);
+[M0_tilde,Mm_tilde]=MCB(I0,Im,Bij,Bi0,robot);
 %Generalized Inertia matrix
-[H0, H0m, Hm] = GIM_Serial(M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,data);
+[H0, H0m, Hm] = GIM(M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,robot);
 M0 = H0*q0dot0+H0m*qmdot0;
 
