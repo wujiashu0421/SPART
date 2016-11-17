@@ -48,7 +48,7 @@ data.base.I=diag([0,0,data.base.mass/6*(base_side^2)]);
 data.base.T_L0_J1=[eye(3),[base_side/2;0;0];zeros(1,3),1];
 
 %--- Create robot structure ---%
-[robot,TEE_Ln] = DH_Serial2robot(data);
+[robot,T_Ln_EE] = DH_Serial2robot(data);
 
 %--- Initial conditions ---%
 q00=[0;0;0;1;zeros(3,1)];
