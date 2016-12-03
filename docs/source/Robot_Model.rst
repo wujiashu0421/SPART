@@ -30,9 +30,9 @@ The `robot` model is build as a Matlab structure with the following fields:
 		* robot.base_links.mass -- Link's mass.
 		* robot.base_links.inertia -- Link's inertia matrix.
 	* robot.Con -- Structure containing extra connectivity information.
-		* robot.Con.Branch -- Branch connectivity map.
-		* robot.Con.Child -- Child connectivity of links.
-		* robot.Con.Child_base -- Child connectivity of base links.
+		* robot.Con.Branch -- Branch connectivity map. This is an nxn  lower triangular matrix. If the i,j element is 1 it means that the ith and jth link are on the same branch (i.e. kinematic chain). 
+		* robot.Con.Child -- Child connectivity of links. It is a nxn matrix and if the i,j element is 1 then the ith link is a child of the jth link.
+		* robot.Con.Child_base -- Child connectivity of base links. It is a nx1 vector that contains 1s on the links that are connected to the base.
 	* robot.origin -- Description of how the robot model was created (i.e. urdf, DH or )
 
 	
