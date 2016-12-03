@@ -1,4 +1,4 @@
-function [Branch,Child,Child_base]=ConnectivityMap(robot)%#codegen
+function [branch,child,child_base]=ConnectivityMap(robot)%#codegen
 %Produced the connectivity map for a robot model
 %
 % Input ->
@@ -27,12 +27,12 @@ function [Branch,Child,Child_base]=ConnectivityMap(robot)%#codegen
 %=== CODE ===%
 
 %Pre-allocate Branch connectivity map
-Branch=zeros(robot.n_links,robot.n_links);
+branch=zeros(robot.n_links,robot.n_links);
 
 %Populate Branch connectivity map
 for i=robot.n_links:-1:1
     for j=i:-1:1
-        Branch(i,j)=1;
+        branch(i,j)=1;
         if robot.joints(robot.links(j).parent_joint).parent_link==0
             
             break
@@ -42,14 +42,14 @@ for i=robot.n_links:-1:1
 end
 
 %Populate Child map
-Child=zeros(robot.n_links,robot.n_links);
-Child_base=zeros(robot.n_links,1);
+child=zeros(robot.n_links,robot.n_links);
+child_base=zeros(robot.n_links,1);
 for i=robot.n_links:-1:1
     parent_link=robot.joints(robot.links(i).parent_joint).parent_link;
     if parent_link~=0
-        Child(i,parent_link)=1;
+        child(i,parent_link)=1;
     else
-        Child_base(i)=1;
+        child_base(i)=1;
     end
 end
 

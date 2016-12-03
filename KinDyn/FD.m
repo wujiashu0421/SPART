@@ -69,7 +69,7 @@ for i=n:-1:1
     %Initialize
     M_hat(1:6,1:6,i)=[Im(1:3,1:3,i),zeros(3,3);zeros(3,3),robot.links(i).mass*eye(3)];
     %Add children contributions
-    for j=find(robot.Con.Child(:,i))'
+    for j=find(robot.con.child(:,i))'
         M_hatii=M_hat(1:6,1:6,j)-psi_hat(1:6,j)*psi(1:6,j)';
         M_hat(1:6,1:6,i)=M_hat(1:6,1:6,i)+Bij(1:6,1:6,j,i)'*M_hatii*Bij(1:6,1:6,j,i);
     end
@@ -79,7 +79,7 @@ end
 %Base-spacecraft
 M_hat0=[I0,zeros(3,3);zeros(3,3),robot.base_link.mass*eye(3)];
 %Add children contributions
-for j=find(robot.Con.Child_base)'
+for j=find(robot.con.child_base)'
     M_hat0ii=M_hat(1:6,1:6,j)-psi_hat(1:6,1)*psi(1:6,j)';
     M_hat0=M_hat0+Bi0(1:6,1:6,j)'*M_hat0ii*Bi0(1:6,1:6,j);
 end
@@ -98,7 +98,7 @@ for i=n:-1:1
     %Initialize
     eta(1:6,i)=zeros(6,1);
     %Add children contributions
-    for j=find(robot.Con.Child(:,i))'
+    for j=find(robot.con.child(:,i))'
         eta(1:6,i)=eta(1:6,i)+Bij(1:6,1:6,j,i)'*(psi(1:6,j)*phi_hat(j)+eta(1:6,j));
         
     end
@@ -108,7 +108,7 @@ end
 %Base-spacecraft
 eta0=zeros(6,1);
 %Add children contributions
-for j=find(robot.Con.Child_base)'
+for j=find(robot.con.child_base)'
     eta0=eta0+Bi0(1:6,1:6,j)'*(psi(1:6,j)*phi_hat(j)+eta(1:6,j));
 end
 phi_hat0=phi0-P0'*eta0;

@@ -106,10 +106,10 @@ for i=1:DH_data.n
 end
 
 %--- Add Conectivity Map ---%
-[Branch,Child,Child_base]=ConnectivityMap(robot);
-robot.Con.Branch=Branch;
-robot.Con.Child=Child;
-robot.Con.Child_base=Child_base;
+[branch,child,child_base]=ConnectivityMap(robot);
+robot.con.branch=branch;
+robot.con.child=child;
+robot.con.child_base=child_base;
 
 %-- Transformation matrix for the end-effector ---%
 T_Ln_EE=[eye(3),DH_data.man(end).b;zeros(1,3),1];

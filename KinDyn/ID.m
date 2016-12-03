@@ -73,14 +73,14 @@ for i=n:-1:1
     %Initialize wq_tilde
     wq_tilde(1:6,i)=wq(1:6,i);
     %Add children contributions
-    for j=find(robot.Con.Child(:,i))'
+    for j=find(robot.con.child(:,i))'
         wq_tilde(1:6,i)=wq_tilde(1:6,i)+Bij(1:6,1:6,j,i)'*wq_tilde(1:6,j);
     end
 end
 %Base-spacecraft
 wq_tilde0=wq0;
 %Add children contributions
-for j=find(robot.Con.Child_base)'
+for j=find(robot.con.child_base)'
     wq_tilde0=wq_tilde0+Bi0(1:6,1:6,j)'*wq_tilde(1:6,j);
 end
 

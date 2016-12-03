@@ -44,7 +44,7 @@ end
 for j=1:i
     %If joint is not fixed
     if robot.joints(j).type~=0
-        if robot.Con.Branch(i,j)==1
+        if robot.con.branch(i,j)==1
             Jm(1:6,robot.joints(j).q_id)=[eye(3),zeros(3,3);SkewSym(rL(1:3,j)-rxi),eye(3)]*pm(1:6,j);
         else
             Jm(1:6,robot.joints(j).q_id)=zeros(6,1);
