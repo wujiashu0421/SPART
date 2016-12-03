@@ -26,8 +26,8 @@ qmdot=zeros(robot.n_links,1);
 [Bij,Bi0,P0,pm]=DiffKinematics(R0,r0,rL,e,g,robot);
 %Velocities
 [t0,tm]=Velocities(Bij,Bi0,P0,pm,q0dot,qmdot,robot);
-%Jacobian
-[J0EE, JmEE]=Jacob(rL(1:3,end),r0,rL,P0,pm,robot.n_links,robot);
+%Jacobian of the last link
+[J0n, Jmn]=Jacob(rL(1:3,end),r0,rL,P0,pm,robot.n_links,robot);
 
 %--- Dynamics ---%
 %Inertias in inertial frames
