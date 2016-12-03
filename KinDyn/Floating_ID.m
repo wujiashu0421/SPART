@@ -44,7 +44,7 @@ function [tauqm,q0ddot] = Floating_ID(wF0,wFm,Mm_tilde,H0,t0,tm,P0,pm,I0,Im,Bij,
 %=== CODE ===%
 
 %Number of links and Joints
-n=robot.n_links;
+n=robot.n_links_joints;
 
 %Recompute Accelerations with qddot=0
 [t0dot,tmdot]=Accelerations(t0,tm,P0,pm,Bi0,Bij,q0dot,qmdot,zeros(6,1),qmddot,robot);

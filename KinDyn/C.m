@@ -39,7 +39,7 @@ function [C0, C0m, Cm0, Cm] = C(t0,tm,I0,Im,M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,robo
 %=== CODE ===%
 
 %--- Number of links and Joints ---%
-n=robot.n_links;
+n=robot.n_links_joints;
 
 %--- Omega ---%
 %Base-spacecraft Omega

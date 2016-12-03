@@ -39,7 +39,7 @@ function [tauq0,tauqm] = ID(wF0,wFm,t0,tm,t0dot,tmdot,P0,pm,I0,Im,Bij,Bi0,robot)
 %=== CODE ===%
 
 %--- Number of links and Joints ---%
-n=robot.n_links;
+n=robot.n_links_joints;
 
 %--- Mdot ---%
 %Base-spacecraft Mdot

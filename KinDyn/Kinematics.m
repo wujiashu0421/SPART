@@ -36,14 +36,13 @@ function [RJ,RL,rJ,rL,e,g]=Kinematics(R0,r0,qm,robot) %#codegen
 %=== CODE ===%
 
 %--- Number of links and joints ---%
-n_links=robot.n_links;
-n_joints=robot.n_joints;
+n=robot.n_links_joints;
 
 %--- Homogeneous transformation matrices ---%
 if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
     %Pre-allocate homogeneous transformations matrices
-    TJ=zeros(4,4,n_joints);
-    TL=zeros(4,4,n_links);
+    TJ=zeros(4,4,n);
+    TL=zeros(4,4,n);
 end
 
 %--- Base link ---%
@@ -52,7 +51,7 @@ T0=[R0,r0;zeros(1,3),1]*clink.T;
 
 %--- Forward kinematics recursion ---%
 %Obtain of joints and links kinematics
-for i=1:n_joints
+for i=1:n
     
     %Get child joint
     cjoint=robot.joints(i);
@@ -83,25 +82,25 @@ end
 %--- Rotation matrices, translation, position and other geometry vectors ---%
 if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
     %Pre-allocate rotation matrices, translation and position vectors
-    RJ=zeros(3,3,n_joints);
-    RL=zeros(3,3,n_links);
-    rJ=zeros(3,n_joints);
-    rL=zeros(3,n_links);
+    RJ=zeros(3,3,n);
+    RL=zeros(3,3,n);
+    rJ=zeros(3,n);
+    rL=zeros(3,n);
     %Pre-allocate rotation/sliding axis
-    e=zeros(3,n_joints);
+    e=zeros(3,n);
     %Pre-allocate other gemotery vectors
-    g=zeros(3,n_joints);
+    g=zeros(3,n);
 end
 %Format Rotation matrices, link positions, joint axis and other geometry
 %vectors
 %Joint associated quantities
-for i=1:n_joints
+for i=1:n
     RJ(1:3,1:3,i)=TJ(1:3,1:3,i);
     rJ(1:3,i)=TJ(1:3,4,i);
     e(1:3,i)=RJ(1:3,1:3,i)*robot.joints(i).axis;
 end
 %Link associated quantities
-for i=1:n_links
+for i=1:n
     RL(1:3,1:3,i)=TL(1:3,1:3,i);
     rL(1:3,i)=TL(1:3,4,i);
     g(1:3,i)=rL(1:3,i)-rJ(1:3,robot.links(i).parent_joint);

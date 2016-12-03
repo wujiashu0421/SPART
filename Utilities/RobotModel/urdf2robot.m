@@ -65,19 +65,17 @@ end
 robot.n_q=[];
 
 %Count links and joints
-robot.n_links = links_urdf.getLength;
-robot.n_joints = joints_urdf.getLength;
+robot.n_links_joints = links_urdf.getLength;
 
 %Create temporary link and joint maps
 links = containers.Map();
 joints = containers.Map();
 
 %Display data
-fprintf('Number of links: %d (including base links)\n', robot.n_links);
-fprintf('Number of joints: %d (including fixed joints)\n',robot.n_joints);
+fprintf('Number of links: %d (including the base link)\n', robot.n_links_joints);
 
 %Iterate over links
-for k = 0:robot.n_links-1
+for k = 0:robot.n_links_joints-1
     %Create basic structure with default values
     link = struct();
     link_xml = links_urdf.item(k);
@@ -120,7 +118,7 @@ for k = 0:robot.n_links-1
 end
 
 %Iterate over joints
-for k = 0:robot.n_joints-1  
+for k = 0:robot.n_links_joints-2  
     %Create basic structure with default values
     joint = struct();
     joint_xml = joints_urdf.item(k);
@@ -209,11 +207,11 @@ robot_keys.joint_id=containers.Map();
 robot_keys.q_id=containers.Map();
 
 %Remove base link from the number of total links
-robot.n_links=robot.n_links-1;
+robot.n_links_joints=robot.n_links_joints-1;
 
 %Create links and joints stucture
-robot.links(robot.n_links) = struct();
-robot.joints(robot.n_joints) = struct();
+robot.links(robot.n_links_joints) = struct();
+robot.joints(robot.n_links_joints) = struct();
 
 %Save base link on its own structure
 clink=links(base_link);

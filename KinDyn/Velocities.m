@@ -33,7 +33,7 @@ function [t0,tm]=Velocities(Bij,Bi0,P0,pm,q0dot,qmdot,robot) %#codegen
 %=== CODE ===%
 
 %--- Number of links and Joints ---%
-n=robot.n_links;
+n=robot.n_links_joints;
 if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
     %Pre-Allocate
     tm=zeros(6,n);

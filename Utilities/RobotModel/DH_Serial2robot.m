@@ -32,8 +32,7 @@ else
 end
 
 %Number of links and joints
-robot.n_links=DH_data.n;
-robot.n_joints=DH_data.n;
+robot.n_links_joints=DH_data.n;
 robot.n_q=DH_data.n;
 
 %Create links and joints structures

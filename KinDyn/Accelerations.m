@@ -37,7 +37,7 @@ function [t0dot,tmdot]=Accelerations(t0,tm,P0,pm,Bi0,Bij,q0dot,qmdot,q0ddot,qmdd
 %=== CODE ===%
 
 %--- Number of links and Joints ---%
-n=robot.n_links;
+n=robot.n_links_joints;
 
 %--- Omega matrices ---%
 %Base-Spacecraft

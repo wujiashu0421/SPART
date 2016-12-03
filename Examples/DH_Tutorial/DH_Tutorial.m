@@ -104,7 +104,7 @@ TEE=[RL(1:3,1:3,end),rL(1:3,end);zeros(1,3),1]*T_Ln_EE;
 %Jacobian of the Link 3
 [J03, Jm3]=Jacob(rL(1:3,3),r0,rL,P0,pm,3,robot);
 %End-effector Jacobian
-[J0EE, JmEE]=Jacob(TEE(1:3,4),r0,rL,P0,pm,robot.n_links,robot);
+[J0EE, JmEE]=Jacob(TEE(1:3,4),r0,rL,P0,pm,robot.n_links_joints,robot);
 %Velocities
 [t0,tm]=Velocities(Bij,Bi0,P0,pm,q0dot,qmdot,robot);
 
@@ -125,12 +125,12 @@ g=9.8; %[m s-2]
 
 %External forces (includes gravity and assumes z is the vertical direction)
 wF0=[0;0;0;0;0;-robot.base_link.mass*g];
-wFm=[zeros(5,robot.n_links);
+wFm=[zeros(5,robot.n_q);
     -robot.links(1).mass*g,-robot.links(2).mass*g,-robot.links(3).mass*g,-robot.links(4).mass*g,-robot.links(5).mass*g];
 
 %Joint torques
 tauq0=zeros(6,1);
-tauqm=zeros(robot.n_links,1);
+tauqm=zeros(robot.n_q,1);
 
 %Forward Dynamics
 [q0ddot_FD,qmddot_FD] = FD(tauq0,tauqm,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,robot);
@@ -139,7 +139,7 @@ tauqm=zeros(robot.n_links,1);
 
 %Accelerations
 q0ddot=zeros(6,1);
-qmddot=zeros(robot.n_links,1);
+qmddot=zeros(robot.n_q,1);
 
 %Accelerations
 [t0dot,tmdot]=Accelerations(t0,tm,P0,pm,Bi0,Bij,q0dot,qmdot,q0ddot,qmddot,robot);
@@ -150,7 +150,7 @@ qmddot=zeros(robot.n_links,1);
 %--- Forward Dynamics - Floating ---%
 
 %Accelerations
-qmddot=zeros(robot.n_links,1);
+qmddot=zeros(robot.n_q,1);
 
 %Inverse Dynamics - Floating Base
 [taum_floating,q0ddot_floating] = Floating_ID(wF0,wFm,Mm_tilde,H0,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,qmddot,robot);

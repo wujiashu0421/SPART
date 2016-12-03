@@ -94,7 +94,7 @@ TEE=[RL(1:3,1:3,end),rL(1:3,end);zeros(1,3),1]*T_Ln_EE;
 %Differential Kinematics
 [Bij,Bi0,P0,pm]=DiffKinematics(R0,r0,rL,e,g,robot);
 %End-effector Jacobian
-[J0EE, JmEE]=Jacob(TEE(1:3,4),r0,rL,P0,pm,robot.n_links,robot);
+[J0EE, JmEE]=Jacob(TEE(1:3,4),r0,rL,P0,pm,robot.n_links_joints,robot);
 %Velocities
 [t0,tm]=Velocities(Bij,Bi0,P0,pm,q0dot,qmdot,robot);
 %Accelerations

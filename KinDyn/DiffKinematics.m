@@ -33,7 +33,7 @@ function [Bij,Bi0,P0,pm]=DiffKinematics(R0,r0,rL,e,g,robot) %#codegen
 %=== CODE ===%
 
 %--- Number of links  ---%
-n=robot.n_links;
+n=robot.n_links_joints;
 
 %--- Twist-propagtaion matrix ---%
 

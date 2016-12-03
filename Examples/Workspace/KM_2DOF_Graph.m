@@ -69,7 +69,7 @@ plot(elps_floating(1,:)+TEE(1,4),elps_floating(2,:)+TEE(2,4),'k--','linewidth',2
 leg(end+1)={sprintf('Floating m_{0}/m_{l}=%d',m0/mi)};
 
 %--- Plot Manipulator ---%
-Man_Plot(R0,r0,base_contour,man_contour,man_contour_end,RL,rL,robot.n_links);
+Man_Plot(R0,r0,base_contour,man_contour,man_contour_end,RL,rL,robot.n_links_joints);
 legend(leg,'Location','best');
 
 

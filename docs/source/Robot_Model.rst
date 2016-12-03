@@ -7,7 +7,7 @@ The robot model contains all the required kinematic and dynamic information of t
 The `robot` model is build as a Matlab structure with the following fields:
 	* robot.name -- Name of the robot.
 	* robot.n_q -- Number of manipulator variables (exclude the base variables).
-	* robot.n_links -- Number of manipulator links and joints (include fixed joints).
+	* robot.n_links_joints -- Number of manipulator links and joints (include fixed joints).
 	* robot.links -- Structure containing the links information.
 		* robot.links(i).id -- Link id.
 		* robot.links(i).name -- Link name.

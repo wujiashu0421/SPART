@@ -34,7 +34,7 @@ function [H0, H0m, Hm] = GIM(M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,robot) %#codegen
 
 %--- Number of links and Joints ---%
 n_q=robot.n_q;
-n=robot.n_links;
+n=robot.n_links_joints;
 
 %--- H Martix ---%
 %Base-spacecraft Inertia matrix

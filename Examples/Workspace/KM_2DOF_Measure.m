@@ -79,6 +79,6 @@ qm=deg2rad([45;-90]);
 %Kinematics
 [RJ,RL,rJ,rL,e,g]=Kinematics(R0,r0,qm,robot);
 %Plot
-Man_Plot(R0,r0,base_contour,man_contour,man_contour_end,RL,rL,robot.n_links);
+Man_Plot(R0,r0,base_contour,man_contour,man_contour_end,RL,rL,robot.n_links_joints);
 
 

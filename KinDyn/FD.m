@@ -43,7 +43,7 @@ function [q0ddot,qmddot] = FD(tauq0,tauqm,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0do
 %=== CODE ===%
 
 %--- Number of links and Joints ---%
-n=robot.n_links;
+n=robot.n_links_joints;
 
 %---- Inverse Dynamics with 0 accelerations ---%
 %Recompute Accelerations with q0ddot=qmddot=0

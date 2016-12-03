@@ -14,7 +14,7 @@ TEE=[RL(1:3,1:3,end),rL(1:3,end);zeros(1,3),1]*TEE_Ln;
 
 %--- End-Effector Jacobian ---%
 %End-effector Jacobian
-[J0EE, JmEE]=Jacob(TEE(1:3,4),r0,rL,P0,pm,robot.n_links,robot);
+[J0EE, JmEE]=Jacob(TEE(1:3,4),r0,rL,P0,pm,robot.n_links_joints,robot);
 
 %--- Generalized Inertia Matrices ---%
 
