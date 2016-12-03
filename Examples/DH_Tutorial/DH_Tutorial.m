@@ -68,7 +68,7 @@ data.man(5).b = [L6/2;0;0];
 data.man(5).mass=2;
 data.man(5).I=diag([2,1,3])/10;
 
-%Firts joint location with respect to base
+%First joint location with respect to base
 data.base.T_L0_J1=[eye(3),[0;0;L0];zeros(1,3),1];
 
 %Base-spacecraft mass and inertia

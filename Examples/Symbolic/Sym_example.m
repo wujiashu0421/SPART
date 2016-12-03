@@ -47,7 +47,7 @@ data.man(2).I=diag(I(1:3,2));
 data.EE.theta=theta_EE; %Rotation around z-axis
 data.EE.d=d_EE; %Translation along z-axis
 
-%Firts joint location with respect to base
+%First joint location with respect to base
 data.base.T_L0_J1=[eye(3),[0;0;0];zeros(1,3),1];
 
 %Base-spacecraft inertia matrix
@@ -55,7 +55,7 @@ data.base.mass=m_base;
 data.base.I=diag(I_base(1:3,1));
 
 %--- Create robot structure ---%
-[robot] = DH_Serial2robot(data);
+[robot,T_Ln_EE] = DH_Serial2robot(data);
 
 %--- Parameters ---%
 
@@ -89,8 +89,12 @@ profile on
 
 %Kinematics
 [RJ,RL,rJ,rL,e,g]=Kinematics(R0,r0,qm,robot);
+%End-Effector
+TEE=[RL(1:3,1:3,end),rL(1:3,end);zeros(1,3),1]*T_Ln_EE;
 %Differential Kinematics
 [Bij,Bi0,P0,pm]=DiffKinematics(R0,r0,rL,e,g,robot);
+%End-effector Jacobian
+[J0EE, JmEE]=Jacob(TEE(1:3,4),r0,rL,P0,pm,robot.n_links,robot);
 %Velocities
 [t0,tm]=Velocities(Bij,Bi0,P0,pm,q0dot,qmdot,robot);
 %Accelerations
@@ -105,8 +109,6 @@ profile on
 [H0, H0m, Hm] = GIM(M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,robot);
 %Generalized Convective Inertia matrix
 [C0, C0m, Cm0, Cm] = C(t0,tm,I0,Im,M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,robot);
-%End-effector Jacobian
-[J0EE, JmEE]=Jacob(rL(1:3,end),r0,rL,P0,pm,robot.n_links,robot);
 
 %Stop profiling
 profile viewer
