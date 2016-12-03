@@ -94,7 +94,7 @@ profile on
 %Forward Dynamics
 [q0ddot_FD,qmddot_FD] = FD(tauq0,tauqm,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,robot);
 %Generalized Convective Inertia matrix
-[C0, C0m, Cm0, Cm] = C(t0,tm,I0,Im,M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,robot);
+[C0, C0m, Cm0, Cm] = CIM(t0,tm,I0,Im,M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,robot);
 %End-effector Jacobian
 [J0EE, JmEE]=Jacob(rL(1:3,end),r0,rL,P0,pm,robot.n_q,robot);
 

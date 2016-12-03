@@ -37,7 +37,7 @@ qmdot=zeros(robot.n_q,1);
 %Generalized Inertia matrix
 [H0, H0m, Hm] = GIM(M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,robot);
 %Generalized Convective Inertia matrix
-[C0, C0m, Cm0, Cm] = C(t0,tm,I0,Im,M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,robot);
+[C0, C0m, Cm0, Cm] = CIM(t0,tm,I0,Im,M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,robot);
 
 %--- Forward Dynamics ---%
 
