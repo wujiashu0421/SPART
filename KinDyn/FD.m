@@ -126,14 +126,14 @@ if not(isempty(coder.target)) %Only use during code generation (allowing symboli
 end
 
 %Forward recursion
-for i=2:n
+for i=1:n
     
-    if robot.joints(i-1).parent_link==0
+    if robot.joints(i).parent_link==0
         %First joint
         mu(1:6,i)=Bi0(1:6,1:6,i)*(P0*q0ddot);
     else
         %Rest of the links
-        if robot.joints(i-1).type~=0
+        if robot.joints(i).type~=0
             mu_aux=(pm(1:6,i-1)*qmddot(robot.joints(i-1).q_id)+mu(1:6,i-1));
         else
             mu_aux=mu(1:6,i-1);
@@ -143,7 +143,7 @@ for i=2:n
     
     %Initialize
     if robot.joints(i).type~=0
-        qmddot(robot.joints(i).q_id)=phi_tilde(i)-psi(1:6,i)'*mu(1:6,i);
+        qmddot(robot.joints(i).q_id,1)=phi_tilde(i)-psi(1:6,i)'*mu(1:6,i);
     end
 end
 
