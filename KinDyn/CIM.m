@@ -117,7 +117,7 @@ for i=n:-1:1
     Bdot=[zeros(3,3), zeros(3,3); SkewSym(t0(4:6)-tm(4:6,i)), zeros(3,3)];
     Hi0_tilde(1:6,1:6,i)=Mm_tilde(1:6,1:6,i)*Bdot;
     %Add children contributions
-    child=find(robot.con.child_base)';
+    child=find(robot.con.child(:,i))';
     for k=1:length(child)
         Hi0_tilde(1:6,1:6,i)=Hi0_tilde(1:6,1:6,i)+Bij(1:6,1:6,child(k),i)'*Hij_tilde(1:6,1:6,child(k),i);
     end
