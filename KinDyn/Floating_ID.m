@@ -67,7 +67,7 @@ q0ddot=-H0\tauq0_0ddot;
 %Update joint forces
 for i=1:n
     if robot.joints(i).type~=0
-        tauqm(robot.joints(i).q_id)=kappa(i,1:6)*q0ddot+tauqm(robot.joints(i).q_id);
+        tauqm(robot.joints(i).q_id)=kappa(i,1:6)*P0*q0ddot+tauqm(robot.joints(i).q_id);
     end
 end
 
