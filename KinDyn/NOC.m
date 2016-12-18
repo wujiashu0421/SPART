@@ -35,7 +35,7 @@ if not(isempty(coder.target)) %Only use during code generation (allowing symboli
 end
 
 %Base-spacecraft contribution
-N=[P0,zeros(6,robot.n_links_joints)]; 
+N(1:6,1:6+robot.n_links_joints)=[P0,zeros(6,robot.n_links_joints)]; 
 
 %Manipulator contribution
 for i=1:robot.n_links_joints
