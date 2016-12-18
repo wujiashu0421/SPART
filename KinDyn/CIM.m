@@ -110,7 +110,6 @@ end
 if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
     %Pre-allocate Hi0_tilde and H0j_tilde
     Hi0_tilde=zeros(6,6,n);
-    H0j_tilde=zeros(6,6,n);
 end
 %Hi0_tilde
 for i=n:-1:1
@@ -121,12 +120,6 @@ for i=n:-1:1
     for k=1:length(child)
         Hi0_tilde(1:6,1:6,i)=Hi0_tilde(1:6,1:6,i)+Bij(1:6,1:6,child(k),i)'*Hij_tilde(1:6,1:6,child(k),i);
     end
-end
-%H0j_tilde
-for j=n:-1:1
-    Bdot=[zeros(3,3), zeros(3,3); SkewSym(tm(4:6,j)-t0(4:6)), zeros(3,3)];
-    Hij_tilde_pre=Hi0_tilde(1:6,1:6,1);
-    H0j_tilde(1:6,1:6,j)=M0_tilde*Bdot+Bi0(1:6,1:6,1)'*Hij_tilde_pre;
 end
 
 %--- C Matrix ---%
