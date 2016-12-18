@@ -7,7 +7,7 @@ disp('The test compares the results obtained by H*qddot+C*qdot');
 disp('with those ones obtained trhought the dedicated forward dynamics algorithms.');
 
 %--- Load robot model ---%
-[robot,Variables] = Load_Robot();
+[robot,Variables] = Load_SerialRobot();
 
 %--- Assign variables ---%
 %Base position
