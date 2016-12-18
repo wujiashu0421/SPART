@@ -73,7 +73,7 @@ for i=1:n
     
     %Add joint contribution
     if robot.joints(i).type~=0
-        tmdot(1:6,i)=Omegam(1:6,1:6,i)*pm(1:6,i)*qmdot(i)+pm(1:6,i)*qmddot(i);
+        tmdot(1:6,i)=tmdot(1:6,i)+Omegam(1:6,1:6,i)*pm(1:6,i)*qmdot(i)+pm(1:6,i)*qmddot(i);
     end
     
     
