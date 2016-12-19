@@ -46,7 +46,7 @@ for i=1:n
     
     if robot.joints(i).parent_link==0
         %First link
-        tm(1:6,i)=Bi0(1:6,1:6,1)*t0;
+        tm(1:6,i)=Bi0(1:6,1:6,i)*t0;
     else
         %Rest of the links
         tm(1:6,i)=Bij(1:6,1:6,i,i-1)*tm(1:6,i-1);
