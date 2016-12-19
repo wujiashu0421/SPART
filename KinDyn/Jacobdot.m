@@ -59,6 +59,7 @@ if not(isempty(coder.target)) %Only use during code generation (allowing symboli
     Jmdot=zeros(6,robot.n_q);
 end
 %Manipulator Jacobian
+joints_num=0;
 for j=1:i
     %If joint is not fixed
     if robot.joints(j).type~=0
@@ -67,13 +68,14 @@ for j=1:i
         else
             Jmdot(1:6,robot.joints(j).q_id)=zeros(6,1);
         end
+        joints_num=joints_num+1;
     end
 end
 
 %Add zeros if required
 if isempty(coder.target) %Only when not pre-allocated
-    if i<robot.n_q
-        Jmdot(1:6,i+1:robot.n_q)=zeros(6,robot.n_q-i);
+    if joints_num<robot.n_q
+        Jmdot(1:6,joints_num+1:robot.n_q)=zeros(6,robot.n_q-joints_num);
     end
 end
 
