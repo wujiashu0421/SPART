@@ -1,5 +1,5 @@
-function [robot,Variables] = Load_SerialRobot()
-%Loads a random serial robot model and generates randomly variables that are used for the SPART tests
+function [robot,Variables] = Load_SerialDHRobot()
+%Loads a random serial robot model (using DH parameters) and generates randomly variables that are used for the SPART tests
 
 %Number of joints/links
 data.n=randi(9,1)+1;
