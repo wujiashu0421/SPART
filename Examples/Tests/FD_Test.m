@@ -1,8 +1,5 @@
-function FD_Test()
+function FD_Test(robot,Variables)
 %This function test the Forward Dynamics functions.
-
-%--- Load robot model ---%
-[robot,Variables] = Load_SerialRobot();
 
 %--- Assign variables ---%
 %Base position

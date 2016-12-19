@@ -1,8 +1,5 @@
-function IM_Test()
+function IM_Test(robot,Variables)
 %This function test the Generalized (H) and Convective (C) inertia matrices functions comparing the recursive algorithms to H=N'M*N and C=N'*(M*Ndot+Mdot*N);.
-
-%--- Load robot model ---%
-[robot,Variables] = Load_SerialRobot();
 
 %--- Assign variables ---%
 %Base position
@@ -10,13 +7,11 @@ R0=Variables.R0;
 r0=Variables.r0;
 
 %Joint variables
-qm=zeros(robot.n_q,1);%Variables.qm;
+qm=Variables.qm;
 
 %Velocities
-q0dot=[1;1;0;0;0;0];%Variables.q0dot;
-%q0dot=sym('q0dot',[6,1],'real');
-%q0dot(3:6)=0;
-qmdot=zeros(robot.n_q,1);%Variables.qmdot;
+q0dot=Variables.q0dot;
+qmdot=Variables.qmdot;
 
 %--- Compute H and C using recursive algorithms ---%
 %Kinematics
@@ -38,11 +33,11 @@ C=[C0, C0m; Cm0, Cm];
 
 %--- Compute H and C using NOC matrix ---%
 %Natural Orthogonal Complement matrix
-N= NOC(r0,rL,P0,pm,robot);
+N=NOC(r0,rL,P0,pm,robot);
 %Generalized inertia matrix
 [H_NOC]=GIM_NOC(N,I0,Im,robot);
 %NOC time derivative
-[Ndot] = NOCdot(r0,t0,rL,tm,P0,pm,robot);
+Ndot=NOCdot(r0,t0,rL,tm,P0,pm,robot);
 %Convective inertia matrix
 [C_NOC]=CIM_NOC(N,Ndot,t0,tm,I0,Im,robot);
 

@@ -1,8 +1,5 @@
-function ID_Test()
+function ID_Test(robot,Variables)
 %This function test the Inverse Dynamics recursive functions by comparing them to the solutions obtained by H*qddot+C*qdot=tau+J'w.
-
-%--- Load robot model ---%
-[robot,Variables] = Load_SerialRobot();
 
 %--- Assign variables ---%
 %Base position
