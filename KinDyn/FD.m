@@ -44,10 +44,11 @@ function [q0ddot,qmddot] = FD(tauq0,tauqm,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0do
 
 %--- Number of links and Joints ---%
 n=robot.n_links_joints;
+n_q=robot.n_q;
 
 %---- Inverse Dynamics with 0 accelerations ---%
 %Recompute Accelerations with q0ddot=qmddot=0
-[t0dot,tmdot]=Accelerations(t0,tm,P0,pm,Bi0,Bij,q0dot,qmdot,zeros(6,1),zeros(n,1),robot);
+[t0dot,tmdot]=Accelerations(t0,tm,P0,pm,Bi0,Bij,q0dot,qmdot,zeros(6,1),zeros(n_q,1),robot);
 %Use the inverse dynamics
 [tau0_0ddot,tauqm_0ddot] = ID(wF0,wFm,t0,tm,t0dot,tmdot,P0,pm,I0,Im,Bij,Bi0,robot);
 
@@ -73,8 +74,13 @@ for i=n:-1:1
         M_hatii=M_hat(1:6,1:6,j)-psi_hat(1:6,j)*psi(1:6,j)';
         M_hat(1:6,1:6,i)=M_hat(1:6,1:6,i)+Bij(1:6,1:6,j,i)'*M_hatii*Bij(1:6,1:6,j,i);
     end
-    psi_hat(1:6,i)=M_hat(1:6,1:6,i)*pm(1:6,i);
-    psi(1:6,i)=psi_hat(1:6,i)/(pm(1:6,i)'*psi_hat(1:6,i));
+    if robot.joints(i).type==0
+        psi_hat(1:6,i)=zeros(6,1);
+        psi(1:6,i)=zeros(6,1);
+    else
+        psi_hat(1:6,i)=M_hat(1:6,1:6,i)*pm(1:6,i);
+        psi(1:6,i)=psi_hat(1:6,i)/(pm(1:6,i)'*psi_hat(1:6,i));
+    end
 end
 %Base-spacecraft
 M_hat0=[I0,zeros(3,3);zeros(3,3),robot.base_link.mass*eye(3)];
@@ -85,12 +91,12 @@ for j=find(robot.con.child_base)'
 end
 psi_hat0=M_hat0*P0;
 
-%--- eta ---
+%--- eta ---%
 if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
     %Pre-allocate and initialize
     eta=zeros(6,n);
-    phi_hat=zeros(n);
-    phi_tilde=zeros(n);
+    phi_hat=zeros(6,n);
+    phi_tilde=zeros(n_q);
 end
 
 %Backwards recursion
@@ -100,10 +106,12 @@ for i=n:-1:1
     %Add children contributions
     for j=find(robot.con.child(:,i))'
         eta(1:6,i)=eta(1:6,i)+Bij(1:6,1:6,j,i)'*(psi(1:6,j)*phi_hat(j)+eta(1:6,j));
-        
     end
-    phi_hat(i)=phi(i)-pm(1:6,i)'*eta(1:6,i);
-    phi_tilde(i)=phi_hat(i)/(pm(1:6,i)'*psi_hat(1:6,i));
+    phi_hat(i)=-pm(1:6,i)'*eta(1:6,i);
+    if robot.joints(i).type~=0
+        phi_hat(i)=phi_hat(i)+phi(robot.joints(i).q_id);
+        phi_tilde(robot.joints(i).q_id)=phi_hat(i)/(pm(1:6,i)'*psi_hat(1:6,i));
+    end
 end
 %Base-spacecraft
 eta0=zeros(6,1);
@@ -133,17 +141,17 @@ for i=1:n
         mu(1:6,i)=Bi0(1:6,1:6,i)*(P0*q0ddot);
     else
         %Rest of the links
-        if robot.joints(i).type~=0
-            mu_aux=(pm(1:6,i-1)*qmddot(robot.joints(i-1).q_id)+mu(1:6,i-1));
+        if robot.joints(robot.joints(i).parent_link).type~=0
+            mu_aux=(pm(1:6,robot.joints(robot.joints(i).parent_link).id)*qmddot(robot.joints(i-1).q_id)+mu(1:6,robot.joints(robot.joints(i).parent_link).id));
         else
-            mu_aux=mu(1:6,i-1);
+            mu_aux=mu(1:6,robot.joints(robot.joints(i).parent_link).id);
         end
         mu(1:6,i)=Bij(1:6,1:6,i,i-1)*mu_aux;
     end
     
     %Initialize
     if robot.joints(i).type~=0
-        qmddot(robot.joints(i).q_id,1)=phi_tilde(i)-psi(1:6,i)'*mu(1:6,i);
+        qmddot(robot.joints(i).q_id,1)=phi_tilde(robot.joints(i).q_id)-psi(1:6,i)'*mu(1:6,i);
     end
 end
 

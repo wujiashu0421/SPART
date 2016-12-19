@@ -93,7 +93,9 @@ if not(isempty(coder.target)) %Only use during code generation (allowing symboli
 end
 %Manipulator joint forces.
 for i=1:n
-    tauqm(i,1)=pm(1:6,i)'*wq_tilde(1:6,i);
+    if robot.joints(i).type~=0
+        tauqm(robot.joints(i).q_id,1)=pm(1:6,i)'*wq_tilde(1:6,i);
+    end
 end
 
 end

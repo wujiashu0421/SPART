@@ -90,16 +90,37 @@ for j=1:length(child)
     Mdot0_tilde = Mdot0_tilde+Mdot_tilde(1:6,1:6,child(j));
 end
 
+
+%--- Bdot ---%
+
+%Pre-allocate Bdotij
+if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
+    Bdotij=zeros(6,6,n,n);
+end
+
+%Compute Bdotij
+for j=1:n
+    for i=1:n
+        if robot.con.branch(i,j)==1
+            %Links are in the same branch
+            Bdotij(1:6,1:6,i,j)=[zeros(3,3), zeros(3,3); SkewSym(tm(4:6,j)-tm(4:6,i)), zeros(3,3)];
+        else
+            %Links are not in the same branch
+            Bdotij(1:6,1:6,i,j)=zeros(6,6);
+        end
+    end
+end
+
+
 %--- Hij tilde ---%
 if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
     %Pre-allocate Hij_tilde
     Hij_tilde=zeros(6,6,n,n);
 end
 %Hij_tilde
-for j=n:-1:1
-    for i=n:-1:1
-        Bdot=[zeros(3,3), zeros(3,3); SkewSym(tm(4:6,j)-tm(4:6,i)), zeros(3,3)];
-        Hij_tilde(1:6,1:6,i,j)=Mm_tilde(1:6,1:6,i)*Bdot;
+for i=n:-1:1
+    for j=n:-1:1
+        Hij_tilde(1:6,1:6,i,j)=Mm_tilde(1:6,1:6,i)*Bdotij(1:6,1:6,i,j);
         %Add children contributions
         child=find(robot.con.child(:,i))';
         for k=1:length(child)
@@ -130,15 +151,17 @@ if not(isempty(coder.target)) %Only use during code generation (allowing symboli
     Cm0=zeros(n,6);
 end
 %Cm Matrix
-for j=n:-1:1
-    for i=n:-1:1
-        if robot.joints(i).type~=0 && robot.joints(j).type~=0
+for j=1:n
+    for i=1:n
+        %Joints must not be fixed and links on the same branch
+        if (robot.joints(i).type~=0 && robot.joints(j).type~=0) && (robot.con.branch(i,j)==1 || robot.con.branch(j,i)==1)
+            %Compute Cm matrix
             if i<=j
                 %Add children contributions
                 child_con=zeros(6,6);
                 child=find(robot.con.child(:,j))';
                 for k=1:length(child)
-                    child_con=Bij(1:6,1:6,child(k),i)'*Hij_tilde(1:6,1:6,child(k),j);
+                    child_con=child_con+Bij(1:6,1:6,child(k),i)'*Hij_tilde(1:6,1:6,child(k),j);
                 end
                 Cm(robot.joints(i).q_id,robot.joints(j).q_id)=pm(1:6,i)'*(Bij(1:6,1:6,j,i)'*Mm_tilde(1:6,1:6,j)*Omega(1:6,1:6,j)+child_con+Mdot_tilde(1:6,1:6,j))*pm(1:6,j);
             else
@@ -152,7 +175,7 @@ end
 child_con=zeros(6,6);
 child=find(robot.con.child_base)';
 for k=1:length(child)
-    child_con=Bi0(1:6,1:6,child(k))'*Hi0_tilde(1:6,1:6,child(k));
+    child_con=child_con+Bi0(1:6,1:6,child(k))'*Hi0_tilde(1:6,1:6,child(k));
 end
 C0 = P0'*(M0_tilde*Omega0+child_con+Mdot0_tilde)*P0;
 %C0m
@@ -165,7 +188,7 @@ for j=1:n
             child_con=zeros(6,6);
             child=find(robot.con.child(:,j))';
             for k=1:length(child)
-                child_con=Bi0(1:6,1:6,child(k))'*Hij_tilde(1:6,1:6,child(k),j);
+                child_con=child_con+Bi0(1:6,1:6,child(k))'*Hij_tilde(1:6,1:6,child(k),j);
             end
             C0m(1:6,robot.joints(j).q_id)=P0'*(Bi0(1:6,1:6,j)'*Mm_tilde(1:6,1:6,j)*Omega(1:6,1:6,j)+child_con+Mdot_tilde(1:6,1:6,j))*pm(1:6,j);
         end
