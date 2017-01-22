@@ -28,7 +28,7 @@ function [I0,Im]=I_I(R0,RL,robot) %#codegen
 %=== CODE ===%
 
 %Base-spacecraft inertia
-I0 = R0*robot.base_link.inertia;
+I0 = R0*robot.base_link.inertia*R0';
 if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
     %Pre-allocate inertias
     Im=zeros(3,3,robot.n_links_joints);
