@@ -49,14 +49,14 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes_arm/arm_base.stl"/>
+        <mesh filename="meshes_kuka_lwr/arm_base.stl"/>
       </geometry>
       <material name="Orange"/>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes_arm/convex/arm_base_convex.stl"/>
+        <mesh filename="meshes_kuka_lwr/convex/arm_base_convex.stl"/>
       </geometry>
     </collision>
   </link>
@@ -77,14 +77,14 @@
     <visual>
       <origin rpy="0 0 3.14159265359" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes_arm/arm_segment_a.stl"/>
+        <mesh filename="meshes_kuka_lwr/arm_segment_a.stl"/>
       </geometry>
       <material name="Orange"/>
     </visual>
     <collision>
       <origin rpy="0 0 3.14159265359" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes_arm/convex/arm_segment_a_convex.stl"/>
+        <mesh filename="meshes_kuka_lwr/convex/arm_segment_a_convex.stl"/>
       </geometry>
     </collision>
   </link>
@@ -113,14 +113,14 @@
     <visual>
       <origin rpy="3.14159265359 0 3.14159265359" xyz="0 0 0.2"/>
       <geometry>
-        <mesh filename="meshes_arm/arm_segment_b.stl"/>
+        <mesh filename="meshes_kuka_lwr/arm_segment_b.stl"/>
       </geometry>
       <material name="Orange"/>
     </visual>
     <collision>
       <origin rpy="3.14159265359 0 3.14159265359" xyz="0 0 0.2"/>
       <geometry>
-        <mesh filename="meshes_arm/convex/arm_segment_b_convex.stl"/>
+        <mesh filename="meshes_kuka_lwr/convex/arm_segment_b_convex.stl"/>
       </geometry>
     </collision>
   </link>
@@ -146,14 +146,14 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes_arm/arm_segment_a.stl"/>
+        <mesh filename="meshes_kuka_lwr/arm_segment_a.stl"/>
       </geometry>
       <material name="Orange"/>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes_arm/convex/arm_segment_a_convex.stl"/>
+        <mesh filename="meshes_kuka_lwr/convex/arm_segment_a_convex.stl"/>
       </geometry>
     </collision>
   </link>
@@ -179,14 +179,14 @@
     <visual>
       <origin rpy="0 3.14159265359 3.14159265359" xyz="0 0 0.2"/>
       <geometry>
-        <mesh filename="meshes_arm/arm_segment_b.stl"/>
+        <mesh filename="meshes_kuka_lwr/arm_segment_b.stl"/>
       </geometry>
       <material name="Orange"/>
     </visual>
     <collision>
       <origin rpy="0 3.14159265359 3.14159265359" xyz="0 0 0.2"/>
       <geometry>
-        <mesh filename="meshes_arm/convex/arm_segment_b_convex.stl"/>
+        <mesh filename="meshes_kuka_lwr/convex/arm_segment_b_convex.stl"/>
       </geometry>
     </collision>
   </link>
@@ -212,14 +212,14 @@
     <visual>
       <origin rpy="0 0 3.14159265359" xyz="0 0 0"/>
       <geometry name="kuka_arm_5_geom">
-        <mesh filename="meshes_arm/arm_segment_last.stl"/>
+        <mesh filename="meshes_kuka_lwr/arm_segment_last.stl"/>
       </geometry>
       <material name="Orange"/>
     </visual>
     <collision>
       <origin rpy="0 0 3.14159265359" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes_arm/convex/arm_segment_last_convex.stl"/>
+        <mesh filename="meshes_kuka_lwr/convex/arm_segment_last_convex.stl"/>
       </geometry>
     </collision>
   </link>
@@ -245,14 +245,14 @@
     <visual>
       <origin rpy="0 0 3.14159265359" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes_arm/arm_wrist.stl"/>
+        <mesh filename="meshes_kuka_lwr/arm_wrist.stl"/>
       </geometry>
       <material name="Grey"/>
     </visual>
     <collision>
       <origin rpy="0 0 3.14159265359" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes_arm/convex/arm_wrist_convex.stl"/>
+        <mesh filename="meshes_kuka_lwr/convex/arm_wrist_convex.stl"/>
       </geometry>
     </collision>
   </link>
@@ -278,14 +278,14 @@
     <visual>
       <origin rpy="0 0 3.14159265359" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes_arm/arm_flanche.stl"/>
+        <mesh filename="meshes_kuka_lwr/arm_flanche.stl"/>
       </geometry>
       <material name="Grey"/>
     </visual>
     <collision>
       <origin rpy="0 0 3.14159265359" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="meshes_arm/convex/arm_flanche_convex.stl"/>
+        <mesh filename="meshes_kuka_lwr/convex/arm_flanche_convex.stl"/>
       </geometry>
     </collision>
   </link>
