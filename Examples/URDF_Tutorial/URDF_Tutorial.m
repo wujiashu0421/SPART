@@ -6,8 +6,8 @@ close all
 clear
 
 %--- URDF filename ---%
-filename='kuka_lwr/kuka.urdf';
-%filename='kuka_iiwa/kuka_iiwa.urdf';
+filename='kuka_lwr.urdf';
+%filename='kuka_iiwa.urdf';
 
 %--- Create robot model ---%
 [robot,robot_keys] = urdf2robot(filename);
