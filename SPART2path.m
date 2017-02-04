@@ -6,6 +6,7 @@ addpath(sprintf('%s/SimulinkLibrary',pwd));
 addpath(sprintf('%s/Utilities',pwd));
 addpath(sprintf('%s/Utilities/Transformations',pwd));
 addpath(sprintf('%s/Utilities/RobotModel',pwd));
+addpath(sprintf('%s/Utilities/URDF_Models',pwd));
 
 %Save path
 savepath;
