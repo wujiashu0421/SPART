@@ -10,6 +10,7 @@ addpath(sprintf('%s/Utilities',pathstr));
 addpath(sprintf('%s/Utilities/Transformations',pathstr));
 addpath(sprintf('%s/Utilities/RobotModel',pathstr));
 addpath(sprintf('%s/Utilities/URDF_Models',pathstr));
+addpath(sprintf('%s/Utilities/Quaternions',pathstr));
 
 %Save path
 savepath;
