@@ -57,7 +57,7 @@
       <geometry>
         <cylinder radius="0.05" length="0.25"/>
       </geometry>
-      <material name="Blue"/>
+      <material name="Grey"/>
     </visual>
   </link>
   <!-- Joint 1 -->
@@ -79,14 +79,14 @@
       <geometry>
         <cylinder radius="0.05" length="0.2"/>
       </geometry>
-      <material name="Orange"/>
+      <material name="Blue"/>
     </visual>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <sphere radius="0.1"/>
+        <cylinder radius="0.1" length="0.1"/>
       </geometry>
-      <material name="Grey"/>
+      <material name="Orange"/>
     </visual>
   </link>
   <!-- Joint 2 -->
@@ -111,11 +111,11 @@
       <material name="Blue"/>
     </visual>
     <visual>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="0 1.5708 0" xyz="0 0 0"/>
       <geometry>
-        <sphere radius="0.1"/>
+        <cylinder radius="0.075" length="0.15"/>
       </geometry>
-      <material name="Grey"/>
+      <material name="Orange"/>
     </visual>
   </link>
   <!-- Joint 3 -->
@@ -137,14 +137,14 @@
       <geometry>
         <cylinder radius="0.05" length="0.75"/>
       </geometry>
-      <material name="Orange"/>
+      <material name="Blue"/>
     </visual>
     <visual>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="0 1.5708 0" xyz="0 0 0"/>
       <geometry>
-        <sphere radius="0.1"/>
+        <cylinder radius="0.075" length="0.15"/>
       </geometry>
-      <material name="Grey"/>
+      <material name="Orange"/>
     </visual>
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0.75"/>
