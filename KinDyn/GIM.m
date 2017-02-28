@@ -54,7 +54,7 @@ for j=1:n
 end
 if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
     %Pre-allocate H0m
-    H0m=zeros(6,n);
+    H0m=zeros(6,n_q);
 end
 %Coupling Inertia matrix
 for i=1:n

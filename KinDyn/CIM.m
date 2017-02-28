@@ -39,6 +39,7 @@ function [C0, C0m, Cm0, Cm] = CIM(t0,tm,I0,Im,M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,ro
 %=== CODE ===%
 
 %--- Number of links and Joints ---%
+n_q=robot.n_q;
 n=robot.n_links_joints;
 
 %--- Omega ---%
@@ -146,9 +147,9 @@ end
 %--- C Matrix ---%
 if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
     %Pre-allocate
-    Cm=zeros(n,n);
-    C0m=zeros(6,n);
-    Cm0=zeros(n,6);
+    Cm=zeros(n_q,n_q);
+    C0m=zeros(6,n_q);
+    Cm0=zeros(n_q,6);
 end
 %Cm Matrix
 for j=1:n
