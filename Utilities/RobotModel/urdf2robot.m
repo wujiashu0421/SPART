@@ -260,7 +260,8 @@ if child_joint.type
     robot_keys.q_id(child_joint.name)=nq;
     nq=nq+1;
 else
-    robot.joints(nj+1).q_id=[];
+    %Fixed joint assign -1
+    robot.joints(nj+1).q_id=-1;
 end
 robot.joints(nj+1).parent_link=robot_keys.link_id(child_joint.parent_link);
 robot.joints(nj+1).child_link=nl+1;
