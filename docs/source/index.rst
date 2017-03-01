@@ -17,6 +17,7 @@ Contents:
    Robot_Model
    URDF
    DH
+   Cite
 
 
 Indices and tables
