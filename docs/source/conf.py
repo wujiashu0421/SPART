@@ -16,10 +16,7 @@ import sys
 import os
 
 # sphinx_rtd_theme (to install `sudo pip install sphinx_rtd_theme`)
-on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
-
-if not on_rtd:  # only import and set the theme if we're building docs locally
-    import sphinx_rtd_theme
+import sphinx_rtd_theme
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
