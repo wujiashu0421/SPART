@@ -7,7 +7,7 @@ SPART can also use the popular Unified Robot Description Format (URDF) file. Mor
 .. _ROS wiki: http://wiki.ros.org/urdf
 .. _XML field descriptions: http://wiki.ros.org/urdf/XML
 
-Sample URDF files can be found in the `Examples/URDF_Tutorial` folder.
+Sample URDF files can be found in the ``Examples/URDF_Tutorial`` folder.
 
 Once you have your URDF description it has to be converted to the robot model. This can be easily done as follows.
 
