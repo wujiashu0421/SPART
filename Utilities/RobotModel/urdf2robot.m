@@ -127,7 +127,6 @@ for k = 0:robot.n_links_joints-2
     joint.parent_link = '';
     joint.child_link = '';
     joint.T=[eye(3),zeros(3,1);zeros(1,3),1];
-    joint.axis = [0; 0; 1];
     
     if strcmp(joint.type_name,'revolute')
         joint.type=1;
@@ -135,6 +134,7 @@ for k = 0:robot.n_links_joints-2
         joint.type=2;
     elseif strcmp(joint.type_name,'fixed')
         joint.type=0;
+        joint.axis = [0; 0; 0];
     end
     
     
@@ -150,10 +150,14 @@ for k = 0:robot.n_links_joints-2
         end
     end
     
-    %Get rotation axis
+    %Get rotation/sliding axis
     axis = joint_xml.getElementsByTagName('axis').item(0);
     if ~isempty(axis)
         joint.axis = eval(['[',char(axis.getAttribute('xyz')),']'])';
+    elseif isempty(axis) && joint.type~=0
+        %Moving joints need a rotation/sliding axis.
+        error_message=[joint.name,' is a moving joint and requires a joint axis.'];
+        error(error_message);
     end
     
     %Get parent link name
