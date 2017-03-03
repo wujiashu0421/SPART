@@ -20,7 +20,7 @@ fprintf('\n');
 disp('SPART - Serial URDF Test:')
 
 %--- Load robot model ---%
-filename='../URDF_Tutorial/kuka_iiwa/kuka_iiwa.urdf';
+filename='kuka_iiwa.urdf';
 [robot,Variables] = Load_SerialURDFRobot(filename);
 
 %--- Tests ---%
@@ -36,7 +36,7 @@ fprintf('\n');
 disp('SPART - Multibranch (from base) URDF Test:')
 
 %--- Load robot model ---%
-filename='../URDF_Tutorial/Multi_kuka_iiwa/Two_iiwa_Base.urdf';
+filename='2_iiwa_base.urdf';
 [robot,Variables] = Load_SerialURDFRobot(filename);
 
 %--- Tests ---%
