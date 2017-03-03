@@ -86,7 +86,7 @@ end
 M_hat0=[I0,zeros(3,3);zeros(3,3),robot.base_link.mass*eye(3)];
 %Add children contributions
 for j=find(robot.con.child_base)'
-    M_hat0ii=M_hat(1:6,1:6,j)-psi_hat(1:6,1)*psi(1:6,j)';
+    M_hat0ii=M_hat(1:6,1:6,j)-psi_hat(1:6,j)*psi(1:6,j)';
     M_hat0=M_hat0+Bi0(1:6,1:6,j)'*M_hat0ii*Bi0(1:6,1:6,j);
 end
 psi_hat0=M_hat0*P0;
@@ -130,7 +130,7 @@ q0ddot=phi_tilde0;
 if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
     %Pre-allocate
     mu=zeros(6,n);
-    qmddot=zeros(n,1);
+    qmddot=zeros(n_q,1);
 end
 
 %Forward recursion
