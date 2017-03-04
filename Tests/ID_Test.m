@@ -54,11 +54,9 @@ tau_HC = H*qddot+C*qdot-N'*[wF0;wFm(:)];
 [tau0_ID,taum_ID] = ID(wF0,wFm,t0,tm,t0dot,tmdot,P0,pm,I0,Im,Bij,Bi0,robot);
 tau_ID=[tau0_ID;taum_ID];
 
-if abs(tau_HC-tau_ID)<1e-6
-    disp('ID Flying Base - PASSED!');
-else
-    warning('ID Flying Base - FAILED!');
-end
+%Test
+test=abs(tau_HC-tau_ID)<1e-6;
+assert(all(test(:)));
 
 %--- Test Inverse Dynamics - Floating base ---%
 
@@ -71,11 +69,11 @@ taum_floating_HC=tau_floating_HC(7:end);
 %Inverse Dynamics Floating Base
 [taum_floating_ID,q0ddot_floating_ID] = Floating_ID(wF0,wFm,Mm_tilde,H0,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,qmddot,robot);
 
-if all(abs(taum_floating_HC-taum_floating_ID)<1e-6) && all(abs(q0ddot_floating_HC-q0ddot_floating_ID)<1e-6)
-    disp('ID Floating Base - PASSED!');
-else
-    warning('ID Floating Base - FAILED!');
-end
+%Test
+test=abs(taum_floating_HC-taum_floating_ID)<1e-6;
+assert(all(test(:)));
+test=abs(q0ddot_floating_HC-q0ddot_floating_ID)<1e-6;
+assert(all(test(:)));
 
 end
 

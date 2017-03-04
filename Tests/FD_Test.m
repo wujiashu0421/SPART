@@ -52,11 +52,9 @@ qddot_HC=H\(tauq+N'*[wF0;wFm(:)]-C*qdot);
 [q0ddot_FD,qmddot_FD] = FD(tauq0,tauqm,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,robot);
 qddot_FD=[q0ddot_FD;qmddot_FD];
 
-if abs(qddot_HC-qddot_FD)<1e-6
-    disp('Forward Dynamics - PASSED!');
-else
-    warning('Forward Dynamics - FAILED!');
-end
+%Test
+test=abs(qddot_HC-qddot_FD)<1e-6;
+assert(all(test(:)));
 
 end
 
