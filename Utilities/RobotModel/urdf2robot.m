@@ -1,4 +1,4 @@
-function [robot,robot_keys] = urdf2robot(filename) %#codegen
+function [robot,robot_keys] = urdf2robot(filename,verbose_flag) %#codegen
 %Creates the SPART robot model from an URDF file.
 %
 %This function was inspired by:
@@ -20,6 +20,11 @@ function [robot,robot_keys] = urdf2robot(filename) %#codegen
 %     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 %=== CODE ===%
+
+%Verbose flag defaults to false
+if nargin<2
+    verbose_flag=false;
+end
 
 %Create Robot structure.
 robot=struct();
@@ -72,7 +77,7 @@ links = containers.Map();
 joints = containers.Map();
 
 %Display data
-fprintf('Number of links: %d (including the base link)\n', robot.n_links_joints);
+if verbose_flag; fprintf('Number of links: %d (including the base link)\n', robot.n_links_joints); end
 
 %Iterate over links
 for k = 0:robot.n_links_joints-1
@@ -194,7 +199,7 @@ end
 for link_name = links.keys
     if isempty(links(char(link_name)).parent_joint)
         base_link = char(link_name);
-        fprintf('Base link: %s\n',base_link);
+        if verbose_flag; fprintf('Base link: %s\n',base_link); end
     end
 end
 %There needs to be a root link
@@ -238,7 +243,7 @@ end
 
 %Populate number of joint variables
 robot.n_q=nq-1;
-fprintf('Number of joint variables: %d\n',robot.n_q);
+if verbose_flag; fprintf('Number of joint variables: %d\n',robot.n_q); end;
 
 %--- Add Conectivity Map ---%
 [branch,child,child_base]=ConnectivityMap(robot);
