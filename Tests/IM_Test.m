@@ -47,7 +47,7 @@ Ndot=NOCdot(r0,t0,rL,tm,P0,pm,robot);
 test=abs(H-H_NOC)<1e-6;
 assert(all(test(:)));
 %CIM
-test=abs(H-H_NOC)<1e-6;
+test=abs(C-C_NOC)<1e-6;
 assert(all(test(:)));
 
 
