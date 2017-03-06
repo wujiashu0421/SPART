@@ -38,7 +38,7 @@ end
 %Backwards recursion
 for i=n:-1:1
     %Initialize M tilde
-    Mm_tilde(1:6,1:6,i)=[Im(1:3,1:3,i),zeros(3,3);zeros(3,3),robot.links(i).mass*eye(3)];%+Bij(1:6,1:6,i+1,i)'*Mm_tilde(1:6,1:6,i+1)*Bij(1:6,1:6,i+1,i);
+    Mm_tilde(1:6,1:6,i)=[Im(1:3,1:3,i),zeros(3,3);zeros(3,3),robot.links(i).mass*eye(3)];
     %Add children contributions
     child=find(robot.con.child(:,i))';
     for j=1:length(child)
