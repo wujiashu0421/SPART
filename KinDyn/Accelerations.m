@@ -42,7 +42,7 @@ n=robot.n_links_joints;
 %--- Omega matrices ---%
 %Base-Spacecraft
 Omega0=[SkewSym(t0(1:3)), zeros(3,3);
-    zeros(3,3), SkewSym(t0(1:3))];
+    zeros(3,3), zeros(3,3)];
 if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
     %Pre-allocate
     Omegam=zeros(6,6,n);

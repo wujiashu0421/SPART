@@ -51,7 +51,7 @@ Omega0=[SkewSym(t0(1:3)), zeros(3,3);
     zeros(3,3), SkewSym(t0(1:3))];
 if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
     %Pre-allocate Omega
-    Omega=zeros(6,6,n);
+    Omega=zeros(6,6,robot.n_links_joints);
 end
 %Compute Omega
 for j=1:i

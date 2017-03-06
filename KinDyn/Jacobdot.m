@@ -37,10 +37,10 @@ function [J0dot, Jmdot]=Jacobdot(rxi,txi,r0,t0,rL,tL,P0,pm,i,robot) %#codegen
 %--- Omega ---%
 %Base-spacecraft Omega
 Omega0=[SkewSym(t0(1:3)), zeros(3,3);
-    zeros(3,3), SkewSym(t0(1:3))];
+    zeros(3,3), zeros(3,3)];
 if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
     %Pre-allocate Omega
-    Omega=zeros(6,6,n);
+    Omega=zeros(6,6,robot.n_links_joints);
 end
 %Compute Omega
 for j=1:i

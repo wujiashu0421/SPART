@@ -33,13 +33,13 @@ function [Ndot] = NOCdot(r0,t0,rL,tL,P0,pm,robot)
 %Pre-allocate
 if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
     %Pre-allocate NOCdot
-    Ndot=zeros(6*robot.n_links_joints,6+robot.n_q);
+    Ndot=zeros(6+6*robot.n_links_joints,6+robot.n_q);
 end
 
 %Compute the NOC time derivative matrix by using the Jacobians time derivative
 %Base-spacecraft contribution
 Omega0=[SkewSym(t0(1:3)), zeros(3,3);
-    zeros(3,3), SkewSym(t0(1:3))];
+    zeros(3,3), zeros(3,3)];
 Ndot(1:6,1:6+robot.n_q)=[Omega0*P0,zeros(6,robot.n_q)];
 %Manipulator contribution
 for i=1:robot.n_links_joints
