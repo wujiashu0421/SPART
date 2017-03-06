@@ -37,10 +37,6 @@ if not(isempty(coder.target)) %Only use during code generation (allowing symboli
 end
 
 %Compute the NOC time derivative matrix by using the Jacobians time derivative
-%Base-spacecraft contribution
-Omega0=[SkewSym(t0(1:3)), zeros(3,3);
-    zeros(3,3), SkewSym(t0(1:3))];
-Ndot(1:6,1:6+robot.n_q)=[Omega0*P0,zeros(6,robot.n_q)];
 %Manipulator contribution
 for i=1:robot.n_links_joints
     [J0doti, Jmdoti]=Jacobdot(rL(1:3,i),tL(1:6,i),r0,t0,rL,tL,P0,pm,i,robot);
