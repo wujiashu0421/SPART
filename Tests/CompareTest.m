@@ -1,4 +1,14 @@
-%SPART basic DH and URDF tests
+%Testing DH, URDF (one and multiple arms) robots model and 
+%kinematic/dynamic functions.
+%
+%This tests compares the results of different kinematic and dynamic 
+%magnitudes when generated with different methods
+%
+% Velocities -> Dedicated function vs Jacobian
+% Inertia Matrices -> Recursive formulation vs NOC-based formulation
+% Inverse Dynamics -> Recursive formulation vs Inerta Matrices based
+% Forward Dynamics -> Recursive formulation vs Inerta Matrices based
+
 
 %=== DH Model ===%
 %Load robot model
@@ -41,7 +51,6 @@ ID_Test(robot,Variables);
 %% URDF Dual Arm Forward Dynamics test
 FD_Test(robot,Variables);
 
-
 %=== URDF Dual Arm Model with fixed  ===%
 %Load robot model
 filename='Test_URDF/2_iiwa_base.urdf';
@@ -55,10 +64,3 @@ IM_Test(robot,Variables);
 ID_Test(robot,Variables);
 %% URDF Dual Arm (Fixed Joints) Forward Dynamics test
 FD_Test(robot,Variables);
-
-
-%=== Test comparing two models (one with fixed joints and one without) ===%
-%% Test
-FixedJointsTest();
-
-
