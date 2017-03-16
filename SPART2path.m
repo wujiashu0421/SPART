@@ -4,13 +4,12 @@
 pathstr = fileparts(mfilename('fullpath'));
 
 %Add all the required folders into the path
-addpath(sprintf('%s/KinDyn',pathstr));
-addpath(sprintf('%s/SimulinkLibrary',pathstr));
-addpath(sprintf('%s/Utilities',pathstr));
-addpath(sprintf('%s/Utilities/Transformations',pathstr));
-addpath(sprintf('%s/Utilities/RobotModel',pathstr));
-addpath(sprintf('%s/Utilities/URDF_Models',pathstr));
-addpath(sprintf('%s/Utilities/Quaternions',pathstr));
+addpath(sprintf('%s/src/kinematics_dynamics',pathstr));
+addpath(sprintf('%s/src/Simulink_library',pathstr));
+addpath(sprintf('%s/src/utils',pathstr));
+addpath(sprintf('%s/src/attitude_transformations',pathstr));
+addpath(sprintf('%s/src/robot_model',pathstr));
+addpath(sprintf('%s/URDF_models',pathstr));
 
 %Save path
 savepath;

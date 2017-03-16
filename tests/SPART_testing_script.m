@@ -10,7 +10,7 @@ close all
 import matlab.unittest.TestRunner
 import matlab.unittest.plugins.CodeCoveragePlugin
 runner = TestRunner.withTextOutput;
-runner.addPlugin(CodeCoveragePlugin.forFolder('../KinDyn'))
+runner.addPlugin(CodeCoveragePlugin.forFolder('../src/','IncludingSubfolders',true))
 
 %--- Define test suite ---%
 suite = testsuite({'CompareTest','FixedJointsTest','CoMTest'});
