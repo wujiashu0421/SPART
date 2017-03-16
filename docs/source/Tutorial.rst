@@ -15,7 +15,7 @@ There are 3 different ways to create the robot model:
 	* Use the Denavit-Hartenberg (DH) convention to define the geometry of your robot. Check (:doc:`/DH`) for a description on how to convert a URDF file into a robot model.
 	* Create the robot model directly. Refer to (:doc:`/Robot_Model`) for further guidance.
 
-Weather if you choose to start from a URDF file or from a DH description this tutorial code can be found either in `Examples/URDF_Tutorial/URDF_Tutorial.m` or `Examples/DH_Tutorial/DH_Tutorial.m`.
+Weather if you choose to start from a URDF file or from a DH description this tutorial code can be found either in ``examples/URDF_Tutorial/URDF_Tutorial.m`` or ``examples/DH_Tutorial/DH_Tutorial.m``.
 
 Kinematics
 ==========
@@ -62,7 +62,7 @@ Some geometric definitions are also included in the following figure.
    Schematic disposition of links and joints.
 
 
-If you change the joint variables and re-run the kinematic function you will get the new positions with that particular configuration. The same can be done with the orientation R0 and position r0 of the base-spacecraft.
+If you change the joint variables and re-run the kinematic function you will get the new positions with that particular configuration. The same can be done with the orientation :math:`R0` and position :math:`r0` of the base-spacecraft.
 
 .. code-block:: matlab
 
@@ -92,7 +92,7 @@ You can also define the joint variables as symbolic and obtain symbolic expressi
 Differential Kinematics
 =======================
 
-To compute the differential kinematics the twist propgation matrices and twist propagation vectors need to be computed first.
+To compute the differential kinematics the twist propagation matrices and twist propagation vectors need to be computed first.
 
 .. code-block:: matlab
 
