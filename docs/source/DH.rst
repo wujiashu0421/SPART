@@ -11,12 +11,12 @@ The DEnavit--Hartenberg (DH) convention is a classical way to provide the kinema
 
    Spacecraft-manipulator system.
 
-The code of this tutorial can be found in `Examples/Tutorial/Tutorial.m`.
+The code of this tutorial can be found in ``examples/Tutorial/Tutorial.m``.
 
 Kinematics
 ==========
 
-Before SPART can start computing any kinematic or dynamic magnitude it needs a representation of the geometry and dynamic properties of the spacecraft-manipulator system. These fixed parameters are introduced into a `data` structure.
+Before SPART can start computing any kinematic or dynamic magnitude it needs a representation of the geometry and dynamic properties of the spacecraft-manipulator system. These fixed parameters are introduced into a ``data`` structure.
 
 The data structure has 3 fields:
 	* data.n -- Number of links.

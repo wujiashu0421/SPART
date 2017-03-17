@@ -11,11 +11,11 @@ Getting the Robot Model
 The first step is to create the robot model. This model contains all the kinematic and dynamic data of the robot. Take a look at (:doc:`/Robot_Model`) to get a detailed description of how this model is structured.
 
 There are 3 different ways to create the robot model:
-	* Use an Unified Robot Description Format (URDF file). Check (:doc:`/URDF`) for a description on how to convert a URDF file into a robot model.
-	* Use the Denavit-Hartenberg (DH) convention to define the geometry of your robot. Check (:doc:`/DH`) for a description on how to convert a URDF file into a robot model.
-	* Create the robot model directly. Refer to (:doc:`/Robot_Model`) for further guidance.
+	* Use an Unified Robot Description Format (URDF file). Check (:doc:`/URDF`) for a description on how to convert a URDF file into a SPART robot model.
+	* Use the Denavit-Hartenberg (DH) convention to define the geometry of your robot. Check (:doc:`/DH`) for a description on how to convert a URDF file into a SPART robot model.
+	* Manually create the robot model. Refer to (:doc:`/Robot_Model`) for further guidance.
 
-Weather if you choose to start from a URDF file or from a DH description this tutorial code can be found either in ``examples/URDF_Tutorial/URDF_Tutorial.m`` or ``examples/DH_Tutorial/DH_Tutorial.m``.
+Weather if you choose to start from a URDF file or from a DH description this tutorial code can be found either in ``examples/URDF_Tutorial/URDF_Tutorial.m`` or in ``examples/DH_Tutorial/DH_Tutorial.m``.
 
 Kinematics
 ==========
@@ -45,14 +45,14 @@ We can now compute the kinematics of the system.
 	[RJ,RL,rJ,rL,e,g]=Kinematics(R0,r0,qm,robot);
 
 The output of the function is as follows:
-	* RJ -- Joint 3x3 rotation matrices.
-	* RL -- Links 3x3 rotation matrices.
-	* rJ -- Joints positions.
-	* rL -- Links positions.
-	* e -- Joints rotations axis.
-	* g -- Vector from the origin of the ith joint to the ith link [inertial]
+	* RJ -- Joint 3x3 rotation matrices -- as a [3x3xn] matrix.
+	* RL -- Links 3x3 rotation matrices -- as a [3x3xn] matrix.
+	* rJ -- Positions of the joints in the inertial frame -- as a [3xn] matrix.
+	* rL -- Positions of the links in the inertial frame -- as a [3xn] matrix.
+	* e -- Joints rotations axis in the inertial frame -- as a [3xn] matrix.
+	* g -- Vector from the origin of the ith joint to the ith link in the inertial frame -- as a [3xn] matrix. 
 
-Some geometric definitions are also included in the following figure.
+Some of the geometric definitions are shown in following figure.
 
 .. figure:: Figures/GenLinksJoints.png
    :scale: 50 %
@@ -62,7 +62,7 @@ Some geometric definitions are also included in the following figure.
    Schematic disposition of links and joints.
 
 
-If you change the joint variables and re-run the kinematic function you will get the new positions with that particular configuration. The same can be done with the orientation :math:`R0` and position :math:`r0` of the base-spacecraft.
+If you change the joint variables ``qm`` or base-spacecraft position ``r_{0}`` and orientation ``R_{0}`` to then re-run the kinematic function ``Kinematics`` you will get the new positions and orientation with that particular configuration.
 
 .. code-block:: matlab
 
@@ -72,7 +72,7 @@ If you change the joint variables and re-run the kinematic function you will get
 	%Kinematics
 	[RJ,RL,rJ,rL,e,g]=Kinematics(R0,r0,qm,robot);
 
-You can also define the joint variables as symbolic and obtain symbolic expressions.
+SPART also allows symbolic computation. To obtain symbolic expressions just define the joint variables as symbolic.
 
 .. code-block:: matlab
 
@@ -100,17 +100,17 @@ To compute the differential kinematics the twist propagation matrices and twist 
 	[Bij,Bi0,P0,pm]=DiffKinematics(R0,r0,rL,e,g,robot);
 
 The output of the differential kinematics are as follows:
-	* Bij -- Twist--propagation matrix (for manipulator i>0 and j>0).
-	* Bi0 -- Twist--propagation matrix (for i>0 and j=0).
-	* P0 -- Base--spacecraft twist--propagation vector.
-	* pm -- Manipulator twist--propagation vector.
+	* Bij -- Twist--propagation [6x6] matrix (for manipulator i>0 and j>0).
+	* Bi0 -- Twist--propagation [6x6] matrix (for i>0 and j=0).
+	* P0 -- Base--spacecraft twist--propagation [6x6] matrix.
+	* pm -- Manipulator twist--propagation [6x1] vector.
 
-With this quantities the velocities of all the links can be determined if the base and joint velocities are previously defined.
+With this quantities the velocities of all the links can be determined if the base ``q0dot`` and joint velocities ``qmdot`` are previously defined.
 	
 .. code-block:: matlab
 
 	%Velocities (joint space)
-	q0dot=zeros(6,1); %Base-spacecraft velocity
+	q0dot=zeros(6,1); %Base-spacecraft velocity [wx,wy,wz,vx,vy,vz].
 	qmdot=[4;-1;5;2;1]*pi/180; %Joint velocities (adjust the length according to your robot model)
 
 
@@ -127,24 +127,31 @@ The twist vector encapsulates the angular and linear velocities in a vector.
 
 	t_{i}=\left[\begin{array}{c}\omega_{i}\\\dot{r}_{i}\end{array}\right]
 
-The twist vector can be propagated as follows from a link to the next using the 3x3 :math:`B_{ij}` twist--propagation matrix and the 6x1 :math:`p_{i}` twist--propagation vector as follows.
+The twist vector can be propagated, from a link to the next one, using the 3x3 :math:`B_{ij}` twist--propagation matrix and the 6x1 :math:`p_{i}` twist--propagation vector as follows:
 
 .. math::
 	
 	t_{i}=B_{ij}t_{j}+p_{i}\dot{q}_{i}
 
-For the base-spacecraft the twist--propagation only uses the a modified 6x6 :math:`P_{0}` twist-propagation vector.
+For the base-spacecraft, the twist--propagation only uses the a modified 6x6 :math:`P_{0}` twist-propagation matrix.
 
 .. math::
 	
 	t_{0}=P_{0}\dot{q}_{0}
 
-The Jacobians of any point can also be easily computed as follows.
+The analytical Jacobians of any point on the spacecraft-manipulator system can also be easily computed as follows:
 
 .. code-block:: matlab
 
 	%Jacobian of the 3rd Link
 	[J03, Jm3]=Jacob(rL(1:3,3),r0,rL,P0,pm,3,robot);
+
+In general for the Jacobian of the ``i`` linke:
+
+.. code-block:: matlab
+
+	%Jacobian of the ith Link
+	[J03, Jm3]=Jacob(rL(1:3,i),r0,rL,P0,pm,i,robot);
 
 The Jacobians map joint space velocities into operational space velocities.
 
@@ -152,16 +159,16 @@ The Jacobians map joint space velocities into operational space velocities.
 	
 	t_{x}=J_{0x}\dot{q}_{0}+J_{mx}\dot{q}_{m}
 
-Equations of Motion and inertia matrices
+Equations of Motion and Inertia Matrices
 ========================================
 
-The generic equations of motion can be written as follows.
+The generic equations of motion can be written as follows:
 
 .. math::
 	
 	H\left(q\right)\ddot{q}+C\left(q,\dot{q}\right)\dot{q}=\mathcal{\tau}
 
-With :math:`H` being the generalized inertia matrix, :math:`C` the generalized convective inertia matrix, :math:`q` the generalized joint variables and :math:`\tau` the generalized joint forces.
+with :math:`H` being the Generalized Inertia Matrix (GIM), :math:`C` the Convective Inertia Matrix (CIM), :math:`q` the generalized joint variables and :math:`\tau` the generalized joint forces.
 
 The generalized joint variables are composed by the base-spacecraft variables :math:`q_{0}` and the manipulator joint variables :math:`q_{m}`.
 The contributions of the base-spacecraft and the manipulator can be made explicit when writing the equations of motion.
@@ -174,7 +181,7 @@ The contributions of the base-spacecraft and the manipulator can be made explici
 	\left[\begin{array}{c} \dot{q}_{0}\\ \dot{q}_{m} \end{array}\right]=
 	\left[\begin{array}{c} \tau_{0}\\ \tau_{m} \end{array}\right]
 
-To obtain the inertia matrices we need to specify the mass and inertia of the base--spacecraft and of the joints.
+To obtain the inertia matrices we need to specify the mass and inertia of the base--spacecraft and of the different manipulator links.
 
 You can now compute these inertia matrices as follows.
 
@@ -194,13 +201,21 @@ Although the equations of motion can be used to solve the forward dynamic proble
 Forward Dynamics
 ================
 
-To solve the forward dynamics you will need to specify the forces acting on the spacecraft--manipulator system. There are two ways of specifying them and you can specify your forces in both of them if that is easier.
+To solve the forward dynamics you will need to specify the forces acting on the spacecraft--manipulator system. There are two ways of specifying them. Choose the one that is easier for your particular application (or both of them simultaneously).
 
-The joint forces :math:`\tau` are the forces acting on the joints :math:`\tau_{m}` (thus is an nx1 vector) and also at the base-spacecraft :math:`tau_{0}` (thus a 6x1 vector). For :math:`\tau_{0}`, as in the twist vector, the torques come first and then the linear forces.
+The joint forces :math:`\tau` are the forces acting on the joints :math:`\tau_{m}` (thus is an ``nx1`` vector) and also at the base-spacecraft :math:`tau_{0}` (thus a ``6x1`` vector). For :math:`\tau_{0}`, as in the twist vector, the torques come first and then the linear forces.
 
-Also you can specify the wrenches :math:`w` (torques and forces) for each body (applied at their center-of-mass). Again these can be decomposed into base-spacecraft 6x1 wrenches :math:`w_{0}` and manipulator {6xn} wrenches :math:`w_{n}`.
+.. math::
 
-Here is an example of how to do it.
+	\tau_{0}=\left[\tau_{x},\tau_{y},\tau_{z},f_{x},f_{y},f_{z}\right]^{T}
+
+Also, you can specify the wrenches :math:`w` (torques and forces) that are applied at their center-of-mass of each link. Again these can be decomposed into base-spacecraft 6x1 wrenches :math:`w_{0}` and manipulator {6xn} wrenches :math:`w_{n}`.
+
+.. math::
+
+	\w_{i}=\left[\tau_{x},\tau_{y},\tau_{z},f_{x},f_{y},f_{z}\right]^{T}
+
+Here is an example of how to do it:
 
 .. code-block:: matlab
 
@@ -212,15 +227,15 @@ Here is an example of how to do it.
 	tauq0=zeros(6,1);
 	tauqm=zeros(robot.n_links,1);
 
-Then a forward dynamic solver is available.
+After these forces are defined, a forward dynamic solver is available.
 
 .. code-block:: matlab
 	
 	%Forward Dynamics
-	[q0ddot_FD,qmddot_FD] = FD(tauq0,tauqm,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,robot);
+	[q0ddot_FD,qmddot_FD] = FD(tau0,taum,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,robot);
 
 
-I you have forces that act on the links, for example gravity (with z being the vertical direction), they can be added through the wrenches as follows.
+As an example, if you need to incorporate the weight of the links (with z being the vertical direction), set the wrenches as follows:
 
 .. code-block:: matlab
 
@@ -237,7 +252,7 @@ I you have forces that act on the links, for example gravity (with z being the v
 Inverse Dynamics
 ================
 
-Similarly for the inverse dynamics the acceleration of the base-spacecraft and the joint need to be specified and then a function to compute the inverse dynamics is available.
+For the inverse dynamics, the acceleration of the base-spacecraft and the joints need to be specified and then a function to compute the inverse dynamics is available.
 
 .. code-block:: matlab
 	
@@ -252,7 +267,7 @@ Similarly for the inverse dynamics the acceleration of the base-spacecraft and t
 	[tau0,taum] = ID(wF0,wFm,t0,tm,t0dot,tmdot,P0,pm,I0,Im,Bij,Bi0,robot);
 
 
-If the base-spacecraft is left uncontrolled (floating case) and thus its acceleration is unknown a different routine is available.
+If the base-spacecraft is left uncontrolled (floating-base case) and thus its acceleration is unknown a different routine is available.
 
 .. code-block:: matlab
 	

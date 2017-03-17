@@ -2,9 +2,9 @@
 Robot Model
 ===========
 
-The robot model contains all the required kinematic and dynamic information of the robor that SPARTS requires to compute all the kinematic and dynamic quantities.
+The robot model contains all the required kinematic and dynamic information of the robotic vehicle that SPARTS requires to compute all the kinematic and dynamic quantities.
 
-The `robot` model is build as a Matlab structure with the following fields:
+The ``robot`` model is build as a Matlab structure with the following fields:
 	* robot.name -- Name of the robot.
 	* robot.n_q -- Number of manipulator variables (exclude the base variables).
 	* robot.n_links_joints -- Number of manipulator links and joints (include fixed joints).
@@ -33,8 +33,6 @@ The `robot` model is build as a Matlab structure with the following fields:
 		* robot.con.branch -- Branch connectivity map. This is an nxn  lower triangular matrix. If the i,j element is 1 it means that the ith and jth link are on the same branch (i.e. kinematic chain). 
 		* robot.con.child -- Child connectivity of links. It is a nxn matrix and if the i,j element is 1 then the ith link is a child of the jth link.
 		* robot.con.child_base -- Child connectivity of base links. It is a nx1 vector that contains 1s on the links that are connected to the base.
-	* robot.origin -- Description of how the robot model was created (i.e. urdf, DH or )
-
 	
 
 

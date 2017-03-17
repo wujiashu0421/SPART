@@ -4,7 +4,7 @@
 URDF Models
 ===========
 
-SPART comes with a few URDF models ready to use. These models are located in ``Utilities/URDF_Models``, which should be already included in your path.
+SPART comes with a few URDF models ready to use. These models are located in ``/URDF_models``, which should be already included in your path (see :doc:`/Installation`).
 
 Spacecraft with robotic manipulators
 ------------------------------------ 

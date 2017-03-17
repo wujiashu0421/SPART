@@ -2,14 +2,14 @@
 Using URDF with SPART
 =====================
 
-SPART can also use the popular Unified Robot Description Format (URDF) file. More information about how to create this type of descriptions can be found in the `ROS wiki`_. Particularly clarifying are the `XML field descriptions`_.
+SPART can also use the popular Unified Robot Description Format (URDF) file. More information about how to create this type of robot descriptions can be found in the `ROS wiki`_. Particularly clarifying are the `XML field descriptions`_.
 
 .. _ROS wiki: http://wiki.ros.org/urdf
 .. _XML field descriptions: http://wiki.ros.org/urdf/XML
 
-SPART includes several URDF models that can be found in the ``Utilities/URDF_Models`` folder. A list of this models is also found in :ref:`URDF-Models`.
+SPART includes several URDF models that can be found in the ``URDF_models`` folder. A list of these models can be found in :ref:`URDF-Models`.
 
-Once you have your URDF description it has to be converted to the robot model. This can be easily done as follows.
+Once you have your URDF description it has to be converted into the robot model. This can be easily done as follows:
 
 .. code-block:: matlab
 
