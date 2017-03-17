@@ -21,7 +21,12 @@ import sphinx_rtd_theme
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath('../..'))
+
+# -- Matlab AutoDoc -- #
+matlab_src_dir = os.path.abspath('../..') 
+primary_domain = 'mat'
+# -- Matlab AutoDoc -- #
 
 # -- General configuration ------------------------------------------------
 
@@ -32,7 +37,9 @@ import sphinx_rtd_theme
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    'sphinx.ext.viewcode',
     'sphinx.ext.autodoc',
+    'sphinxcontrib.matlab',
     'sphinx.ext.mathjax',
 ]
 
@@ -91,7 +98,7 @@ exclude_patterns = []
 
 # If true, the current module name will be prepended to all description
 # unit titles (such as .. function::).
-#add_module_names = True
+add_module_names = False
 
 # If true, sectionauthor and moduleauthor directives will be shown in the
 # output. They are ignored by default.
