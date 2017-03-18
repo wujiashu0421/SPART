@@ -11,12 +11,12 @@ SPART allows to compute:
 * Dynamics - Generalized inertia and convective inertia matrices.
 * Forward/Inverse dynamics (including the floating base case).
 
-Additionally SPART supports:
+Additionally, SPART supports:
 
 * Symbolic computation of all the kinematic and dynamic magnitudes.
 * Automatic Code Generation support.
 	* Code can be integrated in Simulink models.
-	* Efficient C/C++ code can be automatically generated and integrated into with other exixting projects (e.g., with ROS).
+	* Efficient C/C++ code can be automatically generated and integrated into with other existing projects (*e.g.*, with ROS).
 * URDF files (experimental support).
 
 
