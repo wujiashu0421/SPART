@@ -1,34 +1,40 @@
-function [Bij,Bi0,P0,pm]=DiffKinematics(R0,r0,rL,e,g,robot) %#codegen
+function [Bij,Bi0,P0,pm]=DiffKinematics(R0,r0,rL,e,g,robot)
 % Computes the differential kineamtics of a serial manipulator.
 %
-% Input ->
-%   R0 -> Rotation matrix from the base-spacecraft to the inertial frame.
-%   r0 -> Position of the base-spacecraft to the inertial frame.
-%   rL -> Position of links.
-%   e -> Joint axis.
-%   g -> Vector from joint to link center-of-mass
-%   robot -> Robot model.
+% [Bij,Bi0,P0,pm]=DiffKinematics(R0,r0,rL,e,g,robot)
+% 
+% :parameters:
+%   * R0 -- Rotation matrix from the base-spacecraft to the inertial frame.
+%   * r0 -- Position of the base-spacecraft to the inertial frame.
+%   * rL -- Position of links.
+%   * e -- Joint axis.
+%   * g -- Vector from joint to link center-of-mass
+%   * robot -- Robot model.
 %
-% Output ->
-%   Bij -> Twist-propagation matrix (for manipulator i>0 and j>0).
-%   Bi0 -> Twist-propagation matrix (for i>0 and j=0).
-%   P0 -> Base-spacecraft twist-propagation vector.
-%   pm -> Manipulator twist-propagation vector.
+% :return:
+%   * Bij -- Twist-propagation matrix (for manipulator i>0 and j>0).
+%   * Bi0 -- Twist-propagation matrix (for i>0 and j=0).
+%   * P0 -- Base-spacecraft twist-propagation vector.
+%   * pm -- Manipulator twist-propagation vector.
+%
+% See also: :func:`src.kinematics_dynamics.Kinematics` and 
 
-%=== LICENSE ===%
+%{  
+    LICENSE
 
-%     This program is free software: you can redistribute it and/or modify
-%     it under the terms of the GNU Lesser General Public License as published by
-%     the Free Software Foundation, either version 3 of the License, or
-%     (at your option) any later version.
-% 
-%     This program is distributed in the hope that it will be useful,
-%     but WITHOUT ANY WARRANTY; without even the implied warranty of
-%     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-%     GNU Lesser General Public License for more details.
-% 
-%     You should have received a copy of the GNU Lesser General Public License
-%     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+%}
 
 %=== CODE ===%
 

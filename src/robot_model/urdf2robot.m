@@ -1,23 +1,34 @@
-function [robot,robot_keys] = urdf2robot(filename,verbose_flag) %#codegen
-%Creates the SPART robot model from an URDF file.
+function [robot,robot_keys]=urdf2robot(filename,verbose_flag)
+% Creates a SPART robot model from an URDF file.
 %
-%This function was inspired by:
-%https://github.com/jhu-lcsr/matlab_urdf/blob/master/load_ne_id.m
-
-%=== LICENSE ===%
-
-%     This program is free software: you can redistribute it and/or modify
-%     it under the terms of the GNU Lesser General Public License as published by
-%     the Free Software Foundation, either version 3 of the License, or
-%     (at your option) any later version.
+% [robot,robot_keys] = urdf2robot(filename,verbose_flag)
 % 
-%     This program is distributed in the hope that it will be useful,
-%     but WITHOUT ANY WARRANTY; without even the implied warranty of
-%     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-%     GNU Lesser General Public License for more details.
-% 
-%     You should have received a copy of the GNU Lesser General Public License
-%     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+% :parameters: 
+%   * filename -- Path to URDF file.
+%   * verbose_flag -- True for verbose output (Default False).
+%
+% :return:
+%   * robot -- Robot model.
+%
+% This function was inspired by:
+% https://github.com/jhu-lcsr/matlab_urdf/blob/master/load_ne_id.m
+
+%{  
+    LICENSE
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+%}
 
 %=== CODE ===%
 
