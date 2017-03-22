@@ -1,4 +1,4 @@
-function [robot,T_Ln_EE] = DH_Serial2robot(DH_data) %#codegen
+function [robot,T_Ln_EE] = DH_Serial2robot(DH_data)
 %Transforms a description of the robot provided in DH parameters into the
 %robot model.
 

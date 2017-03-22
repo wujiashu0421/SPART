@@ -1,23 +1,31 @@
 function [RJ,RL,rJ,rL,e,g]=Kinematics(R0,r0,qm,robot)
-% Computes the kineamtics of the system.
+% Computes the kinematics of the multibody system.
 %
 % [RJ,RL,rJ,rL,e,g]=Kinematics(R0,r0,qm,robot)
 %
 % :parameters: 
-%   * R0 -- Rotation matrix from the base-spacecraft to the inertial frame.
-%   * r0 -- Position of the base-spacecraft to the inertial frame.
-%   * qm -- Manipulator joint varibles.
-%   * robot -- Robot model.
+%   * R0 -- Rotation matrix from the base-spacecraft to the inertial frame -- [3x3].
+%   * r0 -- Position of the base-spacecraft with respect to the inertial frame -- [3x1].
+%   * qm -- Manipulator joint varibles -- [n_qx1].
+%   * robot -- Robot model (see :doc:`/Robot_Model`).
 %
 % :return: 
-%   * RJ -- Joint 3x3 rotation matrices.
-%   * RL -- Links 3x3 rotation matrices.
-%   * rJ -- Joints positions.
-%   * rL -- Links positions.
-%   * e -- Joints axis.
-%   * g -- Vector from the origin of the ith joint to the ith link [inertial]
+%   * RJ -- Joint rotation matrices -- [3x3xn].
+%   * RL -- Links rotation matrices -- [3x3xn].
+%   * rJ -- Joints positions -- [3xn].
+%   * rL -- Links center-of-mass positions -- [3xn].
+%   * e -- Joints rotation/sliding axis -- [3xn].
+%   * g -- Vector from the origin of the ith joint to the ith link -- [3xn].
 %
-% See also: :func:`src.robot_model.urdf2robot` and :func:`src.robot_model.DH_Serial2robot`
+% All the ouput magnitudes are expressed in the **inertial frame**.
+%
+% Examples:
+%
+%   Retrieving the position of the ith link: ``rL(1:3,i)``.
+%
+%   Retrieving the rotation matrix of the ith joint: ``RJ(1:3,1:3,i)``.   
+%
+% See also: :func:`src.robot_model.urdf2robot` and :func:`src.robot_model.DH_Serial2robot`.
 
 %{  
     LICENSE

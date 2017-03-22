@@ -1,23 +1,25 @@
 function [Bij,Bi0,P0,pm]=DiffKinematics(R0,r0,rL,e,g,robot)
-% Computes the differential kineamtics of a serial manipulator.
+% Computes the differential kinematics of the multibody system.
 %
 % [Bij,Bi0,P0,pm]=DiffKinematics(R0,r0,rL,e,g,robot)
 % 
 % :parameters:
-%   * R0 -- Rotation matrix from the base-spacecraft to the inertial frame.
-%   * r0 -- Position of the base-spacecraft to the inertial frame.
-%   * rL -- Position of links.
-%   * e -- Joint axis.
-%   * g -- Vector from joint to link center-of-mass
-%   * robot -- Robot model.
+%   * R0 -- Rotation matrix from the base-spacecraft to the inertial frame -- [3x3].
+%   * r0 -- Position of the base-spacecraft with respect to the inertial frame -- [3x1].
+%   * rL -- Links center-of-mass positions -- [3xn] .
+%   * e -- Joints rotation/sliding axis -- [3xn].
+%   * g -- Vector from the origin of the ith joint to the ith link -- [3xn].
+%   * robot -- Robot model (see :doc:`/Robot_Model`).
 %
 % :return:
-%   * Bij -- Twist-propagation matrix (for manipulator i>0 and j>0).
-%   * Bi0 -- Twist-propagation matrix (for i>0 and j=0).
-%   * P0 -- Base-spacecraft twist-propagation vector.
-%   * pm -- Manipulator twist-propagation vector.
+%   * Bij -- Twist-propagation matrix (for manipulator i>0 and j>0) -- [6x6xn].
+%   * Bi0 -- Twist-propagation matrix (for i>0 and j=0) -- [6x6xn].
+%   * P0 -- Base-spacecraft twist-propagation vector -- [6x6].
+%   * pm -- Manipulator twist-propagation vector -- [6xn].
 %
-% See also: :func:`src.kinematics_dynamics.Kinematics` and 
+% Use :func:`src.kinematics_dynamics.Kinematics` to compute the ``rL,e,g`` parameters.
+%
+% See also: :func:`src.kinematics_dynamics.Kinematics` and :func:`src.kinematics_dynamics.Jacob`. 
 
 %{  
     LICENSE

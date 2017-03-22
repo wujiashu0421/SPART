@@ -1,4 +1,4 @@
-function [branch,child,child_base]=ConnectivityMap(robot)%#codegen
+function [branch,child,child_base]=ConnectivityMap(robot)
 %Produced the connectivity map for a robot model
 %
 % Input ->

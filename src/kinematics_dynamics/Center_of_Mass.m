@@ -1,29 +1,39 @@
-function r_com = Center_of_Mass(r0,rL,robot) %#codegen
-%Computes the center of mass (CoM) of the system
+function r_com = Center_of_Mass(r0,rL,robot)
+% Computes the center-of-mass (CoM) of the system.
 %
-% Input ->
-%   r0 -> Position of the base-spacecraft to the inertial frame.
-%   rL -> Links positions.
-%   robot -> Robot model.
+% r_com = Center_of_Mass(r0,rL,robot)
 %
-% Output ->
-%   r_com -> Location [m] of the center of mass (3x1 vector).
+% :parameters: 
+%   * r0 -- Position of the base-spacecraft with respect to the inertial frame -- [3x1].
+%   * rL -- Links center-of-mass positions -- [3xn].
+%   * robot -- Robot model (see :doc:`/Robot_Model`).
+%
+% :retruns:
+%   * r_com -- Location of the center-of-mass -- [3x1].
+%
+% Use :func:`src.kinematics_dynamics.Kinematics` to compute the ``rL`` parameter.
+%
+% This function can also be used to compute the velocity/acceleration of the center-of-mass.
+% To do it use as paremeters the velocities ``v0,vL`` or acceleration ``a0,am`` and you will get the CoM  velocity ``v_com`` or acceleration ``a_com``.
+%
+% See also: :func:`src.kinematics_dynamics.Kinematics`
 
-%=== LICENSE ===%
+%{  
+    LICENSE
 
-%     This program is free software: you can redistribute it and/or modify
-%     it under the terms of the GNU Lesser General Public License as published by
-%     the Free Software Foundation, either version 3 of the License, or
-%     (at your option) any later version.
-% 
-%     This program is distributed in the hope that it will be useful,
-%     but WITHOUT ANY WARRANTY; without even the implied warranty of
-%     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-%     GNU Lesser General Public License for more details.
-% 
-%     You should have received a copy of the GNU Lesser General Public License
-%     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+%}
 
 %=== CODE ===%
 
