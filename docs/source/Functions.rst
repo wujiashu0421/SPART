@@ -1,14 +1,29 @@
 Functions
 *********
 
-Kinematics and Dynamics
-=======================
+Here is the documentation for all of SPART functions.
+	
+.. contents:: :local:
+
+Kinematics
+==========
 
 .. autofunction:: src.kinematics_dynamics.Kinematics
 
 .. autofunction:: src.kinematics_dynamics.DiffKinematics
 
 .. autofunction:: src.kinematics_dynamics.Velocities
+
+.. autofunction:: src.kinematics_dynamics.Jacob
+
+.. autofunction:: src.kinematics_dynamics.Accelerations
+
+.. autofunction:: src.kinematics_dynamics.Jacobdot
+
+.. autofunction:: src.kinematics_dynamics.Center_of_Mass
+
+Dynamics
+========
 
 Robot Model
 =======================
