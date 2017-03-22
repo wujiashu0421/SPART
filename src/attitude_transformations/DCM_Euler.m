@@ -1,4 +1,4 @@
-function Euler = DCM_Euler(DCM)%#codegen
+function Euler = DCM_Euler(DCM)
 % Compute the rotation axis and angle from a DCM.
 %
 % Input:
