@@ -49,7 +49,7 @@ The output of the function is as follows:
 	* RL -- Links 3x3 rotation matrices -- as a [3x3xn] matrix.
 	* rJ -- Positions of the joints in the inertial frame -- as a [3xn] matrix.
 	* rL -- Positions of the links in the inertial frame -- as a [3xn] matrix.
-	* e -- Joints rotations axis in the inertial frame -- as a [3xn] matrix.
+	* e -- Joint rotation/sliding axis in the inertial frame -- as a [3xn] matrix.
 	* g -- Vector from the origin of the ith joint to the ith link in the inertial frame -- as a [3xn] matrix. 
 
 Some of the geometric definitions are shown in following figure.
@@ -115,11 +115,11 @@ With this quantities the velocities of all the links can be determined if the ba
 
 
 	%Velocities (operational space)
-	[t0,tm]=Velocities(Bij,Bi0,P0,pm,q0dot,qmdot,robot);
+	[t0,tL]=Velocities(Bij,Bi0,P0,pm,q0dot,qmdot,robot);
 
 The output of the operational space velocities are as follows:
 	* t0 -- Base--spacecraft twist vector [wx,wy,wz,vx,vy,vz].
-	* tm -- Manipulator twist vector [wx,wy,wz,vx,vy,vz].
+	* tL -- Manipulator twist vector [wx,wy,wz,vx,vy,vz].
 
 The twist vector encapsulates the angular and linear velocities in a vector.
 
@@ -194,7 +194,7 @@ You can now compute these inertia matrices as follows.
 	%Generalized Inertia matrix
 	[H0, H0m, Hm] = GIM(M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,robot);
 	%Generalized Convective Inertia matrix
-	[C0, C0m, Cm0, Cm] = CIM(t0,tm,I0,Im,M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,robot);
+	[C0, C0m, Cm0, Cm] = CIM(t0,tL,I0,Im,M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,robot);
 
 Although the equations of motion can be used to solve the forward dynamic problem (determining the motion of the system given a set of applied forces :math:`\tau\rightarrow\ddot{q}`) and the inverse dynamic problem (determining the forces required to produce a prescribe motion :math:`\ddot{q}\rightarrow\tau`) there are more efficient ways of doing so.
 
@@ -232,7 +232,7 @@ After these forces are defined, a forward dynamic solver is available.
 .. code-block:: matlab
 	
 	%Forward Dynamics
-	[q0ddot_FD,qmddot_FD] = FD(tau0,taum,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,robot);
+	[q0ddot_FD,qmddot_FD] = FD(tau0,taum,wF0,wFm,t0,tL,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,robot);
 
 
 As an example, if you need to incorporate the weight of the links (with z being the vertical direction), set the wrenches as follows:
@@ -261,10 +261,10 @@ For the inverse dynamics, the acceleration of the base-spacecraft and the joints
 	qmddot=zeros(robot.n_q,1);
 
 	%Accelerations
-	[t0dot,tmdot]=Accelerations(t0,tm,P0,pm,Bi0,Bij,q0dot,qmdot,q0ddot,qmddot,robot);
+	[t0dot,tLdot]=Accelerations(t0,tL,P0,pm,Bi0,Bij,q0dot,qmdot,q0ddot,qmddot,robot);
 
 	%Inverse Dynamics - Flying base
-	[tau0,taum] = ID(wF0,wFm,t0,tm,t0dot,tmdot,P0,pm,I0,Im,Bij,Bi0,robot);
+	[tau0,taum] = ID(wF0,wFm,t0,tL,t0dot,tLdot,P0,pm,I0,Im,Bij,Bi0,robot);
 
 
 If the base-spacecraft is left uncontrolled (floating-base case) and thus its acceleration is unknown a different routine is available.
@@ -275,5 +275,5 @@ If the base-spacecraft is left uncontrolled (floating-base case) and thus its ac
 	qmddot=zeros(robot.n_q,,1);
 
 	%Inverse Dynamics - Floating Base
-	[taum_floating,q0ddot_floating] = Floating_ID(wF0,wFm,Mm_tilde,H0,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,qmddot,robot);
+	[taum_floating,q0ddot_floating] = Floating_ID(wF0,wFm,Mm_tilde,H0,t0,tL,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,qmddot,robot);
 
