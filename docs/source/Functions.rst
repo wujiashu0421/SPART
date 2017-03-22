@@ -26,15 +26,19 @@ Dynamics
 ========
 
 Robot Model
-=======================
+===========
 
 .. autofunction:: src.robot_model.urdf2robot
+
+.. autofunction:: src.robot_model.DH_Serial2robot
 
 
 Attitude Transformations
 ========================
 
 .. autofunction:: src.attitude_transformations.Angles321_DCM
+
+.. autofunction:: src.attitude_transformations.Angles123_DCM
 
 Utilities
 =========

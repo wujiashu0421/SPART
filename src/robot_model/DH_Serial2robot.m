@@ -1,23 +1,33 @@
 function [robot,T_Ln_EE] = DH_Serial2robot(DH_data)
-%Transforms a description of the robot provided in DH parameters into the
-%robot model.
+% Transforms a description of a multibody system, provided in Denavit-Hartenberg parameters, into the SPART robot model.
+%
+% [robot,T_Ln_EE] = DH_Serial2robot(DH_data)
+%
+% :parameters: 
+%   * DH_data -- Structure containing the DH parameters. (see :doc:`/DH`).
+%
+% :return: 
+%   * robot -- Robot model (see :doc:`/Robot_Model`).
+%   * T_Ln_EE -- Homogeneous transformation matrix from last link to end-effector --[4x4].
+%
+% **DH descriptions are only supported for serial configurations**.
 
-%It only supports serial configurations.
+%{  
+    LICENSE
 
-%=== LICENSE ===%
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-%     This program is free software: you can redistribute it and/or modify
-%     it under the terms of the GNU Lesser General Public License as published by
-%     the Free Software Foundation, either version 3 of the License, or
-%     (at your option) any later version.
-% 
-%     This program is distributed in the hope that it will be useful,
-%     but WITHOUT ANY WARRANTY; without even the implied warranty of
-%     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-%     GNU Lesser General Public License for more details.
-% 
-%     You should have received a copy of the GNU Lesser General Public License
-%     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+%}
 
 %=== CODE ===%
 
