@@ -1,7 +1,7 @@
 Functions
 *********
 
-Here is the documentation for all of SPART functions.
+Here is the documentation for all of SPART functions (the current list is incomplete).
 	
 .. contents:: :local:
 
@@ -34,5 +34,9 @@ Robot Model
 Attitude Transformations
 ========================
 
+.. autofunction:: src.attitude_transformations.Angles321_DCM
+
 Utilities
 =========
+
+.. autofunction:: src.utils.SkewSym
