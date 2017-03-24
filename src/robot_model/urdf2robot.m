@@ -8,7 +8,7 @@ function [robot,robot_keys]=urdf2robot(filename,verbose_flag)
 %   * verbose_flag -- True for verbose output (Default False).
 %
 % :return:
-%   * robot -- Robot model.
+%   * robot -- Robot model (see :doc:`/Robot_Model`).
 %
 % This function was inspired by:
 % https://github.com/jhu-lcsr/matlab_urdf/blob/master/load_ne_id.m
