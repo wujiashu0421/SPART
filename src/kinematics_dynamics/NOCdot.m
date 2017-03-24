@@ -22,15 +22,15 @@ function [Ndot] = NOCdot(r0,t0,rL,tL,P0,pm,robot)
 %	
 %   %Compute NOC
 %   [N] = NOC(r0,rL,P0,pm,robot)
-%	%Compute NOC time-derivative
+%   %Compute NOC time-derivative
 %   [Ndot] = NOCdot(r0,t0,rL,tL,P0,pm,robot)
 %   %Twist time-derivatives of all the links
 %   tdot=N*[q0ddot;qmddot]+Ndot*[q0dot;qmdot];
-%	%Twist time-derivative of the base-spacecraft
-%	t0dot=tdot(1:6,1);
-%	%Twist time-derivative of the ith link
-%	i=2;
-%	tidot=tdot(6*i:6+6*i,1);
+%   %Twist time-derivative of the base-spacecraft
+%   t0dot=tdot(1:6,1);
+%   %Twist time-derivative of the ith link
+%   i=2;
+%   tidot=tdot(6*i:6+6*i,1);
 %
 % See also: :func:`src.kinematics_dynamics.Jacobdot` and :func:`src.kinematics_dynamics.NOC`. 
 

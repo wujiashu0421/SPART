@@ -23,11 +23,11 @@ function [N] = NOC(r0,rL,P0,pm,robot)
 %   [N] = NOC(r0,rL,P0,pm,robot)
 %   %Twist of all the links
 %   t=N*[q0dot;qmdot];
-%	%Twist of the base-spacecraft
-%	t0=t(1:6,1);
-%	%Twist of the ith link
-%	i=2;
-%	ti=t(6*i:6+6*i,1);
+%   %Twist of the base-spacecraft
+%   t0=t(1:6,1);
+%   %Twist of the ith link
+%   i=2;
+%   ti=t(6*i:6+6*i,1);
 %
 % See also: :func:`src.kinematics_dynamics.Jacob` and :func:`src.kinematics_dynamics.NOCdot`. 
 
