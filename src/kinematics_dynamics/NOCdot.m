@@ -1,32 +1,56 @@
 function [Ndot] = NOCdot(r0,t0,rL,tL,P0,pm,robot)
-% Computes the Natural Orthogonal Complement (NOC) matrix time derivative
+% Computes the Natural Orthogonal Complement (NOC) matrix time-derivative.
 %
-% Input ->
-%   r0 -> Inertial position of the base-spacecraft.
-%   t0 -> Inertial twist of the base-spacecraft.
-%   rL -> Links inertial positions.
-%   tL -> Inertial twist of the links.
-%   P0 -> Base-spacecraft twist-propagation vector.
-%   pm -> Manipulator twist-propagation vector.
-%   robot -> Robot model.
+% [Ndot] = NOCdot(r0,t0,rL,tL,P0,pm,robot)
 %
-% Output ->
-%   Ndot -> Natural Orthogonal Complement (NOC) matrix time derivative
+% :parameters: 
+%   * r0 -- Position of the base-spacecraft with respect to the inertial frame -- [3x1].
+%   * t0 -- Base-spacecraft twist vector [wx,wy,wz,vx,vy,vz] (all in inertial frame) -- [6x1].
+%   * rL -- Links center-of-mass positions -- [3xn].
+%   * tL -- Manipulator twist vector [wx,wy,wz,vx,vy,vz] (all in inertial frame) -- [6xn].%   * P0 -- Base-spacecraft twist-propagation vector -- [6x6].
+%   * pm -- Manipulator twist-propagation vector -- [6xn].
+%   * robot -- Robot model (see :doc:`/Robot_Model`).
+%
+% :return: 
+%   * Ndot -- Natural Orthogonal Complement (NOC) matrix time-derivative -- [6+6*n,6+n_q].
+%
+% Examples:
+%
+%   To compute the accelerations of all links:
+%
+% .. code-block:: matlab
+%	
+%   %Compute NOC
+%   [N] = NOC(r0,rL,P0,pm,robot)
+%	%Compute NOC time-derivative
+%   [Ndot] = NOCdot(r0,t0,rL,tL,P0,pm,robot)
+%   %Twist time-derivatives of all the links
+%   tdot=N*[q0ddot;qmddot]+Ndot*[q0dot;qmdot];
+%	%Twist time-derivative of the base-spacecraft
+%	t0dot=tdot(1:6,1);
+%	%Twist time-derivative of the ith link
+%	i=2;
+%	tidot=tdot(6*i:6+6*i,1);
+%
+% See also: :func:`src.kinematics_dynamics.Jacobdot` and :func:`src.kinematics_dynamics.NOC`. 
 
-%=== LICENSE ===%
 
-%     This program is free software: you can redistribute it and/or modify
-%     it under the terms of the GNU Lesser General Public License as published by
-%     the Free Software Foundation, either version 3 of the License, or
-%     (at your option) any later version.
-% 
-%     This program is distributed in the hope that it will be useful,
-%     but WITHOUT ANY WARRANTY; without even the implied warranty of
-%     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-%     GNU Lesser General Public License for more details.
-% 
-%     You should have received a copy of the GNU Lesser General Public License
-%     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+%{  
+    LICENSE
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+%}
 
 %=== Code ===%
 

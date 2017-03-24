@@ -22,6 +22,10 @@ Kinematics
 
 .. autofunction:: src.kinematics_dynamics.Center_of_Mass
 
+.. autofunction:: src.kinematics_dynamics.NOC
+
+.. autofunction:: src.kinematics_dynamics.NOCdot
+
 Dynamics
 ========
 
@@ -31,6 +35,8 @@ Robot Model
 .. autofunction:: src.robot_model.urdf2robot
 
 .. autofunction:: src.robot_model.DH_Serial2robot
+
+.. autofunction:: src.robot_model.ConnectivityMap
 
 
 Attitude Transformations

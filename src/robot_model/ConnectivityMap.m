@@ -1,28 +1,34 @@
 function [branch,child,child_base]=ConnectivityMap(robot)
-%Produced the connectivity map for a robot model
+% Produces the connectivity map for a robot model.
 %
-% Input ->
-%  robot -> Robot model.
+% [branch,child,child_base]=ConnectivityMap(robot)
 %
-% Ouput ->
-%   Branch -> Branch connectivity map.
-%   Child -> Link child map.
-%   Child_base -> Base link child map. 
+% :parameters: 
+%   * robot -- Robot model (see :doc:`/Robot_Model`).
+%
+% :return: 
+%   * Branch -- Branch connectivity map.
+%   * child -- Link--child map.
+%   * child_base -- Base--link child map.
+%
+% See also: :func:`src.robot_model.urdf2robot` and :func:`src.robot_model.DH_Serial2robot`.
 
-%=== LICENSE ===%
+%{  
+    LICENSE
 
-%     This program is free software: you can redistribute it and/or modify
-%     it under the terms of the GNU Lesser General Public License as published by
-%     the Free Software Foundation, either version 3 of the License, or
-%     (at your option) any later version.
-% 
-%     This program is distributed in the hope that it will be useful,
-%     but WITHOUT ANY WARRANTY; without even the implied warranty of
-%     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-%     GNU Lesser General Public License for more details.
-% 
-%     You should have received a copy of the GNU Lesser General Public License
-%     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+%}
 
 %=== CODE ===%
 
