@@ -13,7 +13,7 @@ function [t0dot,tLdot]=Accelerations(t0,tL,P0,pm,Bi0,Bij,q0dot,qmdot,q0ddot,qmdd
 %   * q0dot -- Base-spacecraft velocities [wx,wy,wz,vx,vy,vz]. The angular velocities are in body axis, while the linear velocities in inertial frame -- [6x1].
 %   * qmdot -- Joint velocities -- [n_qx1].
 %   * q0ddot -- Base-spacecraft accelerations [alphax,alphay,alphaz,ax,ay,az]. The angular accelerations are in body axis, while the linear accelerations are in inertial frame -- [6x1].
-%   * qmddot -- Manipulator joint accelerations -- [n_qx1]..
+%   * qmddot -- Manipulator joint accelerations -- [n_qx1].
 %   * robot -- Robot model (see :doc:`/Robot_Model`).
 %
 % :return: 
