@@ -1,33 +1,40 @@
-function [M0_tilde,Mm_tilde]=MCB(I0,Im,Bij,Bi0,robot) %#codegen
-% Computes the Mass Composite Body matrix of a manipulator.
+function [M0_tilde,Mm_tilde]=MCB(I0,Im,Bij,Bi0,robot)
+% Computes the Mass Composite Body Matrix (MCB) of a manipulator.
 %
-% Input ->
-%   I0 -> Base-spacecraft inertia in inertial frame.
-%   Im -> Manipulator inertia in inertial frame.
-%   Bij -> Twist-propagation matrix (for manipulator i>0 and j>0).
-%   Bi0 -> Twist-propagation matrix (for i>0 and j=0).
-%   robot -> Robot model.
+% [M0_tilde,Mm_tilde]=MCB(I0,Im,Bij,Bi0,robot)
 %
-% Output ->
-%   M0_tilde -> Base-spacecraft mass matrix of composite body.
-%   Mm_tilde -> Manipulator mass matrix of composite body.
+% :parameters: 
+%   * I0 -- Base-spacecraft inertia matrix in the inertial frame -- [3x3].
+%   * Im -- Links inertia matrices in the inertial frame -- [3x3xn].
+%   * Bij -- Twist-propagation matrix (for manipulator i>0 and j>0) -- [6x6xn].
+%   * Bi0 -- Twist-propagation matrix (for i>0 and j=0) -- [6x6xn].
+%   * robot -- Robot model (see :doc:`/Robot_Model`).
+%
+% :return: 
+%   * M0_tilde -- Base-spacecraft mass composite body matrix -- [6x6].
+%   * Mm_tilde -- Manipulator mass composite body matrix -- [6x6xn].
+%
+% See also: :func:`src.kinematics_dynamics.I_I`. 
 
-%=== LICENSE ===%
+%{  
+    LICENSE
 
-%     This program is free software: you can redistribute it and/or modify
-%     it under the terms of the GNU Lesser General Public License as published by
-%     the Free Software Foundation, either version 3 of the License, or
-%     (at your option) any later version.
-% 
-%     This program is distributed in the hope that it will be useful,
-%     but WITHOUT ANY WARRANTY; without even the implied warranty of
-%     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-%     GNU Lesser General Public License for more details.
-% 
-%     You should have received a copy of the GNU Lesser General Public License
-%     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+%}
 
 %=== CODE ===%
+
 %Number of links and Joints
 n=robot.n_links_joints;
 if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)

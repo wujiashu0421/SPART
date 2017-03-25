@@ -29,6 +29,16 @@ Kinematics
 Dynamics
 ========
 
+.. autofunction:: src.kinematics_dynamics.FD
+
+.. autofunction:: src.kinematics_dynamics.ID
+
+.. autofunction:: src.kinematics_dynamics.Floating_ID
+
+.. autofunction:: src.kinematics_dynamics.I_I
+
+.. autofunction:: src.kinematics_dynamics.MCB
+
 Robot Model
 ===========
 

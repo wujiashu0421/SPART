@@ -1,29 +1,35 @@
-function [I0,Im]=I_I(R0,RL,robot) %#codegen
+function [I0,Im]=I_I(R0,RL,robot)
 % Converts the inertias in local frame to inertia in the inertial frame.
 %
-% Input ->
-%   R0 -> Rotation matrix from the base-spacecraft to the inertial frame.
-%   RL -> Links 3x3 rotation matrices.
-%   robot -> Robot model.
+% [I0,Im]=I_I(R0,RL,robot)
 %
-% Output ->
-%   I0 -> Base-spacecraft inertia in inertial frame.
-%   Im -> Manipulator inertia in inertial frame.
+% :parameters: 
+%   * R0 -- Rotation matrix from the base-spacecraft to the inertial frame -- [3x3].
+%   * RL -- Links rotation matrices -- [3x3xn].
+%   * robot -- Robot model (see :doc:`/Robot_Model`).
+%
+% :return: 
+%   * I0 -- Base-spacecraft inertia matrix in the inertial frame -- [3x3].
+%   * Im -- Links inertia matrices in the inertial frame -- [3x3xn].
+%
+% See also: :func:`src.kinematics_dynamics.MCB`. 
 
-%=== LICENSE ===%
+%{  
+    LICENSE
 
-%     This program is free software: you can redistribute it and/or modify
-%     it under the terms of the GNU Lesser General Public License as published by
-%     the Free Software Foundation, either version 3 of the License, or
-%     (at your option) any later version.
-% 
-%     This program is distributed in the hope that it will be useful,
-%     but WITHOUT ANY WARRANTY; without even the implied warranty of
-%     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-%     GNU Lesser General Public License for more details.
-% 
-%     You should have received a copy of the GNU Lesser General Public License
-%     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+%}
 
 %=== CODE ===%
 

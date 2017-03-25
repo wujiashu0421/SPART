@@ -1,44 +1,48 @@
-function [q0ddot,qmddot] = FD(tauq0,tauqm,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,robot) %#codegen
-% This function solves the inverse dynamics problem (it obtains the
-% generalized forces from the accelerations) for a Serial Manipulator with 
-% a floating base.
+function [q0ddot,qmddot] = FD(tauq0,tauqm,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,robot)
+% This function solves the forward dynamics (FD) problem (it obtains the
+% acceleration from  forces).
 %
-% Input ->
-%   tauq0 -> Base-spacecraft control forces.
-%   tauqm -> Manipulator control forces.
-%   wF0 -> External forces on the base-spacecraft.
-%   wFm -> External forces on the manipulator links CoM.
-%   t0 -> Base-spacecraft twist vector
-%   tm -> Manipulator twist vector.
-%   P0 -> Base-spacecraft twist-propagation vector.
-%   pm -> Manipulator twist-propagation vector.
-%   I0 -> Base-spacecraft inertia in inertial frame.
-%   Im -> Manipulator inertia in inertial frame.
-%   Bij -> Twist-propagation matrix (for manipulator i>0 and j>0).
-%   Bi0 -> Twist-propagation matrix (for i>0 and j=0).
-%   q0dot -> Base-spacecraft velocities [angular velocity in body, linear
-%   velocity in inertial].
-%   qmdot -> Manipulator joint rates.
-%   robot -> Robot model.
+% [q0ddot,qmddot] = FD(tauq0,tauqm,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,robot)
 %
-% Output ->
-%   q0ddot -> Base-spacecraft acceleration.
-%   qmddot -> Manipulator acceleration.
+% :parameters: 
+%   * tauq0 -- Base-spacecraft forces [Tx,Ty,Tz,fx,fy,fz] (torques in the body frame) -- [6x1].
+%   * tauqm -- Joint forces/troques -- [n_qx1].
+%   * wF0 -- External forces on the base-spacecraft (in the inertial frame) [Tx,Ty,Tz,fx,fy,fz] -- [6x1].
+%   * wFm -- External forces on the manipulator links CoM (in the inertial frame) [Tx,Ty,Tz,fx,fy,fz] -- [6x1].
+%   * t0 -- Base-spacecraft twist vector [wx,wy,wz,vx,vy,vz] (all in inertial frame) -- [6x1].
+%   * tL -- Manipulator twist vector [wx,wy,wz,vx,vy,vz] (all in inertial frame) -- [6xn].
+%   * P0 -- Base-spacecraft twist-propagation vector -- [6x6].
+%   * pm -- Manipulator twist-propagation vector -- [6x1].
+%   * I0 -- Base-spacecraft inertia matrix in the inertial frame -- [3x3].
+%   * Im -- Links inertia matrices in the inertial frame -- [3x3xn].
+%   * Bij -- Twist-propagation matrix (for manipulator i>0 and j>0) -- [6x6xn].
+%   * Bi0 -- Twist-propagation matrix (for i>0 and j=0) -- [6x6xn].
+%   * q0dot -- Base-spacecraft velocities [wx,wy,wz,vx,vy,vz]. The angular velocities are in body axis, while the linear velocities in inertial frame -- [6x1].
+%   * qmdot -- Joint velocities -- [n_qx1].
+%   * robot -- Robot model (see :doc:`/Robot_Model`).
+%
+% :return: 
+%   * q0ddot -- Base-spacecraft accelerations [alphax,alphay,alphaz,ax,ay,az]. The angular accelerations are in body axis, while the linear accelerations are in inertial frame -- [6x1].
+%   * qmddot -- Manipulator joint accelerations -- [n_qx1].
+%
+% See also: :func:`src.kinematics_dynamics.ID` and :func:`src.kinematics_dynamics.I_I`. 
 
-%=== LICENSE ===%
+%{  
+    LICENSE
 
-%     This program is free software: you can redistribute it and/or modify
-%     it under the terms of the GNU Lesser General Public License as published by
-%     the Free Software Foundation, either version 3 of the License, or
-%     (at your option) any later version.
-% 
-%     This program is distributed in the hope that it will be useful,
-%     but WITHOUT ANY WARRANTY; without even the implied warranty of
-%     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-%     GNU Lesser General Public License for more details.
-% 
-%     You should have received a copy of the GNU Lesser General Public License
-%     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+%}
 
 %=== CODE ===%
 
