@@ -8,8 +8,8 @@ function [tauqm,q0ddot] = Floating_ID(wF0,wFm,Mm_tilde,H0,t0,tm,P0,pm,I0,Im,Bij,
 % :parameters: 
 %   * wF0 -- External forces on the base-spacecraft (in the inertial frame) [Tx,Ty,Tz,fx,fy,fz] -- [6x1].
 %   * wFm -- External forces on the manipulator links CoM (in the inertial frame) [Tx,Ty,Tz,fx,fy,fz] -- [6x1].
-%   Mm_tilde -> Manipulator mass matrix of composite body.
-%   H0 -> Base-spacecraft inertia matrix.
+%   * M0_tilde -- Base-spacecraft mass composite body matrix -- [6x6].
+%   * Mm_tilde -- Manipulator mass composite body matrix -- [6x6xn].
 %   * t0 -- Base-spacecraft twist vector [wx,wy,wz,vx,vy,vz] (all in inertial frame) -- [6x1].
 %   * tL -- Manipulator twist vector [wx,wy,wz,vx,vy,vz] (all in inertial frame) -- [6xn].
 %   * pm -- Manipulator twist-propagation vector -- [6x1].
