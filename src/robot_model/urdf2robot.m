@@ -230,8 +230,10 @@ robot_keys.q_id=containers.Map();
 robot.n_links_joints=robot.n_links_joints-1;
 
 %Create links and joints stucture
-robot.links(robot.n_links_joints) = struct();
-robot.joints(robot.n_links_joints) = struct();
+if robot.n_links_joints>0
+    robot.links(robot.n_links_joints) = struct();
+    robot.joints(robot.n_links_joints) = struct();
+end
 
 %Save base link on its own structure
 clink=links(base_link);
