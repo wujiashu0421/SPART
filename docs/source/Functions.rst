@@ -39,6 +39,10 @@ Dynamics
 
 .. autofunction:: src.kinematics_dynamics.MCB
 
+.. autofunction:: src.kinematics_dynamics.GIM
+
+.. autofunction:: src.kinematics_dynamics.CIM
+
 Robot Model
 ===========
 

@@ -1,40 +1,51 @@
-function [C0, C0m, Cm0, Cm] = CIM(t0,tm,I0,Im,M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,robot) %#codegen
-% Computes the Generalized Convective Inertia Matrix of a Serial Manipulator.
+function [C0, C0m, Cm0, Cm] = CIM(t0,tL,I0,Im,M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,robot)
+% Computes the Generalized Convective Inertia Matrix C of the multibody system.
 %
-% Input ->
-%   t0 -> Base-spacecraft twist vector
-%   tm -> Manipulator twist vector.
-%   I0 -> Base-spacecraft inertia in inertial frame.
-%   Im -> Manipulator inertia in inertial frame.
-%   M0_tilde -> Base-spacecraft mass matrix of composite body.
-%   Mm_tilde -> Manipulator mass matrix of composite body.
-%   Bij -> Twist-propagation matrix (for manipulator i>0 and j>0).
-%   Bi0 -> Twist-propagation matrix (for i>0 and j=0).
-%   B0j -> Twist-propagation matrix (for i=0 and j>0).
-%   P0 -> Base-spacecraft twist-propagation vector.
-%   pm -> Manipulator twist-propagation vector.
-%   robot -> Robot model
+% :parameters: 
+%   * t0 -- Base-spacecraft twist vector [wx,wy,wz,vx,vy,vz] (all in inertial frame) -- [6x1].
+%   * tL -- Manipulator twist vector [wx,wy,wz,vx,vy,vz] (all in inertial frame) -- [6xn].
+%   * I0 -- Base-spacecraft inertia matrix in the inertial frame -- [3x3].
+%   * Im -- Links inertia matrices in the inertial frame -- [3x3xn].
+%   * M0_tilde -- Base-spacecraft mass composite body matrix -- [6x6].
+%   * Mm_tilde -- Manipulator mass composite body matrix -- [6x6xn].
+%   * Bij -- Twist-propagation matrix (for manipulator i>0 and j>0) -- [6x6xn].
+%   * Bi0 -- Twist-propagation matrix (for i>0 and j=0) -- [6x6xn].
+%   * P0 -- Base-spacecraft twist-propagation vector -- [6x6].
+%   * pm -- Manipulator twist-propagation vector -- [6xn].
+%   * robot -- Robot model (see :doc:`/Robot_Model`).
 %
-% Output ->
-%   C0 -> Base-spacecraft convective inertia matrix.
-%   C0m -> Base-spacecraft - manipulator coupling convective inertia matrix.
-%   Cm0 -> Manipulator - Base-spacecraft coupling convective inertia matrix.
-%   Cm -> Manipulator convective inertia matrix.
+% :return: 
+%   * C0 -> Base-spacecraft convective inertia matrix -- [6x6].
+%   * C0m -> Base-spacecraft - manipulator coupling convective inertia matrix -- [6xn_q].
+%   * Cm0 -> Manipulator - Base-spacecraft coupling convective inertia matrix -- [n_qx6].
+%   * Cm -> Manipulator convective inertia matrix -- [n_qxn_q].
+%
+% To obtain the full convective inertia matrix C:
+%
+% .. code-block:: matlab
+%   
+%   %Compute C
+%   [C0, C0m, Cm0, Cm] = CIM(t0,tL,I0,Im,M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,robot)
+%   C=[C0,C0m;Cm0;Cm];
+%
+% See also: :func:`src.kinematics_dynamics.GIM`.
 
-%=== LICENSE ===%
+%{  
+    LICENSE
 
-%     This program is free software: you can redistribute it and/or modify
-%     it under the terms of the GNU Lesser General Public License as published by
-%     the Free Software Foundation, either version 3 of the License, or
-%     (at your option) any later version.
-%
-%     This program is distributed in the hope that it will be useful,
-%     but WITHOUT ANY WARRANTY; without even the implied warranty of
-%     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-%     GNU Lesser General Public License for more details.
-%
-%     You should have received a copy of the GNU Lesser General Public License
-%     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+%}
 
 %=== CODE ===%
 
@@ -52,8 +63,8 @@ if not(isempty(coder.target)) %Only use during code generation (allowing symboli
 end
 %Compute Omega
 for i=1:n
-    Omega(1:6,1:6,i)=[SkewSym(tm(1:3,i)), zeros(3,3);
-        zeros(3,3), SkewSym(tm(1:3,i))];
+    Omega(1:6,1:6,i)=[SkewSym(tL(1:3,i)), zeros(3,3);
+        zeros(3,3), SkewSym(tL(1:3,i))];
 end
 
 %--- Mdot ---%
@@ -104,7 +115,7 @@ for j=1:n
     for i=1:n
         if robot.con.branch(i,j)==1
             %Links are in the same branch
-            Bdotij(1:6,1:6,i,j)=[zeros(3,3), zeros(3,3); SkewSym(tm(4:6,j)-tm(4:6,i)), zeros(3,3)];
+            Bdotij(1:6,1:6,i,j)=[zeros(3,3), zeros(3,3); SkewSym(tL(4:6,j)-tL(4:6,i)), zeros(3,3)];
         else
             %Links are not in the same branch
             Bdotij(1:6,1:6,i,j)=zeros(6,6);
@@ -135,7 +146,7 @@ if not(isempty(coder.target)) %Only use during code generation (allowing symboli
 end
 %Hi0_tilde
 for i=n:-1:1
-    Bdot=[zeros(3,3), zeros(3,3); SkewSym(t0(4:6)-tm(4:6,i)), zeros(3,3)];
+    Bdot=[zeros(3,3), zeros(3,3); SkewSym(t0(4:6)-tL(4:6,i)), zeros(3,3)];
     Hi0_tilde(1:6,1:6,i)=Mm_tilde(1:6,1:6,i)*Bdot;
     %Add children contributions
     child=find(robot.con.child(:,i))';
