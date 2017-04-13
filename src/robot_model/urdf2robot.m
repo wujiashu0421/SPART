@@ -274,7 +274,6 @@ function [robot,robot_keys,nl,nj,nq]=urdf2robot_recursive(robot,robot_keys,links
 
 %Copy the elements of child joint
 robot.joints(nj+1).id=nj+1;
-robot.joints(nj+1).name=child_joint.name;
 robot.joints(nj+1).type=child_joint.type;
 %Assign joint variable if joint is revolute or prismatic
 if child_joint.type
@@ -293,7 +292,6 @@ robot.joints(nj+1).T=child_joint.T;
 %Copy elements of child link
 clink=links(child_joint.child_link);
 robot.links(nl+1).id=nl+1;
-robot.links(nl+1).name=clink.name;
 robot.links(nl+1).parent_joint=nj+1;
 robot.links(nl+1).T=clink.T;
 robot.links(nl+1).mass=clink.mass;
