@@ -12,7 +12,6 @@ The ``robot`` model is build as a Matlab structure with the following fields:
 	* robot.links -- Structure containing the links information.
 
 		* robot.links(i).id -- Link id.
-		* robot.links(i).name -- Link name.
 		* robot.links(i).parent_joint -- Parent joint id.
 		* robot.links(i).T -- Transformation matrix from parent joint.
 		* robot.links(i).mass -- Link's mass.
@@ -21,9 +20,8 @@ The ``robot`` model is build as a Matlab structure with the following fields:
 	* robot.joints -- Structure containing the joints information.
 
 		* robot.joints(i).id -- Joint id.
-		* robot.joints(i).name -- Joint name.
 		* robot.joints(i).type -- Joint type (0 -- fixed, 1 -- revolute, 2 -- prismatic)
-		* robot.joints(i).q_id -- Manipulator variable id.
+		* robot.joints(i).q_id -- Manipulator variable id (if q_id=-1 indicates a fixed joint).
 		* robot.joints(i).parent_link -- Parent link id.
 		* robot.joints(i).child_link -- Child link id.
 		* robot.joints(i).axis -- Joint axis.
@@ -41,6 +39,6 @@ The ``robot`` model is build as a Matlab structure with the following fields:
 		* robot.con.branch -- Branch connectivity map. This is an nxn  lower triangular matrix. If the i,j element is 1 it means that the ith and jth link are on the same branch (i.e. kinematic chain). 
 		* robot.con.child -- Child connectivity of links. It is a nxn matrix and if the i,j element is 1 then the ith link is a child of the jth link.
 		* robot.con.child_base -- Child connectivity of base links. It is a nx1 vector that contains 1s on the links that are connected to the base.
-	
+
 
 

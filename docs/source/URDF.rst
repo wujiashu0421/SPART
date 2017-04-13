@@ -19,6 +19,26 @@ Once you have your URDF description it has to be converted into the robot model.
 	%Create robot model
 	[robot,robot_keys] = urdf2robot(filename);
 
+The ``robot_keys`` variables contains the original URDF names of the joints and links in three Matlab containers.
+
+To get the id of a link:
+
+.. code-block:: matlab
+
+	robot_keys.link_id('Link_name')
+
+To get the id of a joint:
+
+.. code-block:: matlab
+
+	robot_keys.joint_id('Joint_name')
+
+To get the id of a variable ``qm``:
+
+.. code-block:: matlab
+
+	robot_keys.q_id('Joint_name')
+
 
 Virtual World in Simulink Using URDF
 ====================================
