@@ -146,12 +146,12 @@ The analytical Jacobians of any point on the spacecraft-manipulator system can a
 	%Jacobian of the 3rd Link
 	[J03, Jm3]=Jacob(rL(1:3,3),r0,rL,P0,pm,3,robot);
 
-In general for the Jacobian of the ``i`` linke:
+In general for the Jacobian of the ``i`` link:
 
 .. code-block:: matlab
 
 	%Jacobian of the ith Link
-	[J03, Jm3]=Jacob(rL(1:3,i),r0,rL,P0,pm,i,robot);
+	[J0i, Jmi]=Jacob(rL(1:3,i),r0,rL,P0,pm,i,robot);
 
 The Jacobians map joint space velocities into operational space velocities.
 
