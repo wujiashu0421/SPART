@@ -1,5 +1,5 @@
 function [t0dot,tLdot]=Accelerations(t0,tL,P0,pm,Bi0,Bij,q0dot,qmdot,q0ddot,qmddot,robot)
-% Computes the accekerations (twist-rate) of the multibody system.
+% Computes the accelerations (twist-rate) of the multibody system.
 %
 % [t0dot,tLdot]=Accelerations(t0,tL,P0,pm,Bi0,Bij,q0dot,qmdot,q0ddot,qmddot,robot)
 %
