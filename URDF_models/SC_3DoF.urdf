@@ -146,8 +146,23 @@
       </geometry>
       <material name="Orange"/>
     </visual>
+  </link>
+  <!-- Joint End-Effector -->
+  <joint name="Joint_EE" type="fixed">
+    <parent link="Link_3"/>
+    <child link="Link_EE"/>
+    <origin rpy="0 0 0" xyz="0 0 0.75"/>
+    <axis xyz="1 0 0"/>
+  </joint>
+    <!-- End-Effector -->
+  <link name="Link_EE">
+    <inertial>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <mass value="0"/>
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+    </inertial>
     <visual>
-      <origin rpy="0 0 0" xyz="0 0 0.75"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
         <sphere radius="0.1"/>
       </geometry>
