@@ -203,17 +203,17 @@ Forward Dynamics
 
 To solve the forward dynamics you will need to specify the forces acting on the spacecraft--manipulator system. There are two ways of specifying them. Choose the one that is easier for your particular application (or both of them simultaneously).
 
-The joint forces :math:`\tau` are the forces acting on the joints :math:`\tau_{m}` (thus is an ``nx1`` vector) and also at the base-spacecraft :math:`tau_{0}` (thus a ``6x1`` vector). For :math:`\tau_{0}`, as in the twist vector, the torques come first and then the linear forces.
+The joint forces :math:`\tau` are the forces acting on the joints :math:`\tau_{m}` (thus is a ``nx1`` vector) and also at the base-spacecraft :math:`\tau_{0}` (thus a ``6x1`` vector). For :math:`\tau_{0}`, as in the twist vector, the torques come first and then the linear forces.
 
 .. math::
 
 	\tau_{0}=\left[\tau_{x},\tau_{y},\tau_{z},f_{x},f_{y},f_{z}\right]^{T}
 
-Also, you can specify the wrenches :math:`w` (torques and forces) that are applied at their center-of-mass of each link. Again these can be decomposed into base-spacecraft 6x1 wrenches :math:`w_{0}` and manipulator {6xn} wrenches :math:`w_{n}`.
+Also, you can specify the wrenches :math:`w` (torques and forces) that are applied at their center-of-mass of each link. Again these can be decomposed into base-spacecraft 6x1 wrenches :math:`w_{0}` and manipulator ``6xn`` wrenches :math:`w_{m}`.
 
 .. math::
 
-	\w_{i}=\left[\tau_{x},\tau_{y},\tau_{z},f_{x},f_{y},f_{z}\right]^{T}
+	w_{i}=\left[\tau_{x},\tau_{y},\tau_{z},f_{x},f_{y},f_{z}\right]^{T}
 
 Here is an example of how to do it:
 
@@ -246,7 +246,7 @@ As an example, if you need to incorporate the weight of the links (with z being 
 	wF0=zeros(6,1);
 	wFm=zeros(6,robot.n_links);
 	for i=1:robot.n_links
-    	wFm(1:6,6)=-robot.links(i).mass*g;
+        wFm(6,i)=-robot.links(i).mass*g;
 	end
 
 Inverse Dynamics
