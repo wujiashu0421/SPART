@@ -37,6 +37,7 @@ Contents:
    DH
    URDF_Models
    Functions
+   Help
    Cite
 
 
