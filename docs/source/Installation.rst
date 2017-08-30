@@ -7,7 +7,7 @@ First you need to download the SPART toolkit from the `SPART Github repository <
 
  git clone https://github.com/NPS-SRL/SPART.git
 
-Once you have the code just put it wherever you like and then in MATLAB execute the following command in the MATLAB command window.
+Once you have the code just put it wherever you like and execute the following command in the MATLAB command window:
 
 .. code:: matlab
 	
