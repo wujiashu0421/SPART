@@ -168,7 +168,7 @@ We can then create our data structure:
 Dynamic parameters
 ==================
 
-Let's assume, for the sake of simplicity, that all the links masses are 2 kg and have diagonal inertia matrices with :math:`I_{xx}=2/10` kg/m2 :math:`I_{yy}=1/10` :math:`I_{zz}=3/10`. And the base-spacecarft has a mass of 20 kg and inertia of :math:`I_{xx}=2` kg/m2 :math:`I_{yy}=1` :math:`I_{zz}=3`.
+Let's assume, for the sake of simplicity, that all the links masses are 2 kg and have diagonal inertia matrices with :math:`I_{xx}=2/10`, :math:`I_{yy}=1/10`, and :math:`I_{zz}=3/10\, \mathrm{kg\,m}^2`. And the base-spacecraft has a mass of 20 kg and inertia of :math:`I_{xx}=2`, kg/m2 :math:`I_{yy}=1`, and :math:`I_{zz}=3 \, \mathrm{kg\,m}^2`.
 
 These variables can be added to the data structure as follows.
 
