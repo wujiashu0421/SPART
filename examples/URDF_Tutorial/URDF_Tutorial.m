@@ -48,7 +48,7 @@ g=9.8; %[m s-2]
 wF0=zeros(6,1);
 wFm=zeros(6,robot.n_links_joints);
 for i=1:robot.n_links_joints
-    wFm(1:6,6)=-robot.links(i).mass*g;
+    wFm(6,i)=-robot.links(i).mass*g;
 end
 
 %Joint torques
