@@ -33,12 +33,19 @@ To get the id of a joint:
 
 	robot_keys.joint_id('Joint_name')
 
-To get the id of a variable ``qm``:
+To get the id of a variable ``qm`` (moving joint):
 
 .. code-block:: matlab
 
 	robot_keys.q_id('Joint_name')
 
+And if you want to know the names of the available links, all joints, and moving joints:
+
+.. code-block:: matlab
+
+	link_names=keys(robot_keys.link_id);
+	joint_names=keys(robot_keys.joint_id);
+	qm_names=keys(robot_keys.q_id);
 
 Virtual World in Simulink Using URDF
 ====================================
