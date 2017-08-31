@@ -28,14 +28,7 @@
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
       <geometry>
-        <box size="1 1 1" />
-      </geometry>
-      <material name="Grey"/>
-    </visual>
-    <visual>
-      <origin rpy="0 0 0" xyz="0 0 -0.60"/>
-      <geometry>
-        <box size="1 1 0.25" />
+        <box size="1.25 1.5 2" />
       </geometry>
       <material name="Grey"/>
     </visual>
@@ -44,14 +37,14 @@
   <joint name="Spacecraft_Left_Panel" type="fixed">
     <parent link="Spacecraft"/>
     <child link="Left_Panel"/>
-    <origin rpy="0 0 0" xyz="0 -0.5 0"/>
+    <origin rpy="0 0 0" xyz="0 -0.75 0"/>
     <axis xyz="0 0 1"/>
   </joint>
   <!-- Joint to Right Solar Panel -->
   <joint name="Spacecraft_Right_Panel" type="fixed">
     <parent link="Spacecraft"/>
     <child link="Right_Panel"/>
-    <origin rpy="0 0 0" xyz="0 0.5 0"/>
+    <origin rpy="0 0 0" xyz="0 0.75 0"/>
     <axis xyz="0 0 1"/>
   </joint>
 
@@ -59,23 +52,22 @@
   <joint name="Spacecraft_Fixture" type="fixed">
     <parent link="Spacecraft"/>
     <child link="Fixture"/>
-    <origin rpy="0 0 0" xyz="0 0 -0.8"/>
+    <origin rpy="0 0 0" xyz="0 0 1"/>
     <axis xyz="0 0 1"/>
   </joint>
-
 
 
   <!-- Left Solar Panel-->
   <link name="Left_Panel">
     <inertial>
-      <origin rpy="0 0 0" xyz="0 -1 0"/>
+      <origin rpy="0 0 0" xyz="0 -1.5 0"/>
       <mass value="20"/>
       <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
     </inertial>
     <visual>
-      <origin rpy="0 0 0" xyz="0 -1 0"/>
+      <origin rpy="0 0 0" xyz="0 -1.5 0"/>
       <geometry>
-        <box size="0.25 2 1"/>
+        <box size="0.25 3 1.5"/>
       </geometry>
       <material name="Blue"/>
     </visual>
@@ -84,14 +76,14 @@
   <!-- Right Solar Panel-->
   <link name="Right_Panel">
     <inertial>
-      <origin rpy="0 0 0" xyz="0 1 0"/>
+      <origin rpy="0 0 0" xyz="0 1.5 0"/>
       <mass value="20"/>
       <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
     </inertial>
     <visual>
-      <origin rpy="0 0 0" xyz="0 1 0"/>
+      <origin rpy="0 0 0" xyz="0 1.5 0"/>
       <geometry>
-        <box size="0.25 2 1"/>
+        <box size="0.25 3 1.5"/>
       </geometry>
       <material name="Blue"/>
     </visual>
