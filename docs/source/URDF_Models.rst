@@ -23,6 +23,13 @@ Spacecraft
 
 - ``Simple_Spacecraft.urdf`` a simple spacecraft model. 
 
+.. figure:: Figures/Simple_Spacecraft.png
+   :scale: 25 %
+   :align: center
+   :alt: Simple spacecraft with 2 solar panels.
+
+   Simple spacecraft with 2 solar panels.
+
 
 Fixed-base manipulators
 -----------------------
