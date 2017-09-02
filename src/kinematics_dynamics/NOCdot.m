@@ -54,11 +54,8 @@ function [Ndot] = NOCdot(r0,t0,rL,tL,P0,pm,robot)
 
 %=== Code ===%
 
-%Pre-allocate
-if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
-    %Pre-allocate NOCdot
-    Ndot=zeros(6+6*robot.n_links_joints,6+robot.n_q);
-end
+%Pre-allocate NOCdot
+Ndot=zeros(6+6*robot.n_links_joints,6+robot.n_q,'like',r0);
 
 %Compute the NOC time derivative matrix by using the Jacobians time derivative
 %Base-spacecraft contribution

@@ -55,10 +55,10 @@ n=robot.n_links_joints;
 %--- H Martix ---%
 %Base-spacecraft Inertia matrix
 H0 = P0'*M0_tilde*P0;
-if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
-    %Pre-allocate Hm
-    Hm=zeros(n_q,n_q);
-end
+
+%Pre-allocate Hm
+Hm=zeros(n_q,n_q,'like',M0_tilde);
+
 %Manipulator Inertia matrix Hm
 for j=1:n
     for i=j:n
@@ -68,10 +68,10 @@ for j=1:n
         end
     end
 end
-if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
-    %Pre-allocate H0m
-    H0m=zeros(6,n_q);
-end
+
+%Pre-allocate H0m
+H0m=zeros(6,n_q,'like',M0_tilde);
+
 %Coupling Inertia matrix
 for i=1:n
     if robot.joints(i).type~=0

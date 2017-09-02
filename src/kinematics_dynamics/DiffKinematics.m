@@ -46,9 +46,7 @@ n=robot.n_links_joints;
 %--- Twist-propagtaion matrix ---%
 
 %Pre-allocate Bij
-if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
-    Bij=zeros(6,6,n,n);
-end
+Bij=zeros(6,6,n,n,'like',R0);
 
 %Compute Bij
 for j=1:n
@@ -64,10 +62,7 @@ for j=1:n
 end
 
 %Pre-allocate Bi0
-if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
-    %Pre-allocate Bi0
-    Bi0=zeros(6,6,n);
-end
+Bi0=zeros(6,6,n,'like',R0);
 
 %Compute Bi0
 for i=1:n
@@ -77,10 +72,7 @@ end
 %--- Twist-Propagation vector ---%
 
 %Pre-allocate pm
-if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
-    %Pre-allocate
-    pm=zeros(6,n);
-end
+pm=zeros(6,n,'like',R0);
 
 %Base-spacecraft
 P0=[R0,zeros(3,3); zeros(3,3), eye(3)];

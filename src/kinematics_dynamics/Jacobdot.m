@@ -57,10 +57,10 @@ function [J0dot, Jmdot]=Jacobdot(rx,tx,r0,t0,rL,tL,P0,pm,i,robot)
 %Base-spacecraft Omega
 Omega0=[SkewSym(t0(1:3)), zeros(3,3);
     zeros(3,3), zeros(3,3)];
-if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
-    %Pre-allocate Omega
-    Omega=zeros(6,6,robot.n_links_joints);
-end
+
+%Pre-allocate Omega
+Omega=zeros(6,6,robot.n_links_joints,'like',rx);
+
 %Compute Omega
 for j=1:i
     Omega(1:6,1:6,j)=[SkewSym(tL(1:3,j)), zeros(3,3);
@@ -74,9 +74,8 @@ end
 J0dot=[eye(3),zeros(3,3);SkewSym(r0-rx),eye(3)]*Omega0*P0+[zeros(3,3),zeros(3,3);SkewSym(t0(4:6)-tx(4:6)),zeros(3,3)]*P0;
 
 %Pre-allocate
-if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
-    Jmdot=zeros(6,robot.n_q);
-end
+Jmdot=zeros(6,robot.n_q,'like',rx);
+    
 %Manipulator Jacobian
 joints_num=0;
 for j=1:i
@@ -88,13 +87,6 @@ for j=1:i
             Jmdot(1:6,robot.joints(j).q_id)=zeros(6,1);
         end
         joints_num=joints_num+1;
-    end
-end
-
-%Add zeros if required
-if isempty(coder.target) %Only when not pre-allocated
-    if joints_num<robot.n_q
-        Jmdot(1:6,joints_num+1:robot.n_q)=zeros(6,robot.n_q-joints_num);
     end
 end
 

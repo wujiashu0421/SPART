@@ -48,10 +48,10 @@ n=robot.n_links_joints;
 %Base-Spacecraft
 Omega0=[SkewSym(t0(1:3)), zeros(3,3);
     zeros(3,3), zeros(3,3)];
-if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
-    %Pre-allocate
-    Omegam=zeros(6,6,n);
-end
+
+%Pre-allocate
+Omegam=zeros(6,6,n,'like',t0);
+
 %Compute Omega for manipulator
 for i=1:n
     Omegam(1:6,1:6,i)=[SkewSym(tL(1:3,i)), zeros(3,3);
@@ -61,10 +61,10 @@ end
 %--- Twist Rate ---%
 %Base-spacecraft
 t0dot = Omega0*P0*q0dot+P0*q0ddot;
-if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
-    %Pre-allocate
-    tLdot=zeros(6,n);
-end
+
+%Pre-allocate
+tLdot=zeros(6,n,'like',t0);
+
 %Forward recursion
 for i=1:n
     

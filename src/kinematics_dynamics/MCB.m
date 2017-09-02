@@ -37,10 +37,9 @@ function [M0_tilde,Mm_tilde]=MCB(I0,Im,Bij,Bi0,robot)
 
 %Number of links and Joints
 n=robot.n_links_joints;
-if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
-    %Pre-allocate
-    Mm_tilde=zeros(6,6,n);
-end
+
+%Pre-allocate
+Mm_tilde=zeros(6,6,n,'like',I0);
 
 %Backwards recursion
 for i=n:-1:1

@@ -50,11 +50,8 @@ function [N] = NOC(r0,rL,P0,pm,robot)
 
 %=== Code ===%
 
-%Pre-allocate
-if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
-    %Pre-allocate NOC
-    N=zeros(6+6*robot.n_links_joints,6+robot.n_q);
-end
+%Pre-allocate NOC
+N=zeros(6+6*robot.n_links_joints,6+robot.n_q,'like',r0);
 
 %Base-spacecraft contribution
 N(1:6,1:6+robot.n_q)=[P0,zeros(6,robot.n_q)]; 

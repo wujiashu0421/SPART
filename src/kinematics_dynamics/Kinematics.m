@@ -50,11 +50,10 @@ function [RJ,RL,rJ,rL,e,g]=Kinematics(R0,r0,qm,robot)
 n=robot.n_links_joints;
 
 %--- Homogeneous transformation matrices ---%
-if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
-    %Pre-allocate homogeneous transformations matrices
-    TJ=zeros(4,4,n);
-    TL=zeros(4,4,n);
-end
+
+%Pre-allocate homogeneous transformations matrices
+TJ=zeros(4,4,n,'like',R0);
+TL=zeros(4,4,n,'like',R0);
 
 %--- Base link ---%
 clink = robot.base_link;
@@ -91,17 +90,17 @@ for i=1:n
 end
 
 %--- Rotation matrices, translation, position and other geometry vectors ---%
-if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
-    %Pre-allocate rotation matrices, translation and position vectors
-    RJ=zeros(3,3,n);
-    RL=zeros(3,3,n);
-    rJ=zeros(3,n);
-    rL=zeros(3,n);
-    %Pre-allocate rotation/sliding axis
-    e=zeros(3,n);
-    %Pre-allocate other gemotery vectors
-    g=zeros(3,n);
-end
+
+%Pre-allocate rotation matrices, translation and position vectors
+RJ=zeros(3,3,n,'like',R0);
+RL=zeros(3,3,n,'like',R0);
+rJ=zeros(3,n,'like',R0);
+rL=zeros(3,n,'like',R0);
+%Pre-allocate rotation/sliding axis
+e=zeros(3,n,'like',R0);
+%Pre-allocate other gemotery vectors
+g=zeros(3,n,'like',R0);
+
 %Format Rotation matrices, link positions, joint axis and other geometry
 %vectors
 %Joint associated quantities

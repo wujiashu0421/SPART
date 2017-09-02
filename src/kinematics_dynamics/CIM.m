@@ -57,10 +57,10 @@ n=robot.n_links_joints;
 %Base-spacecraft Omega
 Omega0=[SkewSym(t0(1:3)), zeros(3,3);
     zeros(3,3), zeros(3,3)];
-if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
-    %Pre-allocate Omega
-    Omega=zeros(6,6,n);
-end
+
+%Pre-allocate Omega
+Omega=zeros(6,6,n,'like',t0);
+
 %Compute Omega
 for i=1:n
     Omega(1:6,1:6,i)=[SkewSym(tL(1:3,i)), zeros(3,3);
@@ -70,20 +70,19 @@ end
 %--- Mdot ---%
 %Base-spacecraft Mdot
 Mdot0=[Omega0(1:3,1:3)*I0, zeros(3,3); zeros(3,3), zeros(3,3)];
-if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
-    %Pre-allocate
-    Mdot=zeros(6,6,n);
-end
+
+%Pre-allocate
+Mdot=zeros(6,6,n,'like',t0);
+
 %Compute Mdot
 for i=1:n
     Mdot(1:6,1:6,i)=[Omega(1:3,1:3,i)*Im(1:3,1:3,i), zeros(3,3); zeros(3,3), zeros(3,3)];
 end
 
 %--- Mdot tilde ---%
-if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
-    %Pre-Allocate
-    Mdot_tilde=zeros(6,6,n);
-end
+%Pre-Allocate
+Mdot_tilde=zeros(6,6,n,'like',t0);
+
 %Backwards recursion
 for i=n:-1:1
     %Initialize
@@ -106,9 +105,7 @@ end
 %--- Bdot ---%
 
 %Pre-allocate Bdotij
-if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
-    Bdotij=zeros(6,6,n,n);
-end
+Bdotij=zeros(6,6,n,n,'like',t0);
 
 %Compute Bdotij
 for j=1:n
@@ -125,10 +122,9 @@ end
 
 
 %--- Hij tilde ---%
-if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
-    %Pre-allocate Hij_tilde
-    Hij_tilde=zeros(6,6,n,n);
-end
+%Pre-allocate Hij_tilde
+Hij_tilde=zeros(6,6,n,n,'like',t0);
+
 %Hij_tilde
 for i=n:-1:1
     for j=n:-1:1
@@ -140,10 +136,10 @@ for i=n:-1:1
         end
     end
 end
-if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
-    %Pre-allocate Hi0_tilde and H0j_tilde
-    Hi0_tilde=zeros(6,6,n);
-end
+
+%Pre-allocate Hi0_tilde and H0j_tilde
+Hi0_tilde=zeros(6,6,n,'like',t0);
+
 %Hi0_tilde
 for i=n:-1:1
     Bdot=[zeros(3,3), zeros(3,3); SkewSym(t0(4:6)-tL(4:6,i)), zeros(3,3)];
@@ -156,12 +152,11 @@ for i=n:-1:1
 end
 
 %--- C Matrix ---%
-if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
-    %Pre-allocate
-    Cm=zeros(n_q,n_q);
-    C0m=zeros(6,n_q);
-    Cm0=zeros(n_q,6);
-end
+%Pre-allocate
+Cm=zeros(n_q,n_q,'like',t0);
+C0m=zeros(6,n_q,'like',t0);
+Cm0=zeros(n_q,6,'like',t0);
+
 %Cm Matrix
 for j=1:n
     for i=1:n

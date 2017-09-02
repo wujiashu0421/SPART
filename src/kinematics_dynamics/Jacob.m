@@ -54,9 +54,8 @@ function [J0, Jm]=Jacob(rx,r0,rL,P0,pm,i,robot)
 J0=[eye(3),zeros(3,3);SkewSym(r0-rx),eye(3)]*P0;
 
 %Pre-allocate
-if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
-    Jm=zeros(6,robot.n_q);
-end
+Jm=zeros(6,robot.n_q,'like',rx);
+
 %Manipulator Jacobian
 joints_num=0;
 for j=1:i
@@ -68,13 +67,6 @@ for j=1:i
             Jm(1:6,robot.joints(j).q_id)=zeros(6,1);
         end
         joints_num=joints_num+1;
-    end
-end
-
-%Add zeros if required
-if isempty(coder.target) %Only when not pre-allocated
-    if joints_num<robot.n_q
-        Jm(1:6,joints_num+1:robot.n_q)=zeros(6,robot.n_q-joints_num);
     end
 end
 

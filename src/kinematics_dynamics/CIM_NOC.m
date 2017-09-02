@@ -32,11 +32,8 @@ function [C]=CIM_NOC(N,Ndot,t0,tL,I0,Im,robot)
 
 %--- Generalized mass matrix ---%
 
-%Pre-allocate
-if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
-    %Pre-allocate M
-    M=zeros(6+6*robot.n_links_joints,6+6*robot.n_links_joints);
-end
+%Pre-allocate M
+M=zeros(6+6*robot.n_links_joints,6+6*robot.n_links_joints,'like',N);
 
 %Base contribution
 M(1:6,1:6)=[I0(1:3,1:3),zeros(3,3);zeros(3,3),robot.base_link.mass*eye(3)];
@@ -49,10 +46,10 @@ end
 %Base-spacecraft Omega
 Omega0=[SkewSym(t0(1:3)), zeros(3,3);
     zeros(3,3), SkewSym(t0(1:3))];
-if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
-    %Pre-allocate Omega
-    Omega=zeros(6,6,robot.n_links_joints);
-end
+
+%Pre-allocate Omega
+Omega=zeros(6,6,robot.n_links_joints,'like',N);
+
 %Compute Omega
 for j=1:i
     Omega(1:6,1:6,j)=[SkewSym(tL(1:3,j)), zeros(3,3);
@@ -60,10 +57,9 @@ for j=1:i
 end
 
 %--- Mdot ---%
-if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
-    %Pre-allocate
-    Mdot=zeros(6+6*robot.n_links_joints,6+6*robot.n_links_joints);
-end
+%Pre-allocate
+Mdot=zeros(6+6*robot.n_links_joints,6+6*robot.n_links_joints,'like',N);
+
 %Base-spacecraft Mdot
 Mdot(1:6,1:6)=[Omega0(1:3,1:3)*I0, zeros(3,3); zeros(3,3), zeros(3,3)];
 %Compute Mdot
@@ -73,6 +69,5 @@ end
 
 %--- Convective Inertia Matrix ---%
 C=N'*(M*Ndot+Mdot*N);
-
 
 end

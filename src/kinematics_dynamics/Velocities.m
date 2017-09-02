@@ -42,10 +42,10 @@ function [t0,tL]=Velocities(Bij,Bi0,P0,pm,q0dot,qmdot,robot)
 
 %--- Number of links and Joints ---%
 n=robot.n_links_joints;
-if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
-    %Pre-Allocate
-    tL=zeros(6,n);
-end
+
+%Pre-Allocate
+tL=zeros(6,n,'like',Bij);
+
 %Base-spacecraft
 t0=P0*q0dot;
 

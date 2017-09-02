@@ -30,11 +30,9 @@ function [H]=GIM_NOC(N,I0,Im,robot)
 %=== CODE ===%
 
 %--- generalized mass matrix M ---%
-%Pre-allocate
-if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
-    %Pre-allocate M
-    M=zeros(6+6*robot.n_links_joints,6+6*robot.n_links_joints);
-end
+
+%Pre-allocate M
+M=zeros(6+6*robot.n_links_joints,6+6*robot.n_links_joints,'like',N);
 
 %Base contribution
 M(1:6,1:6)=[I0(1:3,1:3),zeros(3,3);zeros(3,3),robot.base_link.mass*eye(3)];

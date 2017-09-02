@@ -56,11 +56,10 @@ n=robot.n_links_joints;
 %Use the inverse dynamics
 [tauq0_0ddot,tauqm] = ID(wF0,wFm,t0,tm,t0dot,tmdot,P0,pm,I0,Im,Bij,Bi0,robot);
 
+%Pre-allocate kappa
+kappa=zeros(n,6,'like',wF0);
+
 %Compute Kappa
-if not(isempty(coder.target)) %Only use during code generation (allowing symbolic computations)
-    %Pre-allocate kappa
-    kappa=zeros(n,6);
-end
 for i=1:n
     kappa(i,1:6)=pm(1:6,i)'*Mm_tilde(1:6,1:6,i)*Bi0(1:6,1:6,i);
 end
