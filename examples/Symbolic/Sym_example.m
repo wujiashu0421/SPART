@@ -75,12 +75,12 @@ q0ddot=sym('q0ddot',[6,1],'real');
 qmddot=sym('qmddot',[data.n,1],'real');
 
 %External forces
-wF0=zeros(6,1);
-wFm=zeros(6,data.n);
+wF0=sym(zeros(6,1));
+wFm=sym(zeros(6,data.n));
 
 %Joint torques
-tauq0=zeros(6,1);
-tauqm=[0;0];
+tauq0=sym(zeros(6,1));
+tauqm=sym([0;0]);
 
 %--- Compute Kinematics, Dynamics, ID, and FD ---%
 
