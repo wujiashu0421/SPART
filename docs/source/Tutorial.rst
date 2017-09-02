@@ -89,6 +89,9 @@ SPART also allows symbolic computation. To obtain symbolic expressions just defi
 	%Kinematics
 	[RJ,RL,rJ,rL,e,g]=Kinematics(R0,r0,qm,robot);
 
+.. warning::
+   To obtain symbolic expressions all inputs must be symbolic. Otherwise, errors can occur.
+
 Differential Kinematics
 =======================
 
