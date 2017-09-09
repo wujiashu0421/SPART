@@ -47,6 +47,15 @@ And if you want to know the names of the available links, all joints, and moving
 	joint_names=keys(robot_keys.joint_id);
 	qm_names=keys(robot_keys.q_id);
 
+
+Limitations
+===========
+
+There are several known limitations with how SPART models parses URDF models.
+
+- Revolute joint limits are not enforced. Revolute and Continuous joints are treated equally.
+- Planar and Floating joints are not supported. Please redefine them as a combination of Revolute/Continuous and Prismatic joints.
+
 Virtual World in Simulink Using URDF
 ====================================
 
