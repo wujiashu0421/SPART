@@ -144,13 +144,15 @@ for k = 0:robot.n_links_joints-2
     joint.child_link = '';
     joint.T=[eye(3),zeros(3,1);zeros(1,3),1];
     
-    if strcmp(joint.type_name,'revolute')
+    if strcmp(joint.type_name,'revolute') || strcmp(joint.type_name,'continuous')
         joint.type=1;
     elseif strcmp(joint.type_name,'prismatic')
         joint.type=2;
     elseif strcmp(joint.type_name,'fixed')
         joint.type=0;
         joint.axis = [0; 0; 0];
+    else
+        error(sprintf('Joint type ''%s'' not supported.',joint.type_name));
     end
     
     
