@@ -140,7 +140,7 @@ For the base-spacecraft, the twist--propagation only uses the a modified 6x6 :ma
 
 .. math::
 	
-	t_{0}=P_{0}\dot{q}_{0}
+	t_{0}=P_{0}u_{0}
 
 The analytical Jacobians of any point on the spacecraft-manipulator system can also be easily computed as follows:
 
@@ -160,7 +160,7 @@ The Jacobians map joint space velocities into operational space velocities.
 
 .. math::
 	
-	t_{x}=J_{0x}\dot{q}_{0}+J_{mx}\dot{q}_{m}
+	t_{x}=J_{0x}u_{0}+J_{mx}u_{m}
 
 Equations of Motion and Inertia Matrices
 ========================================
@@ -169,7 +169,7 @@ The generic equations of motion can be written as follows:
 
 .. math::
 	
-	H\left(q\right)\ddot{q}+C\left(q,\dot{q}\right)\dot{q}=\mathcal{\tau}
+	H\left(q\right)\dot{u}+C\left(q,u\right)u=\tau
 
 with :math:`H` being the Generalized Inertia Matrix (GIM), :math:`C` the Convective Inertia Matrix (CIM), :math:`q` the generalized joint variables and :math:`\tau` the generalized joint forces.
 
@@ -179,9 +179,9 @@ The contributions of the base-spacecraft and the manipulator can be made explici
 .. math::
 	
 	\left[\begin{array}{cc} H_{0} & H_{0m}\\ H_{0m}^{T} & H_{m} \end{array}\right]
-	\left[\begin{array}{c} \ddot{q}_{0}\\ \ddot{q}_{m} \end{array}\right]+
+	\left[\begin{array}{c} \dot{u}_{0}\\ \dot{u}_{m} \end{array}\right]+
 	\left[\begin{array}{cc} C_{0} & C_{0m}\\ C_{m0} & C_{m} \end{array}\right]
-	\left[\begin{array}{c} \dot{q}_{0}\\ \dot{q}_{m} \end{array}\right]=
+	\left[\begin{array}{c} u_{0}\\ u_{m} \end{array}\right]=
 	\left[\begin{array}{c} \tau_{0}\\ \tau_{m} \end{array}\right]
 
 To obtain the inertia matrices we need to specify the mass and inertia of the base--spacecraft and of the different manipulator links.
@@ -199,7 +199,7 @@ You can now compute these inertia matrices as follows.
 	%Generalized Convective Inertia matrix
 	[C0, C0m, Cm0, Cm] = CIM(t0,tL,I0,Im,M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,robot);
 
-Although the equations of motion can be used to solve the forward dynamic problem (determining the motion of the system given a set of applied forces :math:`\tau\rightarrow\ddot{q}`) and the inverse dynamic problem (determining the forces required to produce a prescribe motion :math:`\ddot{q}\rightarrow\tau`) there are more efficient ways of doing so.
+Although the equations of motion can be used to solve the forward dynamic problem (determining the motion of the system given a set of applied forces :math:`\tau\rightarrow\dot{u}`) and the inverse dynamic problem (determining the forces required to produce a prescribe motion :math:`\dot{u}\rightarrow\tau`) there are more efficient ways of doing so.
 
 Forward Dynamics
 ================
