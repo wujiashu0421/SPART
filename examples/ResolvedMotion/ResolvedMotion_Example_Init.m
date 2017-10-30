@@ -53,10 +53,10 @@ data.base.T_L0_J1=[eye(3),[base_side/2;0;0];zeros(1,3),1];
 %--- Initial conditions ---%
 q00=[0;0;0;1;zeros(3,1)];
 qm0=[pi/4;-pi/4;-pi/4;pi/4];
-q0dot0=zeros(6,1);
-qmdot0=zeros(4,1);
-q0ddot0=zeros(6,1);
-qmddot0=zeros(3,1);
+u00=zeros(6,1);
+um0=zeros(4,1);
+u0dot0=zeros(6,1);
+umdot0=zeros(3,1);
 
 %Compute Initial momentum (M0) and initial matrices.
 R0=quat_DCM([q00(1:4)]')';
@@ -72,5 +72,5 @@ R0=quat_DCM([q00(1:4)]')';
 [M0_tilde,Mm_tilde]=MCB(I0,Im,Bij,Bi0,robot);
 %Generalized Inertia matrix
 [H0, H0m, Hm] = GIM(M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,robot);
-M0 = H0*q0dot0+H0m*qmdot0;
+M0 = H0*u00+H0m*um0;
 

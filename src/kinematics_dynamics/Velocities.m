@@ -1,15 +1,15 @@
-function [t0,tL]=Velocities(Bij,Bi0,P0,pm,q0dot,qmdot,robot)
+function [t0,tL]=Velocities(Bij,Bi0,P0,pm,u0,um,robot)
 % Computes the velocities of the links.
 %
-% [t0,tL]=Velocities(Bij,Bi0,P0,pm,q0dot,qmdot,robot)
+% [t0,tL]=Velocities(Bij,Bi0,P0,pm,u0,um,robot)
 %
 % :parameters:
 %   * Bij -- Twist-propagation matrix (for manipulator i>0 and j>0) -- [6x6xn].
 %   * Bi0 -- Twist-propagation matrix (for i>0 and j=0) -- [6x6xn].
 %   * P0 -- Base-spacecraft twist-propagation vector -- [6x6].
 %   * pm -- Manipulator twist-propagation vector -- [6x1].
-%   * q0dot -- Base-spacecraft velocities [wx,wy,wz,vx,vy,vz]. The angular velocities are in body axis, while the linear velocities in inertial frame -- [6x1].
-%   * qmdot -- Joint velocities -- [n_qx1].
+%   * u0 -- Base-spacecraft velocities [wx,wy,wz,vx,vy,vz]. The angular velocities are in body axis, while the linear velocities in inertial frame -- [6x1].
+%   * um -- Joint velocities -- [n_qx1].
 %   * robot -- Robot model (see :doc:`/Robot_Model`).
 %
 % :return:
@@ -47,7 +47,7 @@ n=robot.n_links_joints;
 tL=zeros(6,n,'like',Bij);
 
 %Base-spacecraft
-t0=P0*q0dot;
+t0=P0*u0;
 
 %Fordward recursion to obtain the twist vector
 for i=1:n
@@ -62,7 +62,7 @@ for i=1:n
     
     %Add joint contribution
     if robot.joints(i).type~=0
-        tL(1:6,i)=tL(1:6,i)+pm(1:6,i)*qmdot(robot.joints(i).q_id);
+        tL(1:6,i)=tL(1:6,i)+pm(1:6,i)*um(robot.joints(i).q_id);
     end
     
 end

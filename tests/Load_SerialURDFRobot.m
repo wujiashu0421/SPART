@@ -14,12 +14,12 @@ Variables.r0=-1 + (2).*rand(3,1);
 Variables.qm=-pi/2 + (pi).*rand(robot.n_q,1);
 
 %Velocities
-Variables.q0dot=[-pi/2 + (pi).*rand(3,1);-1 + (2).*rand(3,1)];
-Variables.qmdot=-pi/2 + (pi).*rand(robot.n_q,1);
+Variables.u0=[-pi/2 + (pi).*rand(3,1);-1 + (2).*rand(3,1)];
+Variables.um=-pi/2 + (pi).*rand(robot.n_q,1);
 
 %Accelerations
-Variables.q0ddot=[-pi/2 + (pi).*rand(3,1);-1 + (2).*rand(3,1)];
-Variables.qmddot=-pi/2 + (pi).*rand(robot.n_q,1);
+Variables.u0dot=[-pi/2 + (pi).*rand(3,1);-1 + (2).*rand(3,1)];
+Variables.umdot=-pi/2 + (pi).*rand(robot.n_q,1);
 
 %External forces
 Variables.wF0=(-1 + (2).*rand(6,1))/10;

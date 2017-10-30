@@ -1,8 +1,8 @@
-function [q0ddot,qmddot] = FD(tauq0,tauqm,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,robot)
+function [u0dot,umdot] = FD(tauq0,tauqm,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,u0,um,robot)
 % This function solves the forward dynamics (FD) problem (it obtains the
 % acceleration from  forces).
 %
-% [q0ddot,qmddot] = FD(tauq0,tauqm,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,robot)
+% [u0dot,umdot] = FD(tauq0,tauqm,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,u0,um,robot)
 %
 % :parameters: 
 %   * tauq0 -- Base-spacecraft forces [Tx,Ty,Tz,fx,fy,fz] (torques in the body frame) -- [6x1].
@@ -17,13 +17,13 @@ function [q0ddot,qmddot] = FD(tauq0,tauqm,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0do
 %   * Im -- Links inertia matrices in the inertial frame -- [3x3xn].
 %   * Bij -- Twist-propagation matrix (for manipulator i>0 and j>0) -- [6x6xn].
 %   * Bi0 -- Twist-propagation matrix (for i>0 and j=0) -- [6x6xn].
-%   * q0dot -- Base-spacecraft velocities [wx,wy,wz,vx,vy,vz]. The angular velocities are in body axis, while the linear velocities in inertial frame -- [6x1].
-%   * qmdot -- Joint velocities -- [n_qx1].
+%   * u0 -- Base-spacecraft velocities [wx,wy,wz,vx,vy,vz]. The angular velocities are in body axis, while the linear velocities in inertial frame -- [6x1].
+%   * um -- Joint velocities -- [n_qx1].
 %   * robot -- Robot model (see :doc:`/Robot_Model`).
 %
 % :return: 
-%   * q0ddot -- Base-spacecraft accelerations [alphax,alphay,alphaz,ax,ay,az]. The angular accelerations are in body axis, while the linear accelerations are in inertial frame -- [6x1].
-%   * qmddot -- Manipulator joint accelerations -- [n_qx1].
+%   * u0dot -- Base-spacecraft accelerations [alphax,alphay,alphaz,ax,ay,az]. The angular accelerations are in body axis, while the linear accelerations are in inertial frame -- [6x1].
+%   * umdot -- Manipulator joint accelerations -- [n_qx1].
 %
 % See also: :func:`src.kinematics_dynamics.ID` and :func:`src.kinematics_dynamics.I_I`. 
 
@@ -51,8 +51,8 @@ n=robot.n_links_joints;
 n_q=robot.n_q;
 
 %---- Inverse Dynamics with 0 accelerations ---%
-%Recompute Accelerations with q0ddot=qmddot=0
-[t0dot,tmdot]=Accelerations(t0,tm,P0,pm,Bi0,Bij,q0dot,qmdot,zeros(6,1),zeros(n_q,1),robot);
+%Recompute Accelerations with u0dot=umdot=0
+[t0dot,tmdot]=Accelerations(t0,tm,P0,pm,Bi0,Bij,u0,um,zeros(6,1),zeros(n_q,1),robot);
 %Use the inverse dynamics
 [tau0_0ddot,tauqm_0ddot] = ID(wF0,wFm,t0,tm,t0dot,tmdot,P0,pm,I0,Im,Bij,Bi0,robot);
 
@@ -125,13 +125,13 @@ phi_tilde0=(P0'*psi_hat0)\phi_hat0;
 
 
 %--- Base-spacecraft acceleration ---%
-q0ddot=phi_tilde0;
+u0dot=phi_tilde0;
 
 %--- Manipulator acceleration (and mu) ---%
 
 %Pre-allocate
 mu=zeros(6,n,'like',P0);
-qmddot=zeros(n_q,1,'like',P0);
+umdot=zeros(n_q,1,'like',P0);
 
 
 %Forward recursion
@@ -139,11 +139,11 @@ for i=1:n
     
     if robot.joints(i).parent_link==0
         %First joint
-        mu(1:6,i)=Bi0(1:6,1:6,i)*(P0*q0ddot);
+        mu(1:6,i)=Bi0(1:6,1:6,i)*(P0*u0dot);
     else
         %Rest of the links
         if robot.joints(robot.joints(i).parent_link).type~=0
-            mu_aux=(pm(1:6,robot.joints(robot.joints(i).parent_link).id)*qmddot(robot.joints(i-1).q_id)+mu(1:6,robot.joints(robot.joints(i).parent_link).id));
+            mu_aux=(pm(1:6,robot.joints(robot.joints(i).parent_link).id)*umdot(robot.joints(i-1).q_id)+mu(1:6,robot.joints(robot.joints(i).parent_link).id));
         else
             mu_aux=mu(1:6,robot.joints(robot.joints(i).parent_link).id);
         end
@@ -152,7 +152,7 @@ for i=1:n
     
     %Initialize
     if robot.joints(i).type~=0
-        qmddot(robot.joints(i).q_id,1)=phi_tilde(robot.joints(i).q_id)-psi(1:6,i)'*mu(1:6,i);
+        umdot(robot.joints(i).q_id,1)=phi_tilde(robot.joints(i).q_id)-psi(1:6,i)'*mu(1:6,i);
     end
 end
 

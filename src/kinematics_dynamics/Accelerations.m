@@ -1,7 +1,7 @@
-function [t0dot,tLdot]=Accelerations(t0,tL,P0,pm,Bi0,Bij,q0dot,qmdot,q0ddot,qmddot,robot)
+function [t0dot,tLdot]=Accelerations(t0,tL,P0,pm,Bi0,Bij,u0,um,u0dot,umdot,robot)
 % Computes the accelerations (twist-rate) of the multibody system.
 %
-% [t0dot,tLdot]=Accelerations(t0,tL,P0,pm,Bi0,Bij,q0dot,qmdot,q0ddot,qmddot,robot)
+% [t0dot,tLdot]=Accelerations(t0,tL,P0,pm,Bi0,Bij,u0,um,u0dot,umdot,robot)
 %
 % :parameters: 
 %   * t0 -- Base-spacecraft twist vector [wx,wy,wz,vx,vy,vz] (all in inertial frame) -- [6x1].
@@ -10,10 +10,10 @@ function [t0dot,tLdot]=Accelerations(t0,tL,P0,pm,Bi0,Bij,q0dot,qmdot,q0ddot,qmdd
 %   * Bi0 -- Twist-propagation matrix (for i>0 and j=0) -- [6x6xn].
 %   * P0 -- Base-spacecraft twist-propagation vector -- [6x6].
 %   * pm -- Manipulator twist-propagation vector -- [6x1].
-%   * q0dot -- Base-spacecraft velocities [wx,wy,wz,vx,vy,vz]. The angular velocities are in body axis, while the linear velocities in inertial frame -- [6x1].
-%   * qmdot -- Joint velocities -- [n_qx1].
-%   * q0ddot -- Base-spacecraft accelerations [alphax,alphay,alphaz,ax,ay,az]. The angular accelerations are in body axis, while the linear accelerations are in inertial frame -- [6x1].
-%   * qmddot -- Manipulator joint accelerations -- [n_qx1].
+%   * u0 -- Base-spacecraft velocities [wx,wy,wz,vx,vy,vz]. The angular velocities are in body axis, while the linear velocities in inertial frame -- [6x1].
+%   * um -- Joint velocities -- [n_qx1].
+%   * u0dot -- Base-spacecraft accelerations [alphax,alphay,alphaz,ax,ay,az]. The angular accelerations are in body axis, while the linear accelerations are in inertial frame -- [6x1].
+%   * umdot -- Manipulator joint accelerations -- [n_qx1].
 %   * robot -- Robot model (see :doc:`/Robot_Model`).
 %
 % :return: 
@@ -60,7 +60,7 @@ end
 
 %--- Twist Rate ---%
 %Base-spacecraft
-t0dot = Omega0*P0*q0dot+P0*q0ddot;
+t0dot = Omega0*P0*u0+P0*u0dot;
 
 %Pre-allocate
 tLdot=zeros(6,n,'like',t0);
@@ -78,7 +78,7 @@ for i=1:n
     
     %Add joint contribution
     if robot.joints(i).type~=0
-        tLdot(1:6,i)=tLdot(1:6,i)+Omegam(1:6,1:6,i)*pm(1:6,i)*qmdot(robot.joints(i).q_id)+pm(1:6,i)*qmddot(robot.joints(i).q_id);
+        tLdot(1:6,i)=tLdot(1:6,i)+Omegam(1:6,1:6,i)*pm(1:6,i)*um(robot.joints(i).q_id)+pm(1:6,i)*umdot(robot.joints(i).q_id);
     end
     
     

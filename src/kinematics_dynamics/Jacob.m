@@ -25,7 +25,7 @@ function [J0, Jm]=Jacob(rx,r0,rL,P0,pm,i,robot)
 %   %Compute Jacobians
 %   [J0, Jm]=Jacob(rx,r0,rL,P0,pm,i,robot);
 %   %Twist of that point
-%   tx=J0*q0dot+Jm*qmdot;
+%   tx=J0*u0+Jm*um;
 %
 % See also: :func:`src.kinematics_dynamics.Kinematics`, :func:`src.kinematics_dynamics.DiffKinematics`
 

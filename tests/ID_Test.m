@@ -10,12 +10,12 @@ r0=zeros(3,1);%Variables.r0;
 qm=Variables.qm;
 
 %Velocities
-q0dot=Variables.q0dot;
-qmdot=Variables.qmdot;
+u0=Variables.u0;
+um=Variables.um;
 
 %Accelerations
-q0ddot=Variables.q0ddot;
-qmddot=Variables.qmdot;
+u0dot=Variables.u0dot;
+umdot=Variables.um;
 
 %External forces
 wF0=Variables.wF0;
@@ -27,9 +27,9 @@ wFm=Variables.wFm;
 %Differential Kinematics
 [Bij,Bi0,P0,pm]=DiffKinematics(R0,r0,rL,e,g,robot);
 %Velocities
-[t0,tm]=Velocities(Bij,Bi0,P0,pm,q0dot,qmdot,robot);
+[t0,tm]=Velocities(Bij,Bi0,P0,pm,u0,um,robot);
 %Accelerations
-[t0dot,tmdot]=Accelerations(t0,tm,P0,pm,Bi0,Bij,q0dot,qmdot,q0ddot,qmddot,robot);
+[t0dot,tmdot]=Accelerations(t0,tm,P0,pm,Bi0,Bij,u0,um,u0dot,umdot,robot);
 %Inertias
 [I0,Im]=I_I(R0,RL,robot);
 %Mass Composite Body matrix
@@ -44,8 +44,8 @@ N = NOC(r0,rL,P0,pm,robot);
 %--- Test Inverse Dynamics - Flying base ---%
 H=[H0, H0m; H0m', Hm];
 C=[C0, C0m; Cm0, Cm];
-qddot=[q0ddot;qmddot];
-qdot=[q0dot;qmdot];
+qddot=[u0dot;umdot];
+qdot=[u0;um];
 
 %Generalized forces using H*qddot+C*qdot=tau+J'w
 tau_HC = H*qddot+C*qdot-N'*[wF0;wFm(:)];
@@ -60,19 +60,19 @@ assert(all(test(:)));
 
 %--- Test Inverse Dynamics - Floating base ---%
 
-%Compute q0ddot using H*qddot+C*qdot=tau+J'w
-q0ddot_floating_HC=H0\(N(:,1:6)'*[wF0;wFm(:)]-H0m*qmddot-C0*q0dot-C0m*qmdot);
+%Compute u0dot using H*qddot+C*qdot=tau+J'w
+u0dot_floating_HC=H0\(N(:,1:6)'*[wF0;wFm(:)]-H0m*umdot-C0*u0-C0m*um);
 %Generalized forces using H*qddot+C*qdot=tau+J'w
-tau_floating_HC = H*[q0ddot_floating_HC;qmddot]+C*qdot-N'*[wF0;wFm(:)];
+tau_floating_HC = H*[u0dot_floating_HC;umdot]+C*qdot-N'*[wF0;wFm(:)];
 taum_floating_HC=tau_floating_HC(7:end);
 
 %Inverse Dynamics Floating Base
-[taum_floating_ID,q0ddot_floating_ID] = Floating_ID(wF0,wFm,Mm_tilde,H0,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,qmddot,robot);
+[taum_floating_ID,u0dot_floating_ID] = Floating_ID(wF0,wFm,Mm_tilde,H0,t0,tm,P0,pm,I0,Im,Bij,Bi0,u0,um,umdot,robot);
 
 %Test
 test=abs(taum_floating_HC-taum_floating_ID)<1e-6;
 assert(all(test(:)));
-test=abs(q0ddot_floating_HC-q0ddot_floating_ID)<1e-6;
+test=abs(u0dot_floating_HC-u0dot_floating_ID)<1e-6;
 assert(all(test(:)));
 
 end

@@ -10,8 +10,8 @@ r0=Variables.r0;
 qm=Variables.qm;
 
 %Velocities
-q0dot=Variables.q0dot;
-qmdot=Variables.qmdot;
+u0=Variables.u0;
+um=Variables.um;
 
 %--- Compute H and C using recursive algorithms ---%
 %Kinematics
@@ -19,7 +19,7 @@ qmdot=Variables.qmdot;
 %Differential Kinematics
 [Bij,Bi0,P0,pm]=DiffKinematics(R0,r0,rL,e,g,robot);
 %Velocities
-[t0,tm]=Velocities(Bij,Bi0,P0,pm,q0dot,qmdot,robot);
+[t0,tm]=Velocities(Bij,Bi0,P0,pm,u0,um,robot);
 %Inertias
 [I0,Im]=I_I(R0,RL,robot);
 %Mass Composite Body matrix

@@ -16,8 +16,8 @@ filename='kuka_lwr.urdf';
 R0=eye(3);
 r0=zeros(3,1);
 qm=zeros(robot.n_q,1);
-q0dot=zeros(6,1);
-qmdot=zeros(robot.n_q,1);
+u0=zeros(6,1);
+um=zeros(robot.n_q,1);
 
 %--- Kinematics ---%
 %Kinematics
@@ -25,7 +25,7 @@ qmdot=zeros(robot.n_q,1);
 %Diferential Kinematics
 [Bij,Bi0,P0,pm]=DiffKinematics(R0,r0,rL,e,g,robot);
 %Velocities
-[t0,tm]=Velocities(Bij,Bi0,P0,pm,q0dot,qmdot,robot);
+[t0,tm]=Velocities(Bij,Bi0,P0,pm,u0,um,robot);
 %Jacobian of the last link
 [J0n, Jmn]=Jacob(rL(1:3,end),r0,rL,P0,pm,robot.n_links_joints,robot);
 
@@ -56,16 +56,16 @@ tauq0=zeros(6,1);
 tauqm=zeros(robot.n_q,1);
 
 %Forward Dynamics
-[q0ddot_FD,qmddot_FD] = FD(tauq0,tauqm,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,robot);
+[u0dot_FD,umdot_FD] = FD(tauq0,tauqm,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,u0,um,robot);
 
 %--- Inverse Dynamics - Flying ---%
 
 %Accelerations
-q0ddot=zeros(6,1);
-qmddot=zeros(robot.n_q,1);
+u0dot=zeros(6,1);
+umdot=zeros(robot.n_q,1);
 
 %Accelerations
-[t0dot,tmdot]=Accelerations(t0,tm,P0,pm,Bi0,Bij,q0dot,qmdot,q0ddot,qmddot,robot);
+[t0dot,tmdot]=Accelerations(t0,tm,P0,pm,Bi0,Bij,u0,um,u0dot,umdot,robot);
 
 %Inverse Dynamics - Flying base
 [tau0,taum] = ID(wF0,wFm,t0,tm,t0dot,tmdot,P0,pm,I0,Im,Bij,Bi0,robot);
@@ -73,7 +73,7 @@ qmddot=zeros(robot.n_q,1);
 %--- Forward Dynamics - Floating ---%
 
 %Accelerations
-qmddot=zeros(robot.n_q,1);
+umdot=zeros(robot.n_q,1);
 
 %Inverse Dynamics - Floating Base
-[taum_floating,q0ddot_floating] = Floating_ID(wF0,wFm,Mm_tilde,H0,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,qmddot,robot);
+[taum_floating,u0dot_floating] = Floating_ID(wF0,wFm,Mm_tilde,H0,t0,tm,P0,pm,I0,Im,Bij,Bi0,u0,um,umdot,robot);

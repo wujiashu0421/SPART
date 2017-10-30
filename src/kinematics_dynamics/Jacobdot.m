@@ -30,7 +30,7 @@ function [J0dot, Jmdot]=Jacobdot(rx,tx,r0,t0,rL,tL,P0,pm,i,robot)
 %   Compute Jacobians time-derivatives
 %   [J0dot, Jmdot]=Jacobdot(rx,tx,r0,t0,rL,tL,P0,pm,i,robot)
 %   %Twist of that point
-%   txdot=J0*q0ddot+J0dot*q0dot+Jm*qmddot+Jmdot*qmdot;
+%   txdot=J0*u0dot+J0dot*u0+Jm*umdot+Jmdot*um;
 %
 % See also: :func:`src.kinematics_dynamics.Accelerations` and :func:`src.kinematics_dynamics.Jacob`. 
 

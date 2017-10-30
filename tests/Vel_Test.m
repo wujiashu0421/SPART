@@ -10,8 +10,8 @@ r0=zeros(3,1);%Variables.r0;
 qm=Variables.qm;
 
 %Velocities
-q0dot=Variables.q0dot;
-qmdot=Variables.qmdot;
+u0=Variables.u0;
+um=Variables.um;
 
 %--- Compute NOC and velocities ---%
 %Kinematics
@@ -21,11 +21,11 @@ qmdot=Variables.qmdot;
 %Jacobians (in the form of NOC)
 [N] = NOC(r0,rL,P0,pm,robot);
 %Velocities from NOC
-t_NOC=N*[q0dot;qmdot];
+t_NOC=N*[u0;um];
 
 
 %--- Velocities ---%
-[t0,tm]=Velocities(Bij,Bi0,P0,pm,q0dot,qmdot,robot);
+[t0,tm]=Velocities(Bij,Bi0,P0,pm,u0,um,robot);
 
 %Test
 test=abs(t_NOC-[t0;tm(:)])<1e-6;

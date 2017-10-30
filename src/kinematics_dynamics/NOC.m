@@ -22,7 +22,7 @@ function [N] = NOC(r0,rL,P0,pm,robot)
 %   %Compute NOC
 %   [N] = NOC(r0,rL,P0,pm,robot)
 %   %Twist of all the links
-%   t=N*[q0dot;qmdot];
+%   t=N*[u0;um];
 %   %Twist of the base-spacecraft
 %   t0=t(1:6,1);
 %   %Twist of the ith link

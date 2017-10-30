@@ -87,8 +87,8 @@ r0=[0;0;0]; %Position of the base-spacecraft
 qm=[0;0;0;0;0];
 
 %Velocities
-q0dot=zeros(6,1); %Base-spacecraft velocity
-qmdot=[4;-1;5;2;1]*pi/180; %Joint velocities
+u0=zeros(6,1); %Base-spacecraft velocity
+um=[4;-1;5;2;1]*pi/180; %Joint velocities
 
 %--- Create robot structure ---%
 [robot,T_Ln_EE] = DH_Serial2robot(data);
@@ -106,7 +106,7 @@ TEE=[RL(1:3,1:3,end),rL(1:3,end);zeros(1,3),1]*T_Ln_EE;
 %End-effector Jacobian
 [J0EE, JmEE]=Jacob(TEE(1:3,4),r0,rL,P0,pm,robot.n_links_joints,robot);
 %Velocities
-[t0,tm]=Velocities(Bij,Bi0,P0,pm,q0dot,qmdot,robot);
+[t0,tm]=Velocities(Bij,Bi0,P0,pm,u0,um,robot);
 
 %--- Inertia Matrices ---%
 %Inertias in inertial frames
@@ -133,16 +133,16 @@ tauq0=zeros(6,1);
 tauqm=zeros(robot.n_q,1);
 
 %Forward Dynamics
-[q0ddot_FD,qmddot_FD] = FD(tauq0,tauqm,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,robot);
+[u0dot_FD,umdot_FD] = FD(tauq0,tauqm,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,u0,um,robot);
 
 %--- Inverse Dynamics - Flying ---%
 
 %Accelerations
-q0ddot=zeros(6,1);
-qmddot=zeros(robot.n_q,1);
+u0dot=zeros(6,1);
+umdot=zeros(robot.n_q,1);
 
 %Accelerations
-[t0dot,tmdot]=Accelerations(t0,tm,P0,pm,Bi0,Bij,q0dot,qmdot,q0ddot,qmddot,robot);
+[t0dot,tmdot]=Accelerations(t0,tm,P0,pm,Bi0,Bij,u0,um,u0dot,umdot,robot);
 
 %Inverse Dynamics - Flying base
 [tau0,taum] = ID(wF0,wFm,t0,tm,t0dot,tmdot,P0,pm,I0,Im,Bij,Bi0,robot);
@@ -150,7 +150,7 @@ qmddot=zeros(robot.n_q,1);
 %--- Forward Dynamics - Floating ---%
 
 %Accelerations
-qmddot=zeros(robot.n_q,1);
+umdot=zeros(robot.n_q,1);
 
 %Inverse Dynamics - Floating Base
-[taum_floating,q0ddot_floating] = Floating_ID(wF0,wFm,Mm_tilde,H0,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,qmddot,robot);
+[taum_floating,u0dot_floating] = Floating_ID(wF0,wFm,Mm_tilde,H0,t0,tm,P0,pm,I0,Im,Bij,Bi0,u0,um,umdot,robot);

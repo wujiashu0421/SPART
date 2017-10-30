@@ -67,12 +67,12 @@ r0=sym([0;0;0]);
 qm=sym('qm',[data.n,1],'real');
 
 %Velocities
-q0dot=sym('q0dot',[6,1],'real');
-qmdot=sym('qmdot',[data.n,1],'real');
+u0=sym('u0',[6,1],'real');
+um=sym('um',[data.n,1],'real');
 
 %Accelerations
-q0ddot=sym('q0ddot',[6,1],'real');
-qmddot=sym('qmddot',[data.n,1],'real');
+u0dot=sym('u0dot',[6,1],'real');
+umdot=sym('umdot',[data.n,1],'real');
 
 %External forces
 wF0=sym(zeros(6,1));
@@ -96,9 +96,9 @@ TEE=[RL(1:3,1:3,end),rL(1:3,end);zeros(1,3),1]*T_Ln_EE;
 %End-effector Jacobian
 [J0EE, JmEE]=Jacob(TEE(1:3,4),r0,rL,P0,pm,robot.n_links_joints,robot);
 %Velocities
-[t0,tm]=Velocities(Bij,Bi0,P0,pm,q0dot,qmdot,robot);
+[t0,tm]=Velocities(Bij,Bi0,P0,pm,u0,um,robot);
 %Accelerations
-[t0dot,tmdot]=Accelerations(t0,tm,P0,pm,Bi0,Bij,q0dot,qmdot,q0ddot,qmddot,robot);
+[t0dot,tmdot]=Accelerations(t0,tm,P0,pm,Bi0,Bij,u0,um,u0dot,umdot,robot);
 %Inertias
 [I0,Im]=I_I(R0,RL,robot);
 %Inverse Dynamics
@@ -119,7 +119,7 @@ return
 %--- Steps that take a very long time to compute ---%
 
 %Inverse Dynamics Floating Base (has an inverse)
-[taum_floating,q0ddot_floating] = Floating_ID(wF0,wFm,Mm_tilde,H0,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,qmddot,robot);
+[taum_floating,u0dot_floating] = Floating_ID(wF0,wFm,Mm_tilde,H0,t0,tm,P0,pm,I0,Im,Bij,Bi0,u0,um,umdot,robot);
 %Forward Dynamics
-[q0ddot_FD,qmddot_FD] = FD(tauq0,tauqm,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,robot);
+[u0dot_FD,umdot_FD] = FD(tauq0,tauqm,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,u0,um,robot);
 

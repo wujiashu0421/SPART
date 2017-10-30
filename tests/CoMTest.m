@@ -21,10 +21,10 @@ r0=Variables.r0;
 qm=Variables.qm;
 
 %Velocities
-qmdot=Variables.qmdot;
+um=Variables.um;
 
 %Accelerations
-qmddot=Variables.qmdot;
+umdot=Variables.um;
 
 %--- Compute GIM matrix ---%
 %Kinematics
@@ -41,26 +41,26 @@ H=[H0, H0m; H0m', Hm];
 
 %--- Center-of-Mass velocity ---%
 %Compute base velocity
-q0dot=-H0\H0m*qmdot;
+u0=-H0\H0m*um;
 %Velocities
-[t0,tm]=Velocities(Bij,Bi0,P0,pm,q0dot,qmdot,robot);
+[t0,tm]=Velocities(Bij,Bi0,P0,pm,u0,um,robot);
 %Compute Center-of-Mass velocity
 v_com = Center_of_Mass(t0(4:6),tm(4:6,:),robot);
 
 %--- Convective inertia matrix ---%
 %Velocities
-q0dot=Variables.q0dot;
+u0=Variables.u0;
 
 %Velocities
-[t0,tm]=Velocities(Bij,Bi0,P0,pm,q0dot,qmdot,robot);
+[t0,tm]=Velocities(Bij,Bi0,P0,pm,u0,um,robot);
 %Generalized Convective Inertia matrix
 [C0, C0m, Cm0, Cm] = CIM(t0,tm,I0,Im,M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,robot);
 
 %--- Center-of-Mass acceleration ---%
 %Base acceleration
-q0ddot=-H0\(H0m*qmddot+C0*q0dot+C0m*qmdot);
+u0dot=-H0\(H0m*umdot+C0*u0+C0m*um);
 %Accelerations
-[t0dot,tmdot]=Accelerations(t0,tm,P0,pm,Bi0,Bij,q0dot,qmdot,q0ddot,qmddot,robot);
+[t0dot,tmdot]=Accelerations(t0,tm,P0,pm,Bi0,Bij,u0,um,u0dot,umdot,robot);
 %Compute Center-of-Mass acceleration
 a_com = Center_of_Mass(t0dot(4:6),tmdot(4:6,:),robot);
 

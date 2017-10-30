@@ -25,7 +25,7 @@ function [Ndot] = NOCdot(r0,t0,rL,tL,P0,pm,robot)
 %   %Compute NOC time-derivative
 %   [Ndot] = NOCdot(r0,t0,rL,tL,P0,pm,robot)
 %   %Twist time-derivatives of all the links
-%   tdot=N*[q0ddot;qmddot]+Ndot*[q0dot;qmdot];
+%   tdot=N*[u0dot;umdot]+Ndot*[u0;um];
 %   %Twist time-derivative of the base-spacecraft
 %   t0dot=tdot(1:6,1);
 %   %Twist time-derivative of the ith link

@@ -108,17 +108,17 @@ The output of the differential kinematics are as follows:
 	* P0 -- Base--spacecraft twist--propagation [6x6] matrix.
 	* pm -- Manipulator twist--propagation [6x1] vector.
 
-With this quantities the velocities of all the links can be determined if the base ``q0dot`` and joint velocities ``qmdot`` are previously defined.
+With this quantities the velocities of all the links can be determined if the base ``u0`` and joint velocities ``um`` are previously defined.
 	
 .. code-block:: matlab
 
 	%Velocities (joint space)
-	q0dot=zeros(6,1); %Base-spacecraft velocity [wx,wy,wz,vx,vy,vz].
-	qmdot=[4;-1;5;2;1]*pi/180; %Joint velocities (adjust the length according to your robot model)
+	u0=zeros(6,1); %Base-spacecraft velocity [wx,wy,wz,vx,vy,vz].
+	um=[4;-1;5;2;1]*pi/180; %Joint velocities (adjust the length according to your robot model)
 
 
 	%Velocities (operational space)
-	[t0,tL]=Velocities(Bij,Bi0,P0,pm,q0dot,qmdot,robot);
+	[t0,tL]=Velocities(Bij,Bi0,P0,pm,u0,um,robot);
 
 The output of the operational space velocities are as follows:
 	* t0 -- Base--spacecraft twist vector [wx,wy,wz,vx,vy,vz].
@@ -235,7 +235,7 @@ After these forces are defined, a forward dynamic solver is available.
 .. code-block:: matlab
 	
 	%Forward Dynamics
-	[q0ddot_FD,qmddot_FD] = FD(tau0,taum,wF0,wFm,t0,tL,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,robot);
+	[u0dot_FD,umdot_FD] = FD(tau0,taum,wF0,wFm,t0,tL,P0,pm,I0,Im,Bij,Bi0,u0,um,robot);
 
 
 As an example, if you need to incorporate the weight of the links (with z being the vertical direction), set the wrenches as follows:
@@ -260,11 +260,11 @@ For the inverse dynamics, the acceleration of the base-spacecraft and the joints
 .. code-block:: matlab
 	
 	%Accelerations
-	q0ddot=zeros(6,1);
-	qmddot=zeros(robot.n_q,1);
+	u0dot=zeros(6,1);
+	umdot=zeros(robot.n_q,1);
 
 	%Accelerations
-	[t0dot,tLdot]=Accelerations(t0,tL,P0,pm,Bi0,Bij,q0dot,qmdot,q0ddot,qmddot,robot);
+	[t0dot,tLdot]=Accelerations(t0,tL,P0,pm,Bi0,Bij,u0,um,u0dot,umdot,robot);
 
 	%Inverse Dynamics - Flying base
 	[tau0,taum] = ID(wF0,wFm,t0,tL,t0dot,tLdot,P0,pm,I0,Im,Bij,Bi0,robot);
@@ -275,8 +275,8 @@ If the base-spacecraft is left uncontrolled (floating-base case) and thus its ac
 .. code-block:: matlab
 	
 	%Accelerations
-	qmddot=zeros(robot.n_q,,1);
+	umdot=zeros(robot.n_q,,1);
 
 	%Inverse Dynamics - Floating Base
-	[taum_floating,q0ddot_floating] = Floating_ID(wF0,wFm,Mm_tilde,H0,t0,tL,P0,pm,I0,Im,Bij,Bi0,q0dot,qmdot,qmddot,robot);
+	[taum_floating,u0dot_floating] = Floating_ID(wF0,wFm,Mm_tilde,H0,t0,tL,P0,pm,I0,Im,Bij,Bi0,u0,um,umdot,robot);
 

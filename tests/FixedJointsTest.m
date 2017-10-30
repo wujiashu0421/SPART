@@ -17,8 +17,8 @@ r0=Variables.r0;
 qm=Variables.qm;
 
 %Velocities
-q0dot=Variables.q0dot;
-qmdot=Variables.qmdot;
+u0=Variables.u0;
+um=Variables.um;
 
 %External forces
 wF0=Variables.wF0;
@@ -32,8 +32,8 @@ tauq0=Variables.tauq0;
 tauqm=Variables.tauqm;
 
 %Accelerations
-q0ddot=Variables.q0ddot;
-qmddot=Variables.qmdot;
+u0dot=Variables.u0dot;
+umdot=Variables.um;
 
 %--- Kinematics ---%
 %No fixed joints
@@ -44,10 +44,10 @@ qmddot=Variables.qmdot;
 %--- Differential Kinematics ---%
 %No fixed joints
 [Bij1,Bi01,P01,pm1]=DiffKinematics(R0,r0,rL1,e1,g1,robot1);
-[t01,tm1]=Velocities(Bij1,Bi01,P01,pm1,q0dot,qmdot,robot1);
+[t01,tm1]=Velocities(Bij1,Bi01,P01,pm1,u0,um,robot1);
 %Fixed joints
 [Bij2,Bi02,P02,pm2]=DiffKinematics(R0,r0,rL2,e2,g2,robot2);
-[t02,tm2]=Velocities(Bij2,Bi02,P02,pm2,q0dot,qmdot,robot2);
+[t02,tm2]=Velocities(Bij2,Bi02,P02,pm2,u0,um,robot2);
 
 %--- Inertias ---%
 %No fixed joints
@@ -82,9 +82,9 @@ N2=N2(I,:);
 
 %--- Accelerations ---%
 %No fixed joints
-[t0dot1,tmdot1]=Accelerations(t01,tm1,P01,pm1,Bi01,Bij1,q0dot,qmdot,q0ddot,qmddot,robot1);
+[t0dot1,tmdot1]=Accelerations(t01,tm1,P01,pm1,Bi01,Bij1,u0,um,u0dot,umdot,robot1);
 %Fixed joints
-[t0dot2,tmdot2]=Accelerations(t02,tm2,P02,pm2,Bi02,Bij2,q0dot,qmdot,q0ddot,qmddot,robot2);
+[t0dot2,tmdot2]=Accelerations(t02,tm2,P02,pm2,Bi02,Bij2,u0,um,u0dot,umdot,robot2);
 
 %--- Inverse dynamics ---%
 %No fixed joints
@@ -94,9 +94,9 @@ N2=N2(I,:);
 
 %--- Forward Dynamics ---%
 %No fixed joints
-[q0ddot_FD1,qmddot_FD1] = FD(tauq0,tauqm,wF0,wFm1,t01,tm1,P01,pm1,I01,Im1,Bij1,Bi01,q0dot,qmdot,robot1);
+[u0dot_FD1,umdot_FD1] = FD(tauq0,tauqm,wF0,wFm1,t01,tm1,P01,pm1,I01,Im1,Bij1,Bi01,u0,um,robot1);
 %Fixed joints
-[q0ddot_FD2,qmddot_FD2] = FD(tauq0,tauqm,wF0,wFm2,t02,tm2,P02,pm2,I02,Im2,Bij2,Bi02,q0dot,qmdot,robot2);
+[u0dot_FD2,umdot_FD2] = FD(tauq0,tauqm,wF0,wFm2,t02,tm2,P02,pm2,I02,Im2,Bij2,Bi02,u0,um,robot2);
 
 
 %% === Tests ===%
@@ -132,7 +132,7 @@ assert(isequal(tmdot1,tmdot2(:,[2,3,5,6])));
 assert(isequal(tau01,tau02));
 assert(isequal(tauqm1,tauqm2));
 %% Forward dynamics tests
-assert(isequal(q0ddot_FD1,q0ddot_FD2));
-assert(isequal(qmddot_FD1,qmddot_FD2));
+assert(isequal(u0dot_FD1,u0dot_FD2));
+assert(isequal(umdot_FD1,umdot_FD2));
 
 
