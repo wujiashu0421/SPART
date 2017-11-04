@@ -17,6 +17,36 @@ There are 3 different ways to create the robot model:
 
 Weather if you choose to start from a URDF file or from a DH description this tutorial code can be found either in ``examples/URDF_Tutorial/URDF_Tutorial.m`` or in ``examples/DH_Tutorial/DH_Tutorial.m``.
 
+Regular numbering scheme
+========================
+
+A multibody system refers to a collection of bodies coupled by joints. The bodies of the system – known as links – are arranged in kinematic
+chains which can be of two types:
+	* Kinematic trees (also known as open-loop kinematic chains) when the path between any two bodies is unique.
+	* Closed-loop kinematic chains, when the path between any two bodies is not unique.
+
+SPART is only designed for *kinematic trees*.
+
+.. figure:: Figures/KinematicTree.png
+   :scale: 50 %
+   :align: center
+   :alt: Illustration of a kinematic tree.
+
+   Illustration of a generic kinematic tree.
+
+Additionally, SPART uses a regular numbering scheme, identifying each link and joint with a number. Joints and links are denoted by :math:`\mathcal{J}_{i}` and :math:`\mathcal{L}_{i}`, respectively. A link :math:`\mathcal{L}_{i}` may be connected to an arbitrary number of links via an equal number of joints. Given the assumption of a kinematic tree topology, only one of these links lies within the path connecting :math:`\mathcal{L}_{i}` and the base link. This link is referred to as the *parent link* of :math:`\mathcal{L}_{i}` and the joint connecting these two links is denoted by :math:`\mathcal{J}_{i}`. The rest of links directly connected to link :math:`\mathcal{J}_{i}` are called *child links* of :math:`\mathcal{L}_{i}`. Each link :math:`\mathcal{L}_{i}` --- with the except of the base link --- has one and only one parent, but can have an arbitrary number of children links. When a link has more than one children this is called a *branching event*.
+
+In a regular number scheme each children link is given a higher number than its parent, with the base link given the number :math:`0`. If the kinematic tree has multiple branches, multiple numbering options exist and they can be chosen arbitrarily among them.
+
+.. figure:: Figures/RegularNumberingScheme.png
+   :scale: 50 %
+   :align: center
+   :alt: Illustration of a regular numbering scheme.
+
+   Illustration of a regular numbering scheme.
+
+From this point onwards, the notation :math:`i+1` and :math:`i-1` is abused to denote the child and parent link or joint even when they are not sequentially numbered. Additionally, the last joint and link on a branch will be generally denoted by :math:`n`. This last link is also referred to as *end-effector*. 
+
 Kinematics
 ==========
 
@@ -64,12 +94,12 @@ The output of the function is as follows:
 
 The geometric definitions of these quantities are shown in the following figure.
 
-.. figure:: Figures/GenLinksJoints.png
+.. figure:: Figures/KinematicsDef.png
    :scale: 50 %
    :align: center
-   :alt: DH text parameters
+   :alt: Definition of the kinematic quantities.
 
-   Schematic disposition of links and joints.
+   Schematic disposition of a generic link and its associated joint.
 
 
 If you change the joint variables ``qm`` or base-link position ``r_{0}`` and orientation ``R_{0}`` and then re-run the kinematic function ``Kinematics`` you will get the new positions and orientations with that particular multibody configuration.
