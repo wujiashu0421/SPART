@@ -26,7 +26,7 @@ function [C0, C0m, Cm0, Cm] = CIM(t0,tL,I0,Im,M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,ro
 %   
 %   %Compute C
 %   [C0, C0m, Cm0, Cm] = CIM(t0,tL,I0,Im,M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,robot)
-%   C=[C0,C0m;Cm0;Cm];
+%   C=[C0,C0m;Cm0,Cm];
 %
 % See also: :func:`src.kinematics_dynamics.GIM`.
 
