@@ -3,29 +3,31 @@ SPART Tutorial
 ==============
 
 
-This SPART tutorial will cover the basic operation of the library. Before starting make sure you have correctly installed and configured SPART (:doc:`/Installation`).
+This tutorial covers the basic functionality of the library and introduces basic concepts of multibody kinematics and dynamics. Before starting this tutorial make sure you have correctly installed and configured SPART (:doc:`/Installation`).
 
-Getting the Robot Model
+Getting the robot model
 =======================
 
-The first step is to create the robot model. This model contains all the kinematic and dynamic data of the robot. Take a look at (:doc:`/Robot_Model`) to get a detailed description of how this model is structured.
+The first step is to create the model of the robotic multibody system. In SPART this model, containing all the kinematic and dynamic properties of the robot, is stored into the ``robot`` structure. A description of the contents of this ``robot`` structure can be found in the  :doc:`/Robot_Model` page.
 
-There are 3 different ways to create the robot model:
-	* Use an Unified Robot Description Format (URDF file). Check (:doc:`/URDF`) for a description on how to convert a URDF file into a SPART robot model.
-	* Use the Denavit-Hartenberg (DH) convention to define the geometry of your robot. Check (:doc:`/DH`) for a description on how to convert a URDF file into a SPART robot model.
-	* Manually create the robot model. Refer to (:doc:`/Robot_Model`) for further guidance.
+SPART allows to populate the ``robot`` structure using three different input methods:
 
-Weather if you choose to start from a URDF file or from a DH description this tutorial code can be found either in ``examples/URDF_Tutorial/URDF_Tutorial.m`` or in ``examples/DH_Tutorial/DH_Tutorial.m``.
+* **(Recommended method)** With a Unified Robot Description Format (URDF file). Refer to the :doc:`/URDF` page for the procedure to convert a URDF file into a SPART ``robot`` structure.
+* With the Denavit-Hartenberg (DH) parameters. Refer to the :doc:`/DH` page for the procedure to create a SPART ``robot`` structure using DH parameters.
+* Manually create the ``robot`` structure. Refer to the :doc:`/Robot_Model` page for further guidance.
 
-Regular numbering scheme
-========================
+The complete code for this tutorial can be found in ``examples/URDF_Tutorial/URDF_Tutorial.m``, when using a URDF file, or in ``examples/DH_Tutorial/DH_Tutorial.m``, when using DH parameters.
 
-A multibody system refers to a collection of bodies coupled by joints. The bodies of the system – known as links – are arranged in kinematic
-chains which can be of two types:
-	* Kinematic trees (also known as open-loop kinematic chains) when the path between any two bodies is unique.
-	* Closed-loop kinematic chains, when the path between any two bodies is not unique.
 
-SPART is only designed for *kinematic trees*.
+Kinematic tree topology
+=======================
+
+A multibody system refers to a collection of bodies coupled by joints. The bodies of the system – known as links – are arranged in one of the two types of kinematic chains:
+
+* Kinematic trees (also known as open-loop kinematic chains). If the path between any two links is unique.
+* Closed-loop kinematic chains. The path between any two links is not unique.
+
+SPART is only able to handle multibody systems with *kinematic trees*.
 
 .. figure:: Figures/KinematicTree.png
    :scale: 50 %
@@ -34,50 +36,54 @@ SPART is only designed for *kinematic trees*.
 
    Illustration of a generic kinematic tree.
 
-Additionally, SPART uses a regular numbering scheme, identifying each link and joint with a number. Joints and links are denoted by :math:`\mathcal{J}_{i}` and :math:`\mathcal{L}_{i}`, respectively. A link :math:`\mathcal{L}_{i}` may be connected to an arbitrary number of links via an equal number of joints. Given the assumption of a kinematic tree topology, only one of these links lies within the path connecting :math:`\mathcal{L}_{i}` and the base link. This link is referred to as the *parent link* of :math:`\mathcal{L}_{i}` and the joint connecting these two links is denoted by :math:`\mathcal{J}_{i}`. The rest of links directly connected to link :math:`\mathcal{J}_{i}` are called *child links* of :math:`\mathcal{L}_{i}`. Each link :math:`\mathcal{L}_{i}` --- with the except of the base link --- has one and only one parent, but can have an arbitrary number of children links. When a link has more than one children this is called a *branching event*.
+Numbering scheme
+================
 
-In a regular number scheme each children link is given a higher number than its parent, with the base link given the number :math:`0`. If the kinematic tree has multiple branches, multiple numbering options exist and they can be chosen arbitrarily among them.
+SPART uses a regular numbering scheme, identifying each link and joint with a number. Joints are  denoted by :math:`\mathcal{J}_{i}` and the links by :math:`\mathcal{L}_{i}`. One of the links on the kinematic tree is designated as the base link, with :math:`i=0` and denoted :math:`\mathcal{L}_{0}`. The base link can be selected arbitrarily among all the links, yet an obvious choice usually exists.
+
+A link :math:`\mathcal{L}_{i}` can be connected to an arbitrary number of links via an equal number of joints. Given the assumption of a kinematic tree topology, only one of these links lies within the path connecting :math:`\mathcal{L}_{i}` and the **base-link** :math:`\mathcal{L}_{0}`. This *previous/upstream* link is referred to as the *parent link* of :math:`\mathcal{L}_{i}` and the joint connecting these two links is denoted by :math:`\mathcal{J}_{i}`. The rest of links directly connected to link :math:`\mathcal{J}_{i}` are called *child links* of :math:`\mathcal{L}_{i}`. Each link :math:`\mathcal{L}_{i}` has one and only one parent, but can have an arbitrary number of children links. When a link has more than one children this is called a *branching event*.
+
+In a regular number scheme each children link is given a higher number than its parent, with the base link given the number :math:`i=0`. If the kinematic tree has multiple branches, multiple numbering options exist and they can be chosen arbitrarily among them.
 
 .. figure:: Figures/RegularNumberingScheme.png
    :scale: 50 %
    :align: center
-   :alt: Illustration of a regular numbering scheme.
+   :alt: Regular numbering scheme.
 
-   Illustration of a regular numbering scheme.
+   Regular numbering scheme.
 
-From this point onwards, the notation :math:`i+1` and :math:`i-1` is abused to denote the child and parent link or joint even when they are not sequentially numbered. Additionally, the last joint and link on a branch will be generally denoted by :math:`n`. This last link is also referred to as *end-effector*. 
+The notation :math:`i+1` and :math:`i-1` is abused to denote the child and parent link or joint even when they are not sequentially numbered. Additionally, the last joint and link on a branch is denoted by :math:`i=n`. This last link is also referred to as **end-effector**.
 
 Kinematics
 ==========
 
-After creating the robot model the next step is to compute the kinematics of the multibody system.
-
-First we need to define the position and orientation of the base with respect to the inertial Cartesian Coordinate System.
+SPART can compute the position and orientation of all the links and joints. To do so, the base-link position :math:`\mathrm{r}_{0}\in\mathbb{R}^{3}` and orientation, as a rotation matrix :math:`\mathrm{R}_{0}\in\mathrm{SO}\left(3\right)`, are first specified.
 
 .. code-block:: matlab
 
-	%Base position
-	R0=eye(3);  %Rotation from base-link with respect to the inertial CCS
-	r0=[0;0;0]; %Position of the base-link with respect to the origin of the inertial frame, projected in the inertial CCS
+	%Base-link position and orientation
+	R0=eye(3);  %Rotation from base-link with respect to the inertial CCS.
+	r0=[0;0;0]; %Position of the base-link with respect to the origin of the inertial frame, projected in the inertial CCS.
 
-Also the joint variables need to be defined for all active joints.
+In SPART, the vectors are represented by a 3-by-1 column matrix containing the components of the projection to the inertial CCS. Projection to other CCS are explicitly marked.
+
+The joint displacements, :math:`\mathbf{q}_{m}\in\mathbb{R}^{n}`, also needs to be defined.
 
 .. code-block:: matlab
 
-	%Joint variables [rad or m]
-	qm=[0;0;0;0;0]; %Adjust the length according to your robot model
+	%Joint displacements [rad or m]
+	qm=[0;0;0;0;0]; %Adjust the length according to the number of joints in the robot model.
 
-The the ith joint is revolute `qm(i)` denotes a rotation whether if the ith joint is prismatic `qm(i)` denotes a translation.
+If the :math:`i\mathrm{th}` joint is revolute, ``qm(i)`` denotes a rotation, whether if the :math:`i\mathrm{th}` joint is prismatic ``qm(i)`` denotes a translation.
 
-The set of `R0,r0,qm` constitute a set of variables :math:`\mathcal{Q}` that fully define the state of the multibody system,
+The set of ``R0,r0,qm`` constitute a set of variables :math:`\mathcal{Q}`, known as *generalized variables*, that fully define the state of the multibody system,
 
 .. math::
 
 	\mathcal{Q}=\left\lbrace\mathbf{R}_{0},\mathbf{r}_{0},q_{1},\ldots,q_{n}\right\rbrace
 
-with this set usually referred to as *generalized variables*.
 
-We can now compute the kinematics of the system.
+With the generalized variables specified, SPART is now ready to compute the kinematics of the system.
 
 .. code-block:: matlab
 
@@ -85,12 +91,13 @@ We can now compute the kinematics of the system.
 	[RJ,RL,rJ,rL,e,g]=Kinematics(R0,r0,qm,robot);
 
 The output of the function is as follows:
-	* RJ -- Joint 3x3 rotation matrices of the joint  -- as a [3x3xn] matrix.
-	* RL -- Links 3x3 rotation matrices -- as a [3x3xn] matrix.
-	* rJ -- Positions of the joints projected in the inertial frame -- as a [3xn] matrix.
-	* rL -- Positions of the links projected in the inertial frame -- as a [3xn] matrix.
-	* e -- Joint rotation/sliding axis projected in the inertial frame -- as a [3xn] matrix.
-	* g -- Vector from the origin of the origin of the ith joint to origin of the ith link projected in the inertial frame -- as a [3xn] matrix. 
+
+* RJ -- Joint 3x3 rotation matrices -- as a [3x3xn] matrix.
+* RL -- Links 3x3 rotation matrices -- as a [3x3xn] matrix.
+* rJ -- Positions of the joints projected in the inertial CCS -- as a [3xn] matrix.
+* rL -- Positions of the links projected in the inertial CCS -- as a [3xn] matrix.
+* e -- Joint rotation/sliding axis projected in the inertial CCS -- as a [3xn] matrix.
+* g -- Vector from the origin of the origin of the ith joint to origin of the ith link projected in the inertial CCS -- as a [3xn] matrix. 
 
 The geometric definitions of these quantities are shown in the following figure.
 
@@ -102,21 +109,21 @@ The geometric definitions of these quantities are shown in the following figure.
    Schematic disposition of a generic link and its associated joint.
 
 
-If you change the joint variables ``qm`` or base-link position ``r_{0}`` and orientation ``R_{0}`` and then re-run the kinematic function ``Kinematics`` you will get the new positions and orientations with that particular multibody configuration.
+If the joint variables :math:`\mathbf{q}_{m}` or base-link position :math:`\mathbf{r}_{0}` or orientation :math:`\mathbf{R}_{0}` are changed, re-running the ``Kinematics`` function afterwards computes the link and joint positions and orientations with that particular configuration.
 
 .. code-block:: matlab
 
-	%Joint variables [rad]
-	qm=[45;10;-45;20;-90]*pi/180;
+	%Joint displacements [rad or m]
+	qm=[45;10;-45;20;-90]*pi/180; %Assumes revolute joints
 
 	%Kinematics
 	[RJ,RL,rJ,rL,e,g]=Kinematics(R0,r0,qm,robot);
 
-SPART also allows symbolic computation. To obtain symbolic expressions just define the generalized variables as symbolic.
+If your Matlab installation includes the `Symbolic Math Toolbox <https://www.mathworks.com/products/symbolic.html>`_ SPART is able to obtain the analytic expressions of the kinematic quantities. To do so, just define the generalized variables as *symbolic expressions*.
 
 .. code-block:: matlab
 
-	%Joint variables [rad]
+	%Joint displacements [rad or m]
 	qm=sym('qm',[robot.n_q,1],'real');
 
 	%Base-link position
@@ -130,41 +137,38 @@ SPART also allows symbolic computation. To obtain symbolic expressions just defi
 	[RJ,RL,rJ,rL,e,g]=Kinematics(R0,r0,qm,robot);
 
 .. warning::
-   To obtain symbolic expressions all inputs must be symbolic. Otherwise, errors can occur.
+   To obtain analytic expressions, all inputs must be symbolic. Otherwise, errors can occur.
 
-Differential Kinematics
+Differential kinematics
 =======================
 
-The linear and angular velocity of a link with respect to the inertial frame, projected into the inertial CCS, is encapsulated in a *twist* 6x1 column matrix.
+The angular and linear velocity of the :math:`i\mathrm{th}` link with respect to the inertial frame, projected into the inertial CCS, is encapsulated into the **twist** :math:`\mathbf{t}_{i}\in\mathbb{R}^{6}`.
 
 .. math::
 
 	\mathbf{t}_{i}=\begin{bmatrix}\mathbf{\omega}_{i}\\ \dot{\mathbf{r}}_{i}\end{bmatrix}
 
-The twist can be recursively propagated, from a link to the next one, using the 3x3 :math:`\mathbf{B}_{ij}` twist--propagation matrix and the 6x1 :math:`\mathbf{p}_{i}` twist--propagation vector as follows:
+The twist can be recursively propagated outward from one link to the next, using the 6-by-6 :math:`\mathbf{B}_{ij}` twist--propagation matrix and the 6-by-1 :math:`\mathbf{p}_{i}` twist--propagation "vector":
 
 .. math::
 	
-	\mathbf{t}_{i}=\mathbf{B}_{ij}\mathbf{t}_{j}+\mathbf{p}_{i}\dot{q}_{i}
+	\mathbf{t}_{i}=\mathbf{B}_{ij}\mathbf{t}_{j}+\mathbf{p}_{i}\dot{q}_{i}\quad\text{for}\quad j=i-1
 
-
-
-
-These matrices, which form the basis of the differential kinematics, can be computed with the `DiffKinematics` functions as follows:
+These matrices, which form the basis of the differential kinematics, can be computed with the ``DiffKinematics`` function.
 
 .. code-block:: matlab
 
-	%Differential Kinematics
+	%Differential kinematics
 	[Bij,Bi0,P0,pm]=DiffKinematics(R0,r0,rL,e,g,robot);
 
 The output of the differential kinematics are as follows:
-	* Bij -- Twist--propagation [6x6] matrix (for manipulator i>0 and j>0).
-	* Bi0 -- Twist--propagation [6x6] matrix (for i>0 and j=0).
-	* P0 -- Base--link twist--propagation [6x6] matrix.
-	* pm -- Manipulator twist--propagation [6x1] vector.
 
+* Bij -- Twist--propagation [6x6xn] matrix (for manipulator i>0 and j>0).
+* Bi0 -- Twist--propagation [6x6xn] matrix (for i>0 and j=0).
+* P0 -- Base--link twist--propagation [6x6] matrix.
+* pm -- Manipulator twist--propagation [6xn] vector.
 
-The set of velocities :math:`\mathbf{u}` is known as the generalized velocities, and contain the base-link velocities :math:`\mathbf{u}_{0}` and the joint velocities :math:`\mathbf{u}_{m}`. 
+The set of generalized velocities :math:`\mathbf{u}` contains the base-link velocities :math:`\mathbf{u}_{0}\in\mathbb{R}^{6}` and the joint velocities :math:`\mathbf{u}_{m}\in\mathbb{R}^{n}`. 
 
 .. math::
 
@@ -174,13 +178,13 @@ With the base-link and joint velocities defined as:
 
 .. math::
 
-	\mathbf{u}_{0} = \begin{bmatrix}\mathbf{\omega}^{\mathcal{L}_{0}}_{0} \\ \dot{\mathbf{r}}_{0} \end{bmatrix}
+	\mathbf{u}_{0} = \begin{bmatrix}\mathbf{\omega}^{\left\{\mathcal{L}_{0}\right\}}_{0} \\ \dot{\mathbf{r}}_{0} \end{bmatrix}
 
 	\mathbf{u}_{m} = \begin{bmatrix}\dot{q}_{1} \\ \vdots \\ \dot{q}_{n} \end{bmatrix}
 
-Note that :math:`\mathbf{\omega}^{\mathcal{L}_{0}}_{0}` denotes the angular velocity of the base-link with respect to the inertisl frame, projected in the base-link body-fixed CCS.
+Note that :math:`\mathbf{\omega}^{\left\{\mathcal{L}_{0}\right\}}_{0}` denotes the angular velocity of the base-link, with respect to the inertial frame, projected in the base-link body-fixed CCS.
 
-For the base-link, the twist is computed only using a modified 6x6 :math:`\mathbf{P}_{0}` twist-propagation matrix.
+For the base-link, the twist is computed only using a modified 6-by-6 :math:`\mathbf{P}_{0}` twist-propagation matrix.
 
 .. math::
 	
@@ -192,50 +196,53 @@ With this quantities the velocities of all the links can be determined.
 .. code-block:: matlab
 
 	%Velocities (joint space)
-	u0=zeros(6,1); %Base-link velocity [wx,wy,wz,vx,vy,vz].
+	u0=zeros(6,1); %Base-link angular (projected into the base-link body-fixed CCS) and linear velocities.
 	um=[4;-1;5;2;1]*pi/180; %Joint velocities (adjust the length according to your robot model)
-
 
 	%Velocities (operational space)
 	[t0,tL]=Velocities(Bij,Bi0,P0,pm,u0,um,robot);
 
 The output of the operational space velocities are as follows:
-	* t0 -- Base--link twist vector [wx,wy,wz,vx,vy,vz] projected in the inertial CCS.
-	* tL -- Manipulator twist vector [wx,wy,wz,vx,vy,vz] projected in the inertial CCS.
 
-The Jacobian of a point 'x' maps the joint space velocities :math:`\mathbf{u}` into the operational space velocities of that point :math:`\mathbf{t}_{x}`.
+* t0 -- Base--link twist vector projected in the inertial CCS -- as a [6x1] matrix.
+* tL -- Manipulator twist vector projected in the inertial CCS -- as a [6xn] matrix.
+
+Jacobians
+=========
+
+The analytic Jacobian of a point :math:`p` maps the joint-space velocities :math:`\mathbf{u}` into theoperational-space velocities of that point :math:`\mathbf{t}_{p}`.
 
 .. math::
 	
-	\mathbf{t}_{x}=\mathbf{J}_{0x}\mathbf{u}_{0}+\mathbf{J}_{mx}\mathbf{u}_{m}
+	\mathbf{t}_{p}=\mathbf{J}_{0p}\mathbf{u}_{0}+\mathbf{J}_{mp}\mathbf{u}_{m}
 
-The analytical Jacobians of the ith link of the multibody system can be computed as follows:
+The analytical Jacobians of the :math:`i\mathrm{th}` link of the multibody system is computed as follows.
 
 .. code-block:: matlab
 
 	%Jacobian of the ith Link
 	[J0i, Jmi]=Jacob(rL(1:3,i),r0,rL,P0,pm,i,robot);
 
-And to compute the Jacobian of a point 'x' in the ith link:
+To compute the Jacobian of a point 'p' in the :math:`i\mathrm{th}` use the following snippet.
 
 .. code-block:: matlab
 
-	%Jacobian of the a point x in the ith link
-	%rx is the position of the point, projected into the inertial CCS
-	[J0x, Jmx]=Jacob(rx(1:3),r0,rL,P0,pm,i,robot);
+	%Jacobian of the a point p in the ith link
+	%rp is the position of the point p, projected into the inertial CCS -- as a [3x1] matrix.
+	[J0p, Jmp]=Jacob(rp,r0,rL,P0,pm,i,robot);
 
 
 
-Equations of Motion and Inertia Matrices
+Equations of motion and inertia matrices
 ========================================
 
-The generic equations of motion can be written as follows:
+The generic equations of motion, written in a canonical form, take the following form:
 
 .. math::
 	
-	\mathbf{H}\left(\mathcal{Q}\right)\dot{\mathbf{u}}+C\left(\mathcal{Q},\mathbf{u}\right)\mathbf{u}=\mathbf{\tau}
+	\mathbf{H}\dot{\mathbf{u}}+\mathbf{C}\mathbf{u}=\mathbf{\tau}
 
-with :math:`\mathbf{H}` being the Generalized Inertia Matrix (GIM), :math:`\mathbf{C}` the Convective Inertia Matrix (CIM) and :math:`\mathbf{\tau}` the generalized joint forces.
+with :math:`\mathbf{H}\left(\mathcal{Q}\right)` being the Generalized Inertia Matrix (GIM), :math:`\mathbf{C}\left(\mathcal{Q},\mathbf{u}\right)` the Convective Inertia Matrix (CIM) and :math:`\mathbf{\tau}` the generalized forces.
 
 The contributions of the base-link and the manipulator can be made explicit when writing the equations of motion.
 
@@ -247,7 +254,7 @@ The contributions of the base-link and the manipulator can be made explicit when
 	\left[\begin{array}{c} \mathbf{u}_{0}\\ \mathbf{u}_{m} \end{array}\right]=
 	\left[\begin{array}{c} \mathbf{\tau}_{0}\\ \mathbf{\tau}_{m} \end{array}\right]
 
-These inertia matrices are computes as follows.
+These GIM and CIM are computes as follows.
 
 .. code-block:: matlab
 
@@ -262,32 +269,35 @@ These inertia matrices are computes as follows.
 
 Although the equations of motion can be used to solve the forward dynamic problem (determining the motion of the system given a set of applied forces :math:`\mathbf{\tau}\rightarrow\dot{\mathbf{u}}`) and the inverse dynamic problem (determining the forces required to produce a prescribe motion :math:`\dot{\mathbf{u}}\rightarrow\mathbf{\tau}`) there are more computationally efficient ways of doing so.
 
-Forward Dynamics
+Forward dynamics
 ================
 
-To solve the forward dynamics you will need to specify the forces acting on the multibody system. There are two ways of specifying them. Choose the one that is easier for your particular application (or both of them simultaneously).
+To solve the forward dynamics, the forces acting on the multibody system are specified as an input. 
 
-The joint forces :math:`\mathbf{\tau}` are the forces acting on the joints :math:`\mathbf{\tau}_{m}` (thus is a ``nx1`` column matrix) and also at the base-link :math:`\mathbf{\tau_{0}}` (thus a ``6x1`` column matrix). For :math:`\mathbf{\tau}_{0}`, as in the twist vector, the torques :math:`\mathbf{n}_{0}`, projected in the body-fixed CCS, come first and then come the forces :math:`\mathbf{f}_{0}`.
+There are two methods of specifying them. Choose the one that is easier for your particular application (or both of them simultaneously).
+
+The generalized forces :math:`\mathbf{\tau}` are the forces acting on the joints :math:`\mathbf{\tau}_{m}\in\mathbb{R}^{n}` and on the base-link :math:`\mathbf{\tau_{0}}\in\mathbb{R}^{6}`. For :math:`\mathbf{\tau}_{0}`, as in the twist vector, the torques :math:`\mathbf{n}_{0}\in\mathbb{R}^{3}`, projected in the base-link body-fixed CCS, come first and are followed by forces :math:`\mathbf{f}_{0}\in\mathbb{R}^{3}`.
 
 .. math::
 
-	\mathbf{\tau}_{0}=\begin{bmatrix}\mathbf{n}^{\mathcal{L}_{0}}_{0}\\ \mathbf{f}_{0} \end{bmatrix}
+	\mathbf{\tau}_{0}=\begin{bmatrix}\mathbf{n}^{\left\{\mathcal{L}_{0}\right\}}_{0}\\ \mathbf{f}_{0} \end{bmatrix}
 
-Also, you can specify the wrenches :math:`\mathbf{w}` (torques and forces projected into the inertial CCS) that are applied at the center-of-mass of each link. Again these can be decomposed into base-link 6x1 wrenches :math:`\mathbf{w}_{0}` and manipulator ``6xn`` wrenches :math:`\mathbf{w}_{m}`.
+The wrench applied to the :math:`i\mathrm{th}` link, :math:`\mathbf{w}_{i}\in\mathbb{R}^{6}`, encapsulates the torques and forces, projected into the inertial CCS, applied to the center-of-mass of each link.
 
 .. math::
 
 	\mathbf{w}_{i}=\begin{bmatrix}\mathbf{n}_{i}\\ \mathbf{f}_{i} \end{bmatrix}
 
+
 Here is an example of how to define them:
 
 .. code-block:: matlab
 
-	%External forces
+	%Wrenches
 	wF0=zeros(6,1);
 	wFm=zeros(6,data.n);
 
-	%Joint torques
+	%Generalized forces
 	tauq0=zeros(6,1);
 	tauqm=zeros(robot.n_links,1);
 
@@ -295,43 +305,44 @@ After these forces are defined, a forward dynamic solver is available.
 
 .. code-block:: matlab
 	
-	%Forward Dynamics
+	%Forward dynamics
 	[u0dot_FD,umdot_FD] = FD(tau0,taum,wF0,wFm,t0,tL,P0,pm,I0,Im,Bij,Bi0,u0,um,robot);
 
 
-As an example, if you need to incorporate the weight of the links (with `z` being the vertical direction), set the wrenches as follows:
+As an example, if you need to incorporate the weight of the links (with the :math:`z`-axis being the vertical direction), set the wrenches as follows:
 
 .. code-block:: matlab
 
 	%Gravity
 	g=9.8; %[m s-2]
 
-	%External forces (includes gravity and assumes z is the vertical direction)
+	%Wrenches (includes gravity and assumes z is the vertical direction)
 	wF0=zeros(6,1);
+	wF0(6)=-robot.base_link(i).mass*g;
 	wFm=zeros(6,robot.n_links);
 	for i=1:robot.n_links
-        wFm(6,i)=-robot.links(i).mass*g;
+		wFm(6,i)=-robot.links(i).mass*g;
 	end
 
-Inverse Dynamics
+Inverse dynamics
 ================
 
-For the inverse dynamics, the acceleration of the base-link and the joints need to be specified and then a function to compute the inverse dynamics is available.
+For the inverse dynamics, the acceleration of the base-link :math:`\dot{\mathbf{u}}_{0}` and of the joints :math:`\dot{\mathbf{u}}_{m}` is specified,  then, the ``ID`` function computed the inverse dynamics, providing the required forces to obtain these accelerations.
 
 .. code-block:: matlab
 	
-	%Accelerations
+	%Generalized accelerations
 	u0dot=zeros(6,1);
 	umdot=zeros(robot.n_q,1);
 
-	%Accelerations
+	%Oprational-space accelerations
 	[t0dot,tLdot]=Accelerations(t0,tL,P0,pm,Bi0,Bij,u0,um,u0dot,umdot,robot);
 
 	%Inverse Dynamics - Flying base
 	[tau0,taum] = ID(wF0,wFm,t0,tL,t0dot,tLdot,P0,pm,I0,Im,Bij,Bi0,robot);
 
 
-If the base-link is left uncontrolled (floating-base case) and thus its acceleration is unknown a different routine is available.
+If the base-link is left uncontrolled :math:`\dot{\mathbf{\tau}}_{0}=\mathbf{0}` (floating-base case) and thus its acceleration is unknown the ``Floating_ID`` function is available.
 
 .. code-block:: matlab
 	
