@@ -1,30 +1,21 @@
+=====
 SPART
 =====
 
-SPART is a MATLAB modeling and control toolkit for mobile base robotic multibody systems with a kinematic tree topology (`i.e.`, open-loop multi-branched systems).
+SPART is an open-source modeling and control toolkit for mobile-base robotic multibody systems with kinematic tree topologies (`i.e.`, open-loop multi-branched systems).
+SPART is MATLAB-based and ROS-compatible, allowing to prototype in simulation and deploy to hardware controllers for robotic systems.
 
-SPART is organized as a collection of MATLAB functions and Simulink blocks. These can be used to build plants, forward/inverse dynamic solvers, and controllers.
+Given a URDF or a Denavit-Hartenberg (DH) description of a multibody system, SPART allows to compute:
 
-SPART allows to compute:
-
-* Kinematics -- rotation matrices, position vectors, and homogeneous transformation matrices.
-* Differential kinematics -- Jacobians and Natural Orthogonal Complement matrix and their time derivatives as well as operational space velocities and accelerations.
+* Kinematics -- pose of the links and joints (`i.e.`, homogeneous transformation matrices or rotation matrices and position vectors).
+* Differential kinematics -- Operational space velocities and accelerations, as well as the analytic Jacobians and their time derivatives.
 * Dynamics -- Generalized inertia and convective inertia matrices.
 * Forward/Inverse dynamics solvers (including the floating base case).
 
-Additionally, SPART supports:
+Analytical expressions for all these kinematic and dynamic quantities can be obtained with SPART, as it supports symbolic computation.
 
-* Symbolic computation of all the kinematic and dynamic magnitudes.
-* Automatic Code Generation.
-
-   * Code can be integrated in Simulink models.
-   * Efficient C/C++ code can be automatically generated and integrated in other existing projects (`e.g.`, with ROS).
-
-* URDF files (experimental support).
-
-
-Contents:
-=========
+Contents
+========
 
 .. toctree::
    :maxdepth: 1
@@ -39,6 +30,17 @@ Contents:
    Help
    Cite
 
+
+License
+=======
+
+SPART is released under the `LGPLv3 <https://www.gnu.org/licenses/lgpl.html>`_ license.
+
+.. image:: https://www.gnu.org/graphics/lgplv3-147x51.png
+   :height: 51px
+   :width: 147px
+   :scale: 50 %
+   :alt: LGPLv3
 
 Indices and tables
 ==================
