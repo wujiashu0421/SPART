@@ -21,7 +21,7 @@ Contents
    :maxdepth: 1
 
    Installation
-   Tutorial
+   Tutorial_Intro
    Robot_Model
    URDF
    DH
