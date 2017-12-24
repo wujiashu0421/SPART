@@ -1,12 +1,12 @@
-function [u0dot,umdot] = FD(tauq0,tauqm,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,u0,um,robot)
+function [u0dot,umdot] = FD(tau0,taum,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,u0,um,robot)
 % This function solves the forward dynamics (FD) problem (it obtains the
 % acceleration from  forces).
 %
-% [u0dot,umdot] = FD(tauq0,tauqm,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,u0,um,robot)
+% [u0dot,umdot] = FD(tau0,taum,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,u0,um,robot)
 %
 % :parameters: 
-%   * tauq0 -- Base-spacecraft forces [Tx,Ty,Tz,fx,fy,fz] (torques in the body frame) -- [6x1].
-%   * tauqm -- Joint forces/troques -- [n_qx1].
+%   * tau0 -- Base-spacecraft forces [Tx,Ty,Tz,fx,fy,fz] (torques in the body frame) -- [6x1].
+%   * taum -- Joint forces/troques -- [n_qx1].
 %   * wF0 -- External forces on the base-spacecraft (in the inertial frame) [Tx,Ty,Tz,fx,fy,fz] -- [6x1].
 %   * wFm -- External forces on the manipulator links CoM (in the inertial frame) [Tx,Ty,Tz,fx,fy,fz] -- [6x1].
 %   * t0 -- Base-spacecraft twist vector [wx,wy,wz,vx,vy,vz] (all in inertial frame) -- [6x1].
@@ -54,19 +54,19 @@ n_q=robot.n_q;
 %Recompute Accelerations with u0dot=umdot=0
 [t0dot,tmdot]=Accelerations(t0,tm,P0,pm,Bi0,Bij,u0,um,zeros(6,1),zeros(n_q,1),robot);
 %Use the inverse dynamics
-[tau0_0ddot,tauqm_0ddot] = ID(wF0,wFm,t0,tm,t0dot,tmdot,P0,pm,I0,Im,Bij,Bi0,robot);
+[tau0_0ddot,taum_0ddot] = ID(wF0,wFm,t0,tm,t0dot,tmdot,P0,pm,I0,Im,Bij,Bi0,robot);
 
 %--- Forward Dynamics ---%
 
 %Initialize solution
-phi0=tauq0-tau0_0ddot;
-phi=tauqm-tauqm_0ddot;
+phi0=tau0-tau0_0ddot;
+phi=taum-taum_0ddot;
 
 %--- M hat, psi hat and psi  ---%
 %Pre-allocate
-M_hat=zeros(6,6,n,'like',tauq0);
-psi_hat=zeros(6,n,'like',tauq0);
-psi=zeros(6,n,'like',tauq0);
+M_hat=zeros(6,6,n,'like',tau0);
+psi_hat=zeros(6,n,'like',tau0);
+psi=zeros(6,n,'like',tau0);
 
 %Backwards recursion
 for i=n:-1:1

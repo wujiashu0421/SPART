@@ -1,8 +1,8 @@
-function [tauq0,tauqm] = ID(wF0,wFm,t0,tL,t0dot,tLdot,P0,pm,I0,Im,Bij,Bi0,robot)
+function [tau0,taum] = ID(wF0,wFm,t0,tL,t0dot,tLdot,P0,pm,I0,Im,Bij,Bi0,robot)
 % This function solves the inverse dynamics (ID) problem (it obtains the
 % generalized forces from the accelerations) for a manipulator.
 %
-% [tauq0,tauqm] = ID(wF0,wFm,t0,tL,t0dot,tLdot,P0,pm,I0,Im,Bij,Bi0,robot)
+% [tau0,taum] = ID(wF0,wFm,t0,tL,t0dot,tLdot,P0,pm,I0,Im,Bij,Bi0,robot)
 % 
 % :parameters: 
 %   * wF0 -- External forces on the base-spacecraft (in the inertial frame) [Tx,Ty,Tz,fx,fy,fz] -- [6x1].
@@ -20,8 +20,8 @@ function [tauq0,tauqm] = ID(wF0,wFm,t0,tL,t0dot,tLdot,P0,pm,I0,Im,Bij,Bi0,robot)
 %   * robot -- Robot model (see :doc:`/Robot_Model`).
 %
 % :return: 
-%   * tauq0 -- Base-spacecraft forces [Tx,Ty,Tz,fx,fy,fz] (torques in the body frame) -- [6x1].
-%   * tauqm -- Joint forces/troques -- [n_qx1].
+%   * tau0 -- Base-spacecraft forces [Tx,Ty,Tz,fx,fy,fz] (torques in the body frame) -- [6x1].
+%   * taum -- Joint forces/troques -- [n_qx1].
 %
 % See also: :func:`src.kinematics_dynamics.Floating_ID` and :func:`src.kinematics_dynamics.FD`. 
 
@@ -93,15 +93,15 @@ end
 
 %---- Joint forces ---%
 %Base-spacecraft
-tauq0=P0'*wq_tilde0;
+tau0=P0'*wq_tilde0;
 
 %Pre-allocate
-tauqm=zeros(robot.n_q,1,'like',wF0);
+taum=zeros(robot.n_q,1,'like',wF0);
 
 %Manipulator joint forces.
 for i=1:n
     if robot.joints(i).type~=0
-        tauqm(robot.joints(i).q_id,1)=pm(1:6,i)'*wq_tilde(1:6,i);
+        taum(robot.joints(i).q_id,1)=pm(1:6,i)'*wq_tilde(1:6,i);
     end
 end
 
