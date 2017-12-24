@@ -5,30 +5,30 @@ SPART
 SPART is an open-source modeling and control toolkit for mobile-base robotic multibody systems with kinematic tree topologies (`i.e.`, open-loop multi-branched systems).
 SPART is MATLAB-based and ROS-compatible, allowing to prototype in simulation and deploy to hardware controllers for robotic systems.
 
-Given a URDF or a Denavit-Hartenberg (DH) description of a multibody system, SPART allows to compute:
+Given a URDF description of a multibody system, SPART computes the system's:
 
 * Kinematics -- pose of the links and joints (`i.e.`, homogeneous transformation matrices or rotation matrices and position vectors).
 * Differential kinematics -- Operational space velocities and accelerations, as well as the analytic Jacobians and their time derivatives.
 * Dynamics -- Generalized inertia and convective inertia matrices.
-* Forward/Inverse dynamics solvers (including the floating base case).
+* Forward/Inverse dynamics -- solvers for both problems, including the floating-base case.
 
-Analytical expressions for all these kinematic and dynamic quantities can be obtained with SPART, as it supports symbolic computation.
+SPART supports symbolic computation and analytic expressions for all kinematic and dynamic quantities can be obtained.
 
 Contents
 ========
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
    Installation
    Tutorial_Intro
-   Robot_Model
-   URDF
-   DH
-   URDF_Models
+   Tutorial_Robot
+   Tutorial_Kinematics
+   Tutorial_Dynamics
    Functions
-   Help
+   URDF_Models
    Cite
+   Help
 
 
 License
