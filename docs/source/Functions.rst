@@ -1,5 +1,6 @@
-Functions
-*********
+==================
+Function Reference
+==================
 
 Here is the documentation for all of SPART functions (the current list is incomplete).
 	
