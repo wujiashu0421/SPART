@@ -119,3 +119,9 @@ If the base-link is left uncontrolled :math:`\dot{\mathbf{\tau}}_{0}=\mathbf{0}`
 	%Inverse Dynamics - Floating Base
 	[taum_floating,u0dot_floating] = Floating_ID(wF0,wFm,Mm_tilde,H0,t0,tL,P0,pm,I0,Im,Bij,Bi0,u0,um,umdot,robot);
 
+Finding more information
+========================
+
+The :doc:`Functions` provides more documentation on the SPART functions. If you don't find what you need you can always :doc:`Get in touch <Help>`.
+
+
