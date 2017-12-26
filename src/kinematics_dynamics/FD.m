@@ -5,24 +5,24 @@ function [u0dot,umdot] = FD(tau0,taum,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,u0,um,ro
 % [u0dot,umdot] = FD(tau0,taum,wF0,wFm,t0,tm,P0,pm,I0,Im,Bij,Bi0,u0,um,robot)
 %
 % :parameters: 
-%   * tau0 -- Base-spacecraft forces [Tx,Ty,Tz,fx,fy,fz] (torques in the body frame) -- [6x1].
-%   * taum -- Joint forces/troques -- [n_qx1].
-%   * wF0 -- External forces on the base-spacecraft (in the inertial frame) [Tx,Ty,Tz,fx,fy,fz] -- [6x1].
-%   * wFm -- External forces on the manipulator links CoM (in the inertial frame) [Tx,Ty,Tz,fx,fy,fz] -- [6x1].
-%   * t0 -- Base-spacecraft twist vector [wx,wy,wz,vx,vy,vz] (all in inertial frame) -- [6x1].
-%   * tL -- Manipulator twist vector [wx,wy,wz,vx,vy,vz] (all in inertial frame) -- [6xn].
-%   * P0 -- Base-spacecraft twist-propagation vector -- [6x6].
-%   * pm -- Manipulator twist-propagation vector -- [6x1].
-%   * I0 -- Base-spacecraft inertia matrix in the inertial frame -- [3x3].
-%   * Im -- Links inertia matrices in the inertial frame -- [3x3xn].
-%   * Bij -- Twist-propagation matrix (for manipulator i>0 and j>0) -- [6x6xn].
-%   * Bi0 -- Twist-propagation matrix (for i>0 and j=0) -- [6x6xn].
-%   * u0 -- Base-spacecraft velocities [wx,wy,wz,vx,vy,vz]. The angular velocities are in body axis, while the linear velocities in inertial frame -- [6x1].
+%   * tau0 -- Base-link forces [n,f]. The torque n is projected in the body-fixed CCS, while the force f is projected in the inertial CCS -- [6x1].
+%   * taum -- Joint forces/torques -- as a [n_qx1] matrix.
+%   * wF0 -- Wrench acting on the base-link center-of-mass [n,f], projected in the inertial CCS -- as a [6x1] matrix.
+%   * wFm -- Wrench acting on the links center-of-mass  [n,f], projected in the inertial CCS -- as a [6xn] matrix.
+%   * t0 -- Base-link twist [\omega,rdot], projected in the inertial CCS -- as a [6x1] matrix.
+%   * tL -- Manipulator twist [\omega,rdot], projected in the inertial CCS -- as a [6xn] matrix.
+%   * P0 -- Base-link twist-propagation "vector" -- as a [6x6] matrix.
+%   * pm -- Manipulator twist-propagation "vector" -- as a [6xn] matrix.
+%   * I0 -- Base-link inertia matrix, projected in the inertial CCS -- as a [3x3] matrix.
+%   * Im -- Links inertia matrices, projected in the inertial CCS -- as a [3x3xn] matrix.
+%   * Bij -- Twist-propagation matrix (for manipulator i>0 and j>0) -- as a [6x6xn] matrix.
+%   * Bi0 -- Twist-propagation matrix (for i>0 and j=0) -- as a [6x6xn] matrix.
+%   * u0 -- Base-link velocities [\omega,rdot]. The angular velocity is projected in the body-fixed CCS, while the linear velocity is projected in the inertial CCS -- [6x1].
 %   * um -- Joint velocities -- [n_qx1].
-%   * robot -- Robot model (see :doc:`/Robot_Model`).
+%   * robot -- Robot model (see :doc:`/Tutorial_Robot`).
 %
 % :return: 
-%   * u0dot -- Base-spacecraft accelerations [alphax,alphay,alphaz,ax,ay,az]. The angular accelerations are in body axis, while the linear accelerations are in inertial frame -- [6x1].
+%   * u0dot -- Base-link accelerations [\omegadot,rddot]. The angular acceleration is projected in a body-fixed CCS, while the linear acceleration is projected in the inertial CCS -- [6x1].
 %   * umdot -- Manipulator joint accelerations -- [n_qx1].
 %
 % See also: :func:`src.kinematics_dynamics.ID` and :func:`src.kinematics_dynamics.I_I`. 
@@ -85,7 +85,7 @@ for i=n:-1:1
         psi(1:6,i)=psi_hat(1:6,i)/(pm(1:6,i)'*psi_hat(1:6,i));
     end
 end
-%Base-spacecraft
+%Base-link
 M_hat0=[I0,zeros(3,3);zeros(3,3),robot.base_link.mass*eye(3)];
 %Add children contributions
 for j=find(robot.con.child_base)'
@@ -114,7 +114,7 @@ for i=n:-1:1
         phi_tilde(robot.joints(i).q_id)=phi_hat(i)/(pm(1:6,i)'*psi_hat(1:6,i));
     end
 end
-%Base-spacecraft
+%Base-link
 eta0=zeros(6,1);
 %Add children contributions
 for j=find(robot.con.child_base)'
@@ -124,7 +124,7 @@ phi_hat0=phi0-P0'*eta0;
 phi_tilde0=(P0'*psi_hat0)\phi_hat0;
 
 
-%--- Base-spacecraft acceleration ---%
+%--- Base-link acceleration ---%
 u0dot=phi_tilde0;
 
 %--- Manipulator acceleration (and mu) ---%

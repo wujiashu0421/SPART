@@ -4,19 +4,20 @@ function [Ndot] = NOCdot(r0,t0,rL,tL,P0,pm,robot)
 % [Ndot] = NOCdot(r0,t0,rL,tL,P0,pm,robot)
 %
 % :parameters: 
-%   * r0 -- Position of the base-spacecraft with respect to the inertial frame -- [3x1].
-%   * t0 -- Base-spacecraft twist vector [wx,wy,wz,vx,vy,vz] (all in inertial frame) -- [6x1].
-%   * rL -- Links center-of-mass positions -- [3xn].
-%   * tL -- Manipulator twist vector [wx,wy,wz,vx,vy,vz] (all in inertial frame) -- [6xn].%   * P0 -- Base-spacecraft twist-propagation vector -- [6x6].
-%   * pm -- Manipulator twist-propagation vector -- [6xn].
-%   * robot -- Robot model (see :doc:`/Robot_Model`).
+%   * r0 -- Position of the base-link center-of-mass with respect to the origin of the inertial frame, projected in the inertial CCS -- [3x1].
+%   * t0 -- Base-link twist [\omega,rdot], projected in the inertial CCS -- as a [6x1] matrix.
+%   * rL -- Positions of the links, projected in the inertial CCS -- as a [3xn] matrix.
+%   * tL -- Manipulator twist [\omega,rdot], projected in the inertial CCS -- as a [6xn] matrix.
+%   * P0 -- Base-link twist-propagation "vector" -- as a [6x6] matrix.
+%   * pm -- Manipulator twist-propagation "vector" -- as a [6xn] matrix.
+%   * robot -- Robot model (see :doc:`/Tutorial_Robot`).
 %
 % :return: 
-%   * Ndot -- Natural Orthogonal Complement (NOC) matrix time-derivative -- [6+6*n,6+n_q].
+%   * Ndot -- Natural Orthogonal Complement (NOC) matrix time-derivative -- as a [(6+6*n)x(6+n_q)] matrix.
 %
 % Examples:
 %
-%   To compute the accelerations of all links:
+%   To compute the operational-space accelerations of all links:
 %
 % .. code-block:: matlab
 %	
@@ -26,7 +27,7 @@ function [Ndot] = NOCdot(r0,t0,rL,tL,P0,pm,robot)
 %   [Ndot] = NOCdot(r0,t0,rL,tL,P0,pm,robot)
 %   %Twist time-derivatives of all the links
 %   tdot=N*[u0dot;umdot]+Ndot*[u0;um];
-%   %Twist time-derivative of the base-spacecraft
+%   %Twist time-derivative of the base-link
 %   t0dot=tdot(1:6,1);
 %   %Twist time-derivative of the ith link
 %   i=2;
@@ -58,10 +59,12 @@ function [Ndot] = NOCdot(r0,t0,rL,tL,P0,pm,robot)
 Ndot=zeros(6+6*robot.n_links_joints,6+robot.n_q,'like',r0);
 
 %Compute the NOC time derivative matrix by using the Jacobians time derivative
-%Base-spacecraft contribution
+
+%Base-link contribution
 Omega0=[SkewSym(t0(1:3)), zeros(3,3);
     zeros(3,3), zeros(3,3)];
 Ndot(1:6,1:6+robot.n_q)=[Omega0*P0,zeros(6,robot.n_q)];
+
 %Manipulator contribution
 for i=1:robot.n_links_joints
     [J0doti, Jmdoti]=Jacobdot(rL(1:3,i),tL(1:6,i),r0,t0,rL,tL,P0,pm,i,robot);

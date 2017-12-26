@@ -4,17 +4,17 @@ function r_com = Center_of_Mass(r0,rL,robot)
 % r_com = Center_of_Mass(r0,rL,robot)
 %
 % :parameters: 
-%   * r0 -- Position of the base-spacecraft with respect to the inertial frame -- [3x1].
-%   * rL -- Links center-of-mass positions -- [3xn].
-%   * robot -- Robot model (see :doc:`/Robot_Model`).
+%   * r0 -- Position of the base-link, projected in the inertial CCS -- [3x1].
+%   * rL -- Positions of the links, projected in the inertial CCS -- as a [3xn] matrix.
+%   * robot -- Robot model (see :doc:`/Tutorial_Robot`).
 %
-% :retruns:
-%   * r_com -- Location of the center-of-mass -- [3x1].
+% :return:
+%   * r_com -- Location of the center-of-mass, projected in the inertial CCS  -- [3x1].
 %
-% Use :func:`src.kinematics_dynamics.Kinematics` to compute the ``rL`` parameter.
+% Use :func:`src.kinematics_dynamics.Kinematics` to compute ``rL``.
 %
 % This function can also be used to compute the velocity/acceleration of the center-of-mass.
-% To do it use as paremeters the velocities ``v0,vL`` or acceleration ``a0,am`` and you will get the CoM  velocity ``v_com`` or acceleration ``a_com``.
+% To do it use as paremeters the velocities ``r0dot,rLdot`` or acceleration ``r0ddot,rLddot`` and you will get the CoM  velocity ``rcomdot`` or acceleration ``rcomddot``.
 %
 % See also: :func:`src.kinematics_dynamics.Kinematics`
 
@@ -37,17 +37,17 @@ function r_com = Center_of_Mass(r0,rL,robot)
 
 %=== CODE ===%
 
-%Initialize total mass and total mass * distance varables
+%Initialize total mass and total mass * distance
 mass_total=robot.base_link.mass;
 mass_r=r0*robot.base_link.mass;
 
-%Add contribution of manipulator links
+%Add contributions of links
 for i=1:robot.n_links_joints
     mass_total=mass_total+robot.links(i).mass;
     mass_r = mass_r+rL(1:3,i).*robot.links(i).mass; 
 end
 
-%Compute center of mass
+%Compute center-of-mass
 r_com=mass_r./mass_total;
 
 end

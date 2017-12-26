@@ -1,14 +1,15 @@
 function [robot,robot_keys]=urdf2robot(filename,verbose_flag)
-% Creates a SPART robot model from an URDF file.
+% Creates a SPART robot model from a URDF file.
 %
 % [robot,robot_keys] = urdf2robot(filename,verbose_flag)
 % 
 % :parameters: 
-%   * filename -- Path to URDF file.
-%   * verbose_flag -- True for verbose output (Default False).
+%   * filename -- Path to the URDF file.
+%   * verbose_flag -- True for verbose output (default False).
 %
 % :return:
-%   * robot -- Robot model (see :doc:`/Robot_Model`).
+%   * robot -- Robot model (see :doc:`/Tutorial_Robot`).
+%   * robot_keys -- Links/Joints name map (see :doc:`/Tutorial_Robot`).
 %
 % This function was inspired by:
 % https://github.com/jhu-lcsr/matlab_urdf/blob/master/load_ne_id.m

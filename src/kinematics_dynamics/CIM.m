@@ -2,29 +2,29 @@ function [C0, C0m, Cm0, Cm] = CIM(t0,tL,I0,Im,M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,ro
 % Computes the Generalized Convective Inertia Matrix C of the multibody system.
 %
 % :parameters: 
-%   * t0 -- Base-spacecraft twist vector [wx,wy,wz,vx,vy,vz] (all in inertial frame) -- [6x1].
-%   * tL -- Manipulator twist vector [wx,wy,wz,vx,vy,vz] (all in inertial frame) -- [6xn].
-%   * I0 -- Base-spacecraft inertia matrix in the inertial frame -- [3x3].
-%   * Im -- Links inertia matrices in the inertial frame -- [3x3xn].
-%   * M0_tilde -- Base-spacecraft mass composite body matrix -- [6x6].
-%   * Mm_tilde -- Manipulator mass composite body matrix -- [6x6xn].
-%   * Bij -- Twist-propagation matrix (for manipulator i>0 and j>0) -- [6x6xn].
-%   * Bi0 -- Twist-propagation matrix (for i>0 and j=0) -- [6x6xn].
-%   * P0 -- Base-spacecraft twist-propagation vector -- [6x6].
-%   * pm -- Manipulator twist-propagation vector -- [6xn].
-%   * robot -- Robot model (see :doc:`/Robot_Model`).
+%   * t0 -- Base-link twist [\omega,rdot], projected in the inertial CCS -- as a [6x1] matrix.
+%   * tL -- Manipulator twist [\omega,rdot], projected in the inertial CCS -- as a [6xn] matrix.
+%   * I0 -- Base-link inertia matrix, projected in the inertial CCS -- as a [3x3] matrix.
+%   * Im -- Links inertia matrices, projected in the inertial CCS -- as a [3x3xn] matrix.
+%   * M0_tilde -- Base-link mass composite body matrix -- as a [6x6] matrix .
+%   * Mm_tilde -- Manipulator mass composite body matrix -- as a [6x6xn] matrix.
+%   * Bij -- Twist-propagation matrix (for manipulator i>0 and j>0) -- as a [6x6xn] matrix.
+%   * Bi0 -- Twist-propagation matrix (for i>0 and j=0) -- as a [6x6xn] matrix.
+%   * P0 -- Base-link twist-propagation "vector" -- as a [6x6] matrix.
+%   * pm -- Manipulator twist-propagation "vector" -- as a [6xn] matrix.
+%   * robot -- Robot model (see :doc:`/Tutorial_Robot`).
 %
 % :return: 
-%   * C0 -> Base-spacecraft convective inertia matrix -- [6x6].
-%   * C0m -> Base-spacecraft - manipulator coupling convective inertia matrix -- [6xn_q].
-%   * Cm0 -> Manipulator - Base-spacecraft coupling convective inertia matrix -- [n_qx6].
-%   * Cm -> Manipulator convective inertia matrix -- [n_qxn_q].
+%   * C0 -> Base-link convective inertia matrix -- as a [6x6] matrix.
+%   * C0m -> Base-link - manipulator coupling convective inertia matrix -- as a [6xn_q] matrix.
+%   * Cm0 -> Manipulator - base-link coupling convective inertia matrix -- as a [n_qx6] matrix.
+%   * Cm -> Manipulator convective inertia matrix -- as a [n_qxn_q] matrix.
 %
 % To obtain the full convective inertia matrix C:
 %
 % .. code-block:: matlab
 %   
-%   %Compute C
+%   %Compute the Convective Inertia Matrix C
 %   [C0, C0m, Cm0, Cm] = CIM(t0,tL,I0,Im,M0_tilde,Mm_tilde,Bij,Bi0,P0,pm,robot)
 %   C=[C0,C0m;Cm0,Cm];
 %
@@ -54,7 +54,7 @@ n_q=robot.n_q;
 n=robot.n_links_joints;
 
 %--- Omega ---%
-%Base-spacecraft Omega
+%Base-link Omega
 Omega0=[SkewSym(t0(1:3)), zeros(3,3);
     zeros(3,3), zeros(3,3)];
 
@@ -68,7 +68,7 @@ for i=1:n
 end
 
 %--- Mdot ---%
-%Base-spacecraft Mdot
+%Base-link Mdot
 Mdot0=[Omega0(1:3,1:3)*I0, zeros(3,3); zeros(3,3), zeros(3,3)];
 
 %Pre-allocate
@@ -93,7 +93,7 @@ for i=n:-1:1
         Mdot_tilde(1:6,1:6,i)=Mdot_tilde(1:6,1:6,i)+Mdot_tilde(1:6,1:6,child(j));
     end
 end
-%Base-spacecraft
+%Base-link
 Mdot0_tilde = Mdot0;
 %Add children contributions
 child=find(robot.con.child_base)';

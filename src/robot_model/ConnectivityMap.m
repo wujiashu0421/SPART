@@ -4,12 +4,12 @@ function [branch,child,child_base]=ConnectivityMap(robot)
 % [branch,child,child_base]=ConnectivityMap(robot)
 %
 % :parameters:
-%   * robot -- Robot model (see :doc:`/Robot_Model`).
+%   * robot -- Robot model (see :doc:`/Tutorial_Robot`).
 %
 % :return:
-%   * Branch -- Branch connectivity map.
-%   * child -- Link--child map.
-%   * child_base -- Base--link child map.
+%   * branch -- Branch connectivity map. This is a [nxn] lower triangular matrix. If the i,j element is 1 it means that the ith and jth link are on the same branch. 
+%   * child -- A [nxn] matrix. If the i,j element is 1, then the ith link is a child of the jth link.
+%   * child_base -- A [nx1] matrix. If the ith element is 1, the ith link is connected to the base-link.
 %
 % See also: :func:`src.robot_model.urdf2robot` and :func:`src.robot_model.DH_Serial2robot`.
 
@@ -32,10 +32,10 @@ function [branch,child,child_base]=ConnectivityMap(robot)
 
 %=== CODE ===%
 
-%Pre-allocate Branch connectivity map
+%Pre-allocate branch connectivity map
 branch=zeros(robot.n_links_joints,robot.n_links_joints);
 
-%Populate Branch connectivity map
+%Populate branch connectivity map
 for i=robot.n_links_joints:-1:1
     last_parent_link=i;
     branch(i,i)=1;
@@ -50,7 +50,7 @@ for i=robot.n_links_joints:-1:1
     end
 end
 
-%Populate Child map
+%Populate child map
 child=zeros(robot.n_links_joints,robot.n_links_joints);
 child_base=zeros(robot.n_links_joints,1);
 for i=robot.n_links_joints:-1:1

@@ -1,24 +1,24 @@
 function [t0dot,tLdot]=Accelerations(t0,tL,P0,pm,Bi0,Bij,u0,um,u0dot,umdot,robot)
-% Computes the accelerations (twist-rate) of the multibody system.
+% Computes the operational-space accelerations (twist-rate) of the multibody system.
 %
 % [t0dot,tLdot]=Accelerations(t0,tL,P0,pm,Bi0,Bij,u0,um,u0dot,umdot,robot)
 %
 % :parameters: 
-%   * t0 -- Base-spacecraft twist vector [wx,wy,wz,vx,vy,vz] (all in inertial frame) -- [6x1].
-%   * tL -- Manipulator twist vector [wx,wy,wz,vx,vy,vz] (all in inertial frame) -- [6xn].
-%   * Bij -- Twist-propagation matrix (for manipulator i>0 and j>0) -- [6x6xn].
-%   * Bi0 -- Twist-propagation matrix (for i>0 and j=0) -- [6x6xn].
-%   * P0 -- Base-spacecraft twist-propagation vector -- [6x6].
-%   * pm -- Manipulator twist-propagation vector -- [6x1].
-%   * u0 -- Base-spacecraft velocities [wx,wy,wz,vx,vy,vz]. The angular velocities are in body axis, while the linear velocities in inertial frame -- [6x1].
+%   * t0 -- Base-link twist [\omega,rdot], projected in the inertial CCS -- as a [6x1] matrix.
+%   * tL -- Manipulator twist [\omega,rdot], projected in the inertial CCS -- as a [6xn] matrix.
+%   * Bij -- Twist-propagation matrix (for manipulator i>0 and j>0) -- as a [6x6xn] matrix.
+%   * Bi0 -- Twist-propagation matrix (for i>0 and j=0) -- as a [6x6xn] matrix.
+%   * P0 -- Base-link twist-propagation "vector" -- as a [6x6] matrix.
+%   * pm -- Manipulator twist-propagation "vector" -- as a [6xn] matrix.
+%   * u0 -- Base-link velocities [\omega,rdot]. The angular velocity is projected in the body-fixed CCS, while the linear velocity is projected in the inertial CCS -- [6x1].
 %   * um -- Joint velocities -- [n_qx1].
-%   * u0dot -- Base-spacecraft accelerations [alphax,alphay,alphaz,ax,ay,az]. The angular accelerations are in body axis, while the linear accelerations are in inertial frame -- [6x1].
+%   * u0dot -- Base-link accelerations [\omegadot,rddot]. The angular acceleration is projected in a body-fixed CCS, while the linear acceleration is projected in the inertial CCS -- [6x1].
 %   * umdot -- Manipulator joint accelerations -- [n_qx1].
-%   * robot -- Robot model (see :doc:`/Robot_Model`).
+%   * robot -- Robot model (see :doc:`/Tutorial_Robot`).
 %
 % :return: 
-%   * t0dot -- Base-spacecraft twist-rate vector [alphax,alphay,alphaz,ax,ay,az] (all in inertial frame) -- [6x1].
-%   * tLdot -- Manipulator twist-rate vector [alphax,alphay,alphaz,ax,ay,az] (all in inertial frame) -- [6xn].
+%   * t0dot -- Base-link twist-rate vector \omegadot,rddot], projected in inertial frame -- as a [6x1] matrix.
+%   * tLdot -- Manipulator twist-rate vector \omegadot,rddot], projected in inertial frame -- as a [6xn] matrix.
 %
 % See also: :func:`src.kinematics_dynamics.Jacobdot`. 
 
@@ -45,7 +45,7 @@ function [t0dot,tLdot]=Accelerations(t0,tL,P0,pm,Bi0,Bij,u0,um,u0dot,umdot,robot
 n=robot.n_links_joints;
 
 %--- Omega matrices ---%
-%Base-Spacecraft
+%Base-link
 Omega0=[SkewSym(t0(1:3)), zeros(3,3);
     zeros(3,3), zeros(3,3)];
 
@@ -59,7 +59,7 @@ for i=1:n
 end
 
 %--- Twist Rate ---%
-%Base-spacecraft
+%Base-link
 t0dot = Omega0*P0*u0+P0*u0dot;
 
 %Pre-allocate

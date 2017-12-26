@@ -1,36 +1,36 @@
-function [J0dot, Jmdot]=Jacobdot(rx,tx,r0,t0,rL,tL,P0,pm,i,robot)
-% Computes the Jacobian time-derivative of the rx point.
+function [J0dot, Jmdot]=Jacobdot(rp,tp,r0,t0,rL,tL,P0,pm,i,robot)
+% Computes the geometric Jacobian time-derivative of a point `p`.
 %
-% [J0dot, Jmdot]=Jacobdot(rx,tx,r0,t0,rL,tL,P0,pm,i,robot)
+% [J0dot, Jmdot]=Jacobdot(rp,tp,r0,t0,rL,tL,P0,pm,i,robot)
 %
 % :parameters: 
-%   * rx -- Inertial position of the point of interest -- [3x1].
-%   * tx -- Twist of the point of interest [wx,wy,wz,vx,vy,vz] (all in inertial frame) -- [6x1].
-%   * r0 -- Inertial position of the base-spacecraft -- [3x1].
-%   * t0 -- Base-spacecraft twist vector [wx,wy,wz,vx,vy,vz] (all in inertial frame) -- [6x1].
-%   * rL -- Links inertial positions -- [3xn].
-%   * tL -- Manipulator twist vector [wx,wy,wz,vx,vy,vz] (all in inertial frame) -- [6xn].
-%   * P0 -- Base-spacecraft twist-propagation vector -- [6x6].
-%   * pm -- Manipulator twist-propagation vector -- [6xn].
-%   * i -- Link where the point `x` is located -- int 0 to n.
-%   * robot -- Robot model (see :doc:`/Robot_Model`).
+%   * rp -- Position of the point of interest, projected in the inertial CCS -- [3x1].
+%   * tp -- Twist of the point of interest [\omega,rdot], projected in the intertial CCS -- [6x1].
+%   * r0 -- Position of the base-link center-of-mass with respect to the origin of the inertial frame, projected in the inertial CCS -- [3x1].
+%   * t0 -- Base-link twist [\omega,rdot], projected in the inertial CCS -- as a [6x1] matrix.
+%   * rL -- Positions of the links, projected in the inertial CCS -- as a [3xn] matrix.
+%   * tL -- Manipulator twist [\omega,rdot], projected in the inertial CCS -- as a [6xn] matrix.
+%   * P0 -- Base-link twist-propagation "vector" -- as a [6x6] matrix.
+%   * pm -- Manipulator twist-propagation "vector" -- as a [6xn] matrix.
+%   * i -- Link id where the point `p` is located -- int 0 to n.
+%   * robot -- Robot model (see :doc:`/Tutorial_Robot`).
 %
 % :return: 
-%   * J0dot -- Base-spacecraft Jacobian time-derivative --[6x6].
-%   * Jmdot -- Manipulator Jacobian time-derivative --[6xn_q].
+%   * J0dot -- Base-link Jacobian time-derivative -- as a [6x6] matrix.
+%   * Jmdot -- Manipulator Jacobian time-derivative -- as a [6xn_q] matrix.
 %
 % Examples:
 %
-%   To compute the acceleration of a point ``rx`` on the ith link:
+%   To compute the acceleration of a point ``p`` on the ith link:
 %
 % .. code-block:: matlab
 %   
 %   %Compute Jacobians
-%   [J0, Jm]=Jacob(rx,r0,rL,P0,pm,i,robot);
+%   [J0, Jm]=Jacob(rp,r0,rL,P0,pm,i,robot);
 %   Compute Jacobians time-derivatives
-%   [J0dot, Jmdot]=Jacobdot(rx,tx,r0,t0,rL,tL,P0,pm,i,robot)
-%   %Twist of that point
-%   txdot=J0*u0dot+J0dot*u0+Jm*umdot+Jmdot*um;
+%   [J0dot, Jmdot]=Jacobdot(rp,tp,r0,t0,rL,tL,P0,pm,i,robot)
+%   %Twist-rate of that point
+%   tpdot=J0*u0dot+J0dot*u0+Jm*umdot+Jmdot*um;
 %
 % See also: :func:`src.kinematics_dynamics.Accelerations` and :func:`src.kinematics_dynamics.Jacob`. 
 
@@ -54,12 +54,12 @@ function [J0dot, Jmdot]=Jacobdot(rx,tx,r0,t0,rL,tL,P0,pm,i,robot)
 %=== CODE ===%
 
 %--- Omega ---%
-%Base-spacecraft Omega
+%Base-link Omega
 Omega0=[SkewSym(t0(1:3)), zeros(3,3);
     zeros(3,3), zeros(3,3)];
 
 %Pre-allocate Omega
-Omega=zeros(6,6,robot.n_links_joints,'like',rx);
+Omega=zeros(6,6,robot.n_links_joints,'like',rp);
 
 %Compute Omega
 for j=1:i
@@ -68,13 +68,13 @@ for j=1:i
 end
 
 
-%--- Jacobians time derivative ---%
+%--- Jacobian time-derivative ---%
 
-%Base Jacobian
-J0dot=[eye(3),zeros(3,3);SkewSym(r0-rx),eye(3)]*Omega0*P0+[zeros(3,3),zeros(3,3);SkewSym(t0(4:6)-tx(4:6)),zeros(3,3)]*P0;
+%Base-link Jacobian
+J0dot=[eye(3),zeros(3,3);SkewSym(r0-rp),eye(3)]*Omega0*P0+[zeros(3,3),zeros(3,3);SkewSym(t0(4:6)-tp(4:6)),zeros(3,3)]*P0;
 
 %Pre-allocate
-Jmdot=zeros(6,robot.n_q,'like',rx);
+Jmdot=zeros(6,robot.n_q,'like',rp);
     
 %Manipulator Jacobian
 joints_num=0;
@@ -82,7 +82,7 @@ for j=1:i
     %If joint is not fixed
     if robot.joints(j).type~=0
         if robot.con.branch(i,j)==1
-            Jmdot(1:6,robot.joints(j).q_id)=[eye(3),zeros(3,3);SkewSym(rL(1:3,j)-rx),eye(3)]*Omega(1:6,1:6,j)*pm(1:6,j)+[zeros(3,3),zeros(3,3);SkewSym(tL(4:6,j)-tx(4:6)),zeros(3,3)]*pm(1:6,j);
+            Jmdot(1:6,robot.joints(j).q_id)=[eye(3),zeros(3,3);SkewSym(rL(1:3,j)-rp),eye(3)]*Omega(1:6,1:6,j)*pm(1:6,j)+[zeros(3,3),zeros(3,3);SkewSym(tL(4:6,j)-tp(4:6)),zeros(3,3)]*pm(1:6,j);
         else
             Jmdot(1:6,robot.joints(j).q_id)=zeros(6,1);
         end

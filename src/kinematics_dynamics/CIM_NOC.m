@@ -1,17 +1,24 @@
 function [C]=CIM_NOC(N,Ndot,t0,tL,I0,Im,robot)
-% Computes the Generalized Convective Inertia Matrix of a Serial Manipulator.
+% Computes the generalized Convective Inertia Matrix C of the multibody system.
 %
-% Input ->
-%   N -> Natural Orthogonal Complement matrix.
-%   N -> Natural Orthogonal Complement matrix time derivative.
-%   t0 -> Inertial twist of the base-spacecraft.
-%   tL -> Inertial twist of the links.
-%   I0 -> Base-spacecraft inertia in inertial frame.
-%   Im -> Manipulator inertia in inertial frame.
-%   robot -> Robot model.
+% This function is LESS EFFICENT that the :func:`src.kinematics_dynamics.CIM` function, as it doesn't use the recursive algorithms. 
 %
-% Output ->
-%   C -> Generalized convective inertia matrix.
+% [C]=CIM_NOC(N,Ndot,t0,tL,I0,Im,robot)
+%
+% :parameters: 
+%   * N -- Natural Orthogonal Complement (NOC) matrix -- a [(6+6*n)x(6+n_q)] matrix.
+%   * Ndot -- Natural Orthogonal Complement (NOC) matrix time-derivative -- as a [(6+6*n)x(6+n_q)] matrix.
+%   * t0 -- Base-link twist [\omega,rdot], projected in the inertial CCS -- as a [6x1] matrix.
+%   * tL -- Manipulator twist [\omega,rdot], projected in the inertial CCS -- as a [6xn] matrix.
+%   * I0 -- Base-link inertia matrix, projected in the inertial CCS -- as a [3x3] matrix.
+%   * Im -- Links inertia matrices, projected in the inertial CCS -- as a [3x3xn] matrix.
+%   * robot -- Robot model (see :doc:`/Tutorial_Robot`).
+%
+% :return: 
+%   C -> Generalized Convective Inertia Matrix -- as a [(6+n_q)x(6+n_q)] matrix.
+%
+%  See also: :func:`src.kinematics_dynamics.CIM_NOC`.
+
 
 %=== LICENSE ===%
 
@@ -35,7 +42,7 @@ function [C]=CIM_NOC(N,Ndot,t0,tL,I0,Im,robot)
 %Pre-allocate M
 M=zeros(6+6*robot.n_links_joints,6+6*robot.n_links_joints,'like',N);
 
-%Base contribution
+%Base-link contribution
 M(1:6,1:6)=[I0(1:3,1:3),zeros(3,3);zeros(3,3),robot.base_link.mass*eye(3)];
 %Manipulator contribution
 for i=1:robot.n_links_joints
@@ -43,7 +50,7 @@ for i=1:robot.n_links_joints
 end
 
 %--- Omega ---%
-%Base-spacecraft Omega
+%Base-link Omega
 Omega0=[SkewSym(t0(1:3)), zeros(3,3);
     zeros(3,3), SkewSym(t0(1:3))];
 
@@ -60,7 +67,7 @@ end
 %Pre-allocate
 Mdot=zeros(6+6*robot.n_links_joints,6+6*robot.n_links_joints,'like',N);
 
-%Base-spacecraft Mdot
+%Base-link Mdot
 Mdot(1:6,1:6)=[Omega0(1:3,1:3)*I0, zeros(3,3); zeros(3,3), zeros(3,3)];
 %Compute Mdot
 for i=1:robot.n_links_joints

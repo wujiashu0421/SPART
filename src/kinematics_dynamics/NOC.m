@@ -1,17 +1,17 @@
 function [N] = NOC(r0,rL,P0,pm,robot)
-% Computes the Natural Orthogonal Complement (NOC) matrix.
+% Computes the Natural Orthogonal Complement (NOC) matrix (generalized Jacobian).
 %
 % [N] = NOC(r0,rL,P0,pm,robot)
 %
 % :parameters: 
-%   * r0 -- Position of the base-spacecraft with respect to the inertial frame -- [3x1].
-%   * rL -- Links center-of-mass positions -- [3xn].
-%   * P0 -- Base-spacecraft twist-propagation vector -- [6x6].
-%   * pm -- Manipulator twist-propagation vector -- [6xn].
-%   * robot -- Robot model (see :doc:`/Robot_Model`).
+%   * r0 -- Position of the base-link, projected in the inertial CCS -- [3x1].
+%   * rL -- Positions of the links, projected in the inertial CCS -- as a [3xn] matrix.
+%   * P0 -- Base-link twist-propagation "vector" -- as a [6x6] matrix.
+%   * pm -- Manipulator twist-propagation "vector" -- as a [6xn] matrix.
+%   * robot -- Robot model (see :doc:`/Tutorial_Robot`).
 %
 % :return: 
-%   * N -- Natural Orthogonal Complement (NOC) matrix -- [6+6*n,6+n_q].
+%   * N -- Natural Orthogonal Complement (NOC) matrix -- a [(6+6*n)x(6+n_q)] matrix.
 %
 % Examples:
 %
@@ -19,11 +19,11 @@ function [N] = NOC(r0,rL,P0,pm,robot)
 %
 % .. code-block:: matlab
 %	
-%   %Compute NOC
+%   %Compute NOC.
 %   [N] = NOC(r0,rL,P0,pm,robot)
-%   %Twist of all the links
+%   %Generalized twist (concatenation of the twist of all links).
 %   t=N*[u0;um];
-%   %Twist of the base-spacecraft
+%   %Twist of the base-link
 %   t0=t(1:6,1);
 %   %Twist of the ith link
 %   i=2;
@@ -53,7 +53,7 @@ function [N] = NOC(r0,rL,P0,pm,robot)
 %Pre-allocate NOC
 N=zeros(6+6*robot.n_links_joints,6+robot.n_q,'like',r0);
 
-%Base-spacecraft contribution
+%Base-link contribution
 N(1:6,1:6+robot.n_q)=[P0,zeros(6,robot.n_q)]; 
 
 %Manipulator contribution

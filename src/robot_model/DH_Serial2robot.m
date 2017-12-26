@@ -7,7 +7,7 @@ function [robot,T_Ln_EE] = DH_Serial2robot(DH_data)
 %   * DH_data -- Structure containing the DH parameters. (see :doc:`/DH`).
 %
 % :return: 
-%   * robot -- Robot model (see :doc:`/Robot_Model`).
+%   * robot -- Robot model (see :doc:`/Tutorial_Robot`).
 %   * T_Ln_EE -- Homogeneous transformation matrix from last link to end-effector --[4x4].
 %
 % **DH descriptions are only supported for serial configurations**.

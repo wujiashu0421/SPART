@@ -1,22 +1,22 @@
 function [t0,tL]=Velocities(Bij,Bi0,P0,pm,u0,um,robot)
-% Computes the velocities of the links.
+% Computes the operational-space velocities of the multibody system.
 %
 % [t0,tL]=Velocities(Bij,Bi0,P0,pm,u0,um,robot)
 %
 % :parameters:
-%   * Bij -- Twist-propagation matrix (for manipulator i>0 and j>0) -- [6x6xn].
-%   * Bi0 -- Twist-propagation matrix (for i>0 and j=0) -- [6x6xn].
-%   * P0 -- Base-spacecraft twist-propagation vector -- [6x6].
-%   * pm -- Manipulator twist-propagation vector -- [6x1].
-%   * u0 -- Base-spacecraft velocities [wx,wy,wz,vx,vy,vz]. The angular velocities are in body axis, while the linear velocities in inertial frame -- [6x1].
+%   * Bij -- Twist-propagation matrix (for manipulator i>0 and j>0) -- as a [6x6xn] matrix.
+%   * Bi0 -- Twist-propagation matrix (for i>0 and j=0) -- as a [6x6xn] matrix.
+%   * P0 -- Base-link twist-propagation "vector" -- as a [6x6] matrix.
+%   * pm -- Manipulator twist-propagation "vector" -- as a [6xn] matrix.
+%   * u0 -- Base-link velocities [\omega,rdot]. The angular velocity is projected in the body-fixed CCS, while the linear velocity is projected in the inertial CCS -- [6x1].
 %   * um -- Joint velocities -- [n_qx1].
-%   * robot -- Robot model (see :doc:`/Robot_Model`).
+%   * robot -- Robot model (see :doc:`/Tutorial_Robot`).
 %
 % :return:
-%   * t0 -- Base-spacecraft twist vector [wx,wy,wz,vx,vy,vz] (all in inertial frame) -- [6x1].
-%   * tL -- Manipulator twist vector [wx,wy,wz,vx,vy,vz] (all in inertial frame) -- [6xn].
+%   * t0 -- Base-link twist [\omega,rdot], projected in the inertial CCS -- as a [6x1] matrix.
+%   * tL -- Manipulator twist [\omega,rdot], projected in the inertial CCS -- as a [6xn] matrix.
 %
-% Use :func:`src.kinematics_dynamics.DiffKinematics` to compute the ``Bij,Bi0,P0,pm`` parameters.
+% Use :func:`src.kinematics_dynamics.DiffKinematics` to compute ``Bij``, ``Bi0``, ``P0``, and ``pm``.
 %
 % See also: :func:`src.kinematics_dynamics.Jacob`
 
@@ -40,16 +40,16 @@ function [t0,tL]=Velocities(Bij,Bi0,P0,pm,u0,um,robot)
 
 %=== CODE ===%
 
-%--- Number of links and Joints ---%
+%--- Number of links and joints ---%
 n=robot.n_links_joints;
 
-%Pre-Allocate
+%Pre-allocate
 tL=zeros(6,n,'like',Bij);
 
-%Base-spacecraft
+%Base-link
 t0=P0*u0;
 
-%Fordward recursion to obtain the twist vector
+%Forward recursion to obtain the twist
 for i=1:n
     
     if robot.joints(i).parent_link==0
@@ -68,10 +68,3 @@ for i=1:n
 end
 
 end
-
-
-
-
-
-
-
