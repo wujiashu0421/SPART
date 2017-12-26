@@ -239,8 +239,6 @@ end
 
 %Save base link on its own structure
 clink=links(base_link);
-robot.base_link.name=clink.name;
-robot.base_link.T=clink.T;
 robot.base_link.mass=clink.mass;
 robot.base_link.inertia=clink.inertia;
 
@@ -265,9 +263,6 @@ if verbose_flag; fprintf('Number of joint variables: %d\n',robot.n_q); end;
 robot.con.branch=branch;
 robot.con.child=child;
 robot.con.child_base=child_base;
-
-%--- Assign robot model origin ---%
-robot.origin='urdf';
 
 end
 

@@ -55,9 +55,8 @@ n=robot.n_links_joints;
 TJ=zeros(4,4,n,'like',R0);
 TL=zeros(4,4,n,'like',R0);
 
-%--- Base link ---%
-clink = robot.base_link;
-T0=[R0,r0;zeros(1,3),1]*clink.T;
+%--- Base-link ---%
+T0=[R0,r0;zeros(1,3),1];
 
 %--- Forward kinematics recursion ---%
 %Obtain of joints and links kinematics
