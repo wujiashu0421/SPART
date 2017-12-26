@@ -25,6 +25,10 @@ To obtain the kinematics of the system, the base-link position :math:`\mathrm{r}
 
 In SPART, the vectors are represented by a 3-by-1 column matrix containing the components of the vector projection to the inertial CCS. Projections to other CCS are explicitly marked.
 
+.. note::
+
+	The position of the base-link ``r0`` refers to the base-link center-of-mass, corresponding with the origin of the URDF ``inertial`` tag. The base-link orientation ``R0`` also corresponds with the orientation of the CCS specified in the URDF ``inertial`` tag.
+
 The joint displacements, :math:`\mathbf{q}_{m}\in\mathbb{R}^{n}`, also also defined as a :math:`n`-by-1 column matrix.
 
 .. math::
