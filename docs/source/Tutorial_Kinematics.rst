@@ -5,7 +5,7 @@ SPART Tutorial -- Kinematics
 Direct Kinematics
 =================
 
-SPART can compute the position and orientation of all the links and joints. The definitions of the kinematic quantities of a generic link are notionally shown in the following figure.
+SPART can compute the position and orientation of all the links and joints. The definitions of the kinematic quantities of a generic link and joint are notionally shown in the following figure.
 
 .. figure:: Figures/KinematicsDef.png
    :scale: 50 %
@@ -40,9 +40,9 @@ The joint displacements, :math:`\mathbf{q}_{m}\in\mathbb{R}^{n}`, also also defi
 	%Joint displacements
 	qm=[0;0;0];
 
-If the :math:`i`\th joint is revolute, :math:`q_{i}` denotes an angular displacement around the rotation axis :math:`\hat{e}_{i}`, whether if the :math:`i`\th joint is prismatic, :math:`q_{i}` denotes a translational displacement on the sliding axis :math:`\hat{e}_{i}`.
+If the :math:`i`\th joint is revolute, :math:`q_{i}` denotes an angular displacement around the rotation axis :math:`\hat{e}_{i}`, whether if the :math:`i`\th joint is prismatic, :math:`q_{i}` denotes a translational displacement along the sliding axis :math:`\hat{e}_{i}`.
 
-The set of :math:`\mathbf{R}_{0},\mathbf{r}_{0},\mathbf{q}_{m}` constitute a set of variables :math:`\mathcal{Q}`, known as *generalized variables*, fully defining the state of the multibody system,
+The set of :math:`\mathbf{R}_{0},\mathbf{r}_{0},\mathbf{q}_{m}` constitute a set of variables :math:`\mathcal{Q}`, known as *generalized variables*, which full define the state of the multibody system,
 
 .. math::
 
@@ -81,7 +81,7 @@ and the rotation matrix corresponding to the second link CCS:
 	i=2;
 	RL(1:3,1:3,i)
 
-If your Matlab installation includes the `Symbolic Math Toolbox <https://www.mathworks.com/products/symbolic.html>`_ SPART is able to obtain the analytic expressions of the kinematic quantities. To do so, just define the generalized variables as *symbolic expressions*.
+If your Matlab installation includes the `Symbolic Math Toolbox <https://www.mathworks.com/products/symbolic.html>`_ SPART is able to obtain the analytic expressions of these kinematic quantities. To do so, just define the generalized variables as *symbolic expressions*.
 
 .. code-block:: matlab
 
@@ -104,19 +104,19 @@ If your Matlab installation includes the `Symbolic Math Toolbox <https://www.mat
 Differential kinematics
 =======================
 
-The angular and linear velocity of the :math:`i`\th link with respect to the inertial frame, projected in the inertial CCS, is encapsulated into the **twist** variable :math:`\mathbf{t}_{i}\in\mathbb{R}^{6}`.
+The angular and linear velocities of the :math:`i`\th link with respect to the inertial frame, projected in the inertial CCS, are encapsulated into the **twist** variable :math:`\mathbf{t}_{i}\in\mathbb{R}^{6}`.
 
 .. math::
 
 	\mathbf{t}_{i}=\begin{bmatrix}\mathbf{\omega}_{i}\\ \dot{\mathbf{r}}_{i}\end{bmatrix}
 
-The twist can be recursively propagated outward one link to the next, from the base-link to the end-effector, using the 6-by-6 :math:`\mathbf{B}_{ij}` twist--propagation matrix and the 6-by-1 :math:`\mathbf{p}_{i}` twist--propagation "vector":
+The twist can be recursively propagated outward from one link to the next using the 6-by-6 :math:`\mathbf{B}_{ij}` twist--propagation matrix and the 6-by-1 :math:`\mathbf{p}_{i}` twist--propagation "vector":
 
 .. math::
 	
 	\mathbf{t}_{i}=\mathbf{B}_{ij}\mathbf{t}_{j}+\mathbf{p}_{i}\dot{q}_{i}\quad\text{for}\quad j=i-1
 
-These matrices, which form the basis of the differential kinematics, can be computed with the ``DiffKinematics`` function.
+The twist--propagation matrices and "vectors", which form the basis of the differential kinematics, can be computed with the ``DiffKinematics`` function.
 
 .. code-block:: matlab
 
@@ -157,7 +157,7 @@ With the twist-propagation quantities and the generalized velocities, the twists
 	
 .. code-block:: matlab
 
-	%Velocities (joint-space)
+	%Generalized velocities (joint-space velocities)
 	u0=zeros(6,1); %Base-link angular (projected in the base-link body-fixed CCS) and linear velocities.
 	um=[4;-1;5]*pi/180; %Joint velocities
 
@@ -166,8 +166,8 @@ With the twist-propagation quantities and the generalized velocities, the twists
 
 The output of the operational space velocities are as follows:
 
-* t0 -- Base--link twist vector projected in the inertial CCS -- as a [6x1] matrix.
-* tL -- Manipulator twist vector projected in the inertial CCS -- as a [6xn] matrix.
+* t0 -- Base--link twist projected in the inertial CCS -- as a [6x1] matrix.
+* tL -- Manipulator links twist projected in the inertial CCS -- as a [6xn] matrix.
 
 Jacobians
 =========
@@ -190,11 +190,11 @@ The Jacobian of a point :math:`p`, fixed to the :math:`i`\th link, can be obtain
 
 .. code-block:: matlab
 
-	%Jacobian of the a point p in the ith link
+	%Jacobian of a point p in the ith link
 	%rp is the position of the point p, projected in the inertial CCS -- as a [3x1] matrix.
 	[J0p, Jmp]=Jacob(rp,r0,rL,P0,pm,i,robot);
 
-The Jacobians corresponding to the center-of-mass of the the :math:`i`\th link of the multibody system is then computed as follows:
+The Jacobians corresponding to the center-of-mass of the the :math:`i`\th link of the multibody system are then computed as follows:
 
 .. code-block:: matlab
 
@@ -211,7 +211,7 @@ The accelerations of a link can be encapsulated in a twist-rate :math:`\dot{\mat
 
 	\dot{\mathbf{t}}_{i}=\begin{bmatrix}\dot{\mathbf{\omega}}_{i}\\ \ddot{\mathbf{r}}_{i}\end{bmatrix}
 
-And the generalized accelerations :math:`\dot{\mathbf{u}}\in\mathbb{R}^{6+n}` of the system can be also defined in an equivalent manner:
+The generalized accelerations :math:`\dot{\mathbf{u}}\in\mathbb{R}^{6+n}` of the system are defined as:
 
 .. math::
 

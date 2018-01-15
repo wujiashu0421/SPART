@@ -7,10 +7,10 @@ SPART is MATLAB-based and ROS-compatible, allowing to prototype in simulation an
 
 Given a URDF description of a multibody system, SPART computes the system's:
 
-* Kinematics -- pose of the links and joints (`i.e.`, homogeneous transformation matrices or rotation matrices and position vectors).
-* Differential kinematics -- Operational space velocities and accelerations, as well as the analytic Jacobians and their time derivatives.
-* Dynamics -- Generalized inertia and convective inertia matrices.
-* Forward/Inverse dynamics -- solvers for both problems, including the floating-base case.
+* Kinematics -- pose of the links and joints (`i.e.`, rotation matrices and position vectors).
+* Differential kinematics -- operational space velocities and accelerations, as well as the geometric Jacobians and their time derivatives.
+* Dynamics -- generalized inertia and convective inertia matrices.
+* Forward/Inverse dynamics -- solves both problems, including the floating-base case.
 
 SPART supports symbolic computation and analytic expressions for all kinematic and dynamic quantities can be obtained.
 
