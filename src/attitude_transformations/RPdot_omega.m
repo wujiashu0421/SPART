@@ -1,13 +1,15 @@
-function [DCM]=RP2DCM(s)
-% Computes the DCM matrix from the Rodrigues Parameters
+function [omega]=RPdot_omega(s,sdot)
+% Computes the angular velocity projected in the body frame from the
+% Rodrigues Parameters time derivative
 %
 % Formula from ANALYTICAL MECHANICS OF SPACE SYSTEMS, Hanspeter Schaub and John L. Junkins
 % 
 % Inputs:
 %   s -> Rodrigues Parameters
+%   sdot -> Rodrigues Parameters time dervative
 %
 % Outputs:
-%   DCM -> Direction Cosine Matrix
+%   omega -> Angular velocity projected in the body axis
 
 %=== LICENSE ===%
 
@@ -26,7 +28,7 @@ function [DCM]=RP2DCM(s)
 
 %=== CODE ===%
 
-DCM = 1/(1+s'*s)*((1-s'*s)*eye(3)+2*s*s'-2*SkewSym(s));
+omega = 2/(1+s'*s)*((1-s'*s)*eye(3)-SkewSym(s))*sdot;
 
 
 end
