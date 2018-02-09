@@ -1,5 +1,5 @@
-function [omega]=RPdot_omega(s,sdot)
-% Computes the angular velocity projected in the body frame from the
+function [omegadot]=RPddot_omegadot(s,sdot,sddot)
+% Computes the angular acceleration projected in the body frame from the
 % Rodrigues Parameters and their time derivatives.
 %
 % Formula from ANALYTICAL MECHANICS OF SPACE SYSTEMS, Hanspeter Schaub and John L. Junkins
@@ -7,9 +7,10 @@ function [omega]=RPdot_omega(s,sdot)
 % Inputs:
 %   s -> Rodrigues Parameters
 %   sdot -> Rodrigues Parameters time dervative
+%   sddot -> Rodrigues Parameters double time dervative
 %
 % Outputs:
-%   omega -> Angular velocity projected in the body axis
+%   omegadot -> Angular acceleration projected in the body axis
 
 %=== LICENSE ===%
 
@@ -28,12 +29,12 @@ function [omega]=RPdot_omega(s,sdot)
 
 %=== CODE ===%
 
-
 %Intermediate variables
 B = 2/(1+s'*s)*(eye(3)-SkewSym(s));
+Bdot = 4*s'*sdot/(1+s'*s)^2-2*SkewSym(sdot)/(1+s'*s);
 
-%Velocity
-omega = B*sdot;
+%Acceleration
+omegadot = Bdot*sdot+B*sddot;
 
 
 end
