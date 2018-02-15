@@ -11,3 +11,5 @@ Dr. Josep Virgili Llop - jvirgili@nps.edu
 Jerry V. Drew II
 
 Andrew Bradstreet
+
+Katrina Alsup
