@@ -13,7 +13,7 @@ runner = TestRunner.withTextOutput;
 runner.addPlugin(CodeCoveragePlugin.forFolder('../src/','IncludingSubfolders',true))
 
 %--- Define test suite ---%
-suite = testsuite({'CompareTest','FixedJointsTest','CoMTest'});
+suite = testsuite({'CompareTest','FixedJointsTest','CoMTest','AttTransTest'});
 
 %--- Run tests ---%
 result = runner.run(suite);
