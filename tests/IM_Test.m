@@ -50,6 +50,9 @@ assert(all(test(:)));
 test=abs(C-C_NOC)<1e-6;
 assert(all(test(:)));
 
+%--- Test total mass ---%
+test=abs(sum(sum(H0(4:6,4:6)))/3-TotalMass(robot))<1e-6;
+assert(all(test(:)));
 
 
 
