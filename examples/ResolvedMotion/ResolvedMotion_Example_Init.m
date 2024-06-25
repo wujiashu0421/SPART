@@ -6,7 +6,7 @@ clear
 
 %--- Manipulator Data ---%               
 %Number of joints/links
-data.n=4;
+data.n=3;
 
 %Manipulator dimensions
 man_side = 1;
@@ -29,7 +29,7 @@ data.man(2)=data.man(1);
 data.man(3)=data.man(1);
 
 %Fourth joint
-data.man(4)=data.man(1);
+%data.man(4)=data.man(1);
 
 %End-Effector 
 data.EE.theta=0; %Rotation around z-axis
@@ -52,9 +52,9 @@ data.base.T_L0_J1=[eye(3),[base_side/2;0;0];zeros(1,3),1];
 
 %--- Initial conditions ---%
 q00=[0;0;0;1;zeros(3,1)];
-qm0=[pi/4;-pi/4;-pi/4;pi/4];
+qm0=[pi/4;-pi/4;-pi/4];
 u00=zeros(6,1);
-um0=zeros(4,1);
+um0=zeros(3,1);
 u0dot0=zeros(6,1);
 umdot0=zeros(3,1);
 
